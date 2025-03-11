@@ -1,8 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser  # Import AbstractUser
+from django.contrib.auth.models import AbstractUser  
 
 
-# Custom User Model
+#custom User Model
 class User(AbstractUser):
     is_student = models.BooleanField(default=False)
     is_lecturer = models.BooleanField(default=False)
@@ -12,7 +12,7 @@ class User(AbstractUser):
         verbose_name='groups',
         blank=True,
         help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
-        related_name="issues_user_groups",  # Add this related_name
+        related_name="issues_user_groups",  
         related_query_name="issues_user",
     )
     user_permissions = models.ManyToManyField(
