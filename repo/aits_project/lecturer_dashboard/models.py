@@ -6,6 +6,7 @@ class Lecturer(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField()
     password = models.CharField(max_length=255)
-
+#fn
     def __str__(self):
         return self.name
+
