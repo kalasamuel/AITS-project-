@@ -1,12 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser  
-
+import random
 
 #custom User Model
 class User(AbstractUser):
     is_student = models.BooleanField(default=False)
     is_lecturer = models.BooleanField(default=False)
     is_registrar = models.BooleanField(default=False)
+    
+    def generate_verification_code(self):
+        self.verification_code = str(random.randint(100000, 999999))
+        self.save()
+        
     groups = models.ManyToManyField(
         'auth.Group',
         verbose_name='groups',
@@ -31,9 +36,10 @@ class Student(models.Model):
     Reg_No = models.CharField(max_length=20, unique=True)
     First_Name = models.CharField(max_length=255)
     Last_Name = models.CharField(max_length=255)
+    Institutional_Email = models.EmailField()
     Email = models.EmailField()
     Phone_Number = models.CharField(max_length=15)
-    Department = models.CharField(max_length=255)  # You might want to use a ForeignKey to the Department model here
+    Department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)  # You might want to use a ForeignKey to the Department model here
     Course = models.CharField(max_length=255)
     Year_of_Study = models.IntegerField()
 
@@ -52,6 +58,7 @@ class Lecturer(models.Model):
     First_Name = models.CharField(max_length=255)
     Last_Name = models.CharField(max_length=255)
     Email = models.EmailField()
+    Institutional_Email = models.EmailField()
     Department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
@@ -69,6 +76,7 @@ class AcademicRegistrar(models.Model):
     First_Name = models.CharField(max_length=255)
     Last_Name = models.CharField(max_length=255)
     Email = models.EmailField()
+    Institutional_Email = models.EmailField()
     Notifications = models.TextField(blank=True, null=True)
 
     def __str__(self):
