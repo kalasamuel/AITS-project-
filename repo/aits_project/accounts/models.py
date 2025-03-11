@@ -20,7 +20,7 @@ class User(AbstractUser):
         verbose_name='user permissions',
         blank=True,
         help_text='Specific permissions for this user.',
-        related_name="issues_user_permissions",  # Add this related_name
+        related_name="issues_user_permissions",  
         related_query_name="issues_user",
     )
 
