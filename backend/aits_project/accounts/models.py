@@ -29,6 +29,20 @@ class User(AbstractUser):
         related_query_name="issues_user",
     )
 
+# Department Model
+class Department(models.Model):
+    Dept_ID = models.AutoField(primary_key=True)
+    Name = models.CharField(max_length=255)
+    Faculty = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.Name
+
+    class Meta:
+        verbose_name = "Department"
+        verbose_name_plural = "Departments"
+
+
 # Student Model
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -87,15 +101,3 @@ class AcademicRegistrar(models.Model):
         verbose_name_plural = "Academic Registrars"
 
 
-# Department Model
-class Department(models.Model):
-    Dept_ID = models.AutoField(primary_key=True)
-    Name = models.CharField(max_length=255)
-    Faculty = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.Name
-
-    class Meta:
-        verbose_name = "Department"
-        verbose_name_plural = "Departments"
