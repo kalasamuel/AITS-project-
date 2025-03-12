@@ -1,58 +1,57 @@
-.form-container{
-  max-width:600px;
-  margin:2rem auto;
-  padding: 2rem;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0,0.1);
+.issue-form-container{
+  max-width:500px;
+  margin:auto;
+  padding:20px;
+  background:green;
+  color:white;
+  border-radius: 10px;
+  
 
 }
-.form-heading{
-  color: #2c3e50;
+.issue-form-container h2{
   text-align: center;
-  margin-bottom: 1.5rem;
 }
-.issue-form{
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.issue-form-cobtainer label{
+  display: block;
+  margin-top:10px;
 
 }
-.form-label{
-  font-weight: 600;
-  color: #34495e;
-}
-.form-input,.form-textarea,.form-select{
-  padding: 0.8rem;
-  border: 1px solid #bdc3c7;
-  border-radius: 4px;
-  font-size: 1rem;
+.issue-form-container input,
+.issue-form-container textarea,
+.issue-form-container select{
   width: 100%;
+  padding:8px;
+  margin-top: 5px;
+  border-radius: 5px;
 }
-.form-textarea{
-  height: 100px;
-  resize: vertical;
+.issue-form-container button{
+  display:block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background: white;
+  color: green;
+  font-weight:bold;
+  border:none;
+  cursor:pointer;
 }
-.form-select{
-  appearance: none;
-
+.issue-form-container ul{
+  list-style: none;
+  padding: 0;
 }
-.error-message{
-  color: #e74c3c;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
+.issue-form-container li{
+  display: flex;
+  justify-content: space-between;
+  background: white;
+  color: black;
+  margin-top: 5px;
+  padding: 5px;
+  border-radius: 5px;
 }
-.submit-button{
-  background-color: #3498db;
+.issue-form-container li button{
+  background: red;
   color: white;
-  padding: 1rem;
   border: none;
-  border-radius: 4px;
+  padding: 5px;
   cursor: pointer;
-  font-size: 1rem;
-  margin-top: 1rem;
-  transition: background-color 0.3s;
-}
-.submit-button:hover{
-  background-color: #2980b9;
 }

@@ -1,42 +1,27 @@
-import { useState } from 'react'
-import IssueForm from "./IssueForm";
+import React from 'react'
+import {Link} from "react-router-dom";
 import "./IssueForm.css";
-
-
-
-function Dashboard() {
-  const [showForm,setShowForm]=useState(false);
-  return (
-    <div
-    className="dashboard-container">
-      <nav className="sidebar">
-        <h2>Academic Issue Tracking System</h2>
+const Dashboard=()=>{
+  return(
+    <div className="dashboard">
+      <div className='sidebar'>
+        <h2>Menu</h2>
         <ul>
-        <li>Dashboard</li>
-        <li>Issue Submission </li>
-        <li>Issue Details</li>
-        <li>Notifications</li>
-        <li>Profile and Settings</li>
+          <li><Link to="/">Dashboard</Link></li>
+          <li><Link to="/submit">IssueSubmission</Link></li>
+          <li><Link to="/details">IssueDetails</Link></li>
+          <li><Link to="/notifications">Notifications</Link></li>
+          <li><Link to="/profile">Profile & Settings</Link></li>
         </ul>
-      </nav>
-      <main className="content">
-        <header>
-          <h3>Student's Dashboard</h3>
-          <button onClick={()=> setShowForm(!showForm)}>Submit New Issue</button>
-        </header>
-        {showForm && <IssueForm/>}
-        <section>
-          <h4>My Current Issues</h4>
-          <ul className="issue-list">
-            <li>Issue 1-Pending</li>
-            <li>Issue 2-Resolved</li>
-            <li>Issue 3-In Progress</li>
-          </ul>
-        </section>
-      </main>
+      </div>
+      <div className="content">
+        <h1>Welcome to the Academic Issue Tracking System</h1>
+      </div>
     </div>
-  )
-  
-}
-
+  );
+};
 export default Dashboard;
+
+
+
+
