@@ -1,0 +1,39 @@
+.dashboard-container{
+  display:flex;
+  height:70vh;
+
+}
+.sidebar{
+  width:250px;
+  background:green;
+  color:white;
+  padding:20px;
+  border-radius: 15px;
+
+}
+.sidebar ul{
+  list-style:none;
+  padding:0;
+}
+.sidebar li{
+  padding:10px;
+  cursor:pointer;
+}
+.content{
+  flex:1;
+padding:20px;
+}
+haeder{
+  display:blockflex;
+  justify-content: space-between;
+  align-items: center;
+}
+.issue-list{
+  list-style:none;
+  padding: 0;
+}
+.issue-list li{
+  padding: 10px;
+  background: lightgray;
+  margin: 5px;
+}
