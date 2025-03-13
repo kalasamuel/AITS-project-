@@ -1,17 +1,34 @@
 from rest_framework import serializers
-from .models import Department, Student
+from .models import CustomUser, VerificationCode, Student, Lecturer, Department, AcademicRegistrar
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['role', 'Institutional_Email', 'Email', 
+                  'Student_Number', 'Lecturer_ID', 'Year_of_Study', 'is_verified']
+
+class VerificationCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VerificationCode
+        fields = ['code', 'created_at', 'expires_at']
+
+# Serializers for role-specific models 
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = '__all__'
+
+class LecturerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lecturer
+        fields = '__all__'
 
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
         fields = '__all__'  # Includes all fields
 
-class StudentSerializer(serializers.ModelSerializer):
-    department = DepartmentSerializer(read_only=True)  # Nested representation
-    department_id = serializers.PrimaryKeyRelatedField(
-        queryset=Department.objects.all(), source='department', write_only=True
-    )
-
+class AcademicRegistrarSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Student
-        fields = ['id', 'student_id', 'name', 'email', 'department', 'department_id']
+        model =AcademicRegistrar
+        fields ='__all__'

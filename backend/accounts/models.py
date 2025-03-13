@@ -70,7 +70,7 @@ class Department(models.Model):
 # Student Model
 class Student(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'student'})
-    Student_Number = models.CharField(max_length=10, unique=True)
+    Student_Number = models.CharField(max_length=10, primary_key=True, default="2400725045")
     Reg_No = models.CharField(max_length=20, unique=True)
     First_Name = models.CharField(max_length=255)
     Last_Name = models.CharField(max_length=255)
