@@ -23,7 +23,7 @@ def send_verification_email(user, subject):
             subject,
             email_message,
             "kala.samuel@students.mak.ac.ug",  # Temporary sender email for development
-            [user.email],  # Using `user.email` since `Institutional_Email` is removed
+            [user.email],  # Using `user.email` to send to Institutional_Email in the views.py file
             fail_silently=False,
         )
         return True
@@ -38,7 +38,7 @@ def send_gmail_notification(user, subject, message):
             subject,
             message,
             "kala.samuel@students.mak.ac.ug",  # Temporary sender email for development
-            [user.personal_gmail],  # Send to Gmail instead of institutional email
+            [user.personal_email],  # Send to Gmail instead of institutional email
             fail_silently=False,
         )
         return True

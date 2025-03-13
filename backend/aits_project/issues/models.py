@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import User, Student, Lecturer, AcademicRegistrar, Department # Import user models
+from accounts.models import CustomUser, Student, Lecturer, AcademicRegistrar, Department # Import user models
 
 
 
@@ -7,18 +7,24 @@ class Issue(models.Model):
     """
     Represents an issue in the system.
     """
+    STATUS_CHOICES = [
+    ('open', 'Open'),
+    ('in_progress', 'In Progress'),
+    ('resolved', 'Resolved'),
+    ]
+    
     Issue_ID = models.AutoField(primary_key=True)
     Issue_Type = models.CharField(max_length=255)
     Description = models.TextField()
     SupportFile = models.FileField(upload_to='issue_support_files/', blank=True, null=True)
-    Status = models.CharField(max_length=50, default='Open')
+    Status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='open')
     Created_at = models.DateTimeField(auto_now_add=True)
     Updated_at = models.DateTimeField(auto_now=True)
-    Student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True, blank=True, related_name='student_issues')
+    Student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'student'}, null=True, blank=True, related_name='student_issues')
     Lecturer = models.ForeignKey(Lecturer, on_delete=models.SET_NULL, null=True, blank=True, related_name='lecturer_issues')
     Registrar = models.ForeignKey(AcademicRegistrar, on_delete=models.SET_NULL, null=True, blank=True, related_name='registrar_issues')
     Department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True, related_name='department_issues') # Categorization
-    Assigned_to = models.ForeignKey('accounts.Lecturer', on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_issues')
+    Assigned_to = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, limit_choices_to={'role': 'lecturer'}, null=True, blank=True, related_name='assigned_issues')
 
 
     def __str__(self):
@@ -46,3 +52,13 @@ class Notification(models.Model):
     class Meta:
         verbose_name = "Notification"
         verbose_name_plural = "Notifications"
+        
+class Course(models.Model):
+    name = models.CharField(max_length=255)
+    code = models.CharField(max_length=20, unique=True)
+    lecturer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'lecturer'})
+
+class Assignment(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    due_date = models.DateField()
