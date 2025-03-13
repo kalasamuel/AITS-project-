@@ -6,7 +6,11 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from django.utils.timezone import now
 from rest_framework import status
-from .utils import send_verification_email #still working on utils.py
+from .utils import send_verification_email
+
+# Predefined Registrar Code (This should be stored securely in settings)
+REGISTRAR_CODE = "REG123456"  # This will be required during registration
+
 
 # self-registration API (Students and Lecturers)
 class SelfRegisterView(APIView):
@@ -24,7 +28,8 @@ class SelfRegisterView(APIView):
         password = data.get("password", "").strip()
         confirm_password = data.get("confirm_password", "").strip()
         personal_email = data.get("Email", "").strip()
-        
+        registrar_code = data.get("Registrar_Code", "").strip()
+                
         # Ensures all fields are provided
         if not email or not password or not confirm_password or not first_name or not last_name:
             return Response({"error": "All fields are required."}, status=status.HTTP_400_BAD_REQUEST)
@@ -71,7 +76,6 @@ class SelfRegisterView(APIView):
 
         # Use reusable function to send email
         email_sent = send_verification_email(user, "AITS Registration Verification Code")
-        #I'm still working on utils.py that contains code for generating the verification code
         if email_sent:
             return Response({"message": "Registration successful. Check your email for the verification code."}, status=status.HTTP_201_CREATED)
         else:
