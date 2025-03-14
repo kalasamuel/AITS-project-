@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import myImage from "./icons8-empty-box-50.png";
 import "./IssueForm.css";
 const IssueForm=()=>{
   const [files,setFiles]=useState([]);
@@ -27,7 +28,11 @@ const IssueForm=()=>{
             </select>
             <label>Course Code:</label>
             <input type="text" required/>
-            <label>Attach Files:</label>
+            <label>Attach your file:</label>
+            <div className='file-upload-container'>
+              <img src={myImage} alt="file-upload"/>
+              <input type="file" multiple onChange={handleFileChange}/> 
+            </div>
             <input type="file" multiple onChange={handleFileChange}/>
             {files.length>0 && (
               <ul>
