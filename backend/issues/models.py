@@ -1,8 +1,6 @@
 from django.db import models
 from accounts.models import CustomUser, Student, Lecturer, AcademicRegistrar, Department # Import user models
 
-
-
 class Issue(models.Model):
     """
     Represents an issue in the system.
@@ -62,3 +60,15 @@ class Assignment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     due_date = models.DateField()
+
+#links student (from CustomUser) to a course
+class Enrollment(models.Model):
+    student=models.ForeignKey("account.CutomUser", on_delete=models.CASCADE, limit_choices_to={'role':'student'})
+    course=models.ForeignKey("issues.Course", on_delete=models.CASCADE)
+    enrolled_at=models.DateTimeField(auto_now_add=True) # automatically records the time
+    
+    def __str__(self):
+        return f"{self.student.username} enrolled in {self.course.name}"
+    
+    class Meta:
+        unique_together = ('student', 'course') #ensure no duplictae enrollments
