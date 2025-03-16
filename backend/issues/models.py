@@ -63,7 +63,7 @@ class Assignment(models.Model):
 
 #links student (from CustomUser) to a course
 class Enrollment(models.Model):
-    student=models.ForeignKey("account.CutomUser", on_delete=models.CASCADE, limit_choices_to={'role':'student'})
+    student=models.ForeignKey("accounts.CustomUser", on_delete=models.CASCADE, limit_choices_to={'role':'student'})
     course=models.ForeignKey("issues.Course", on_delete=models.CASCADE)
     enrolled_at=models.DateTimeField(auto_now_add=True) # automatically records the time
     
