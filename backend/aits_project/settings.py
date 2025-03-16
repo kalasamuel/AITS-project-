@@ -44,6 +44,7 @@ CORS_ALLOWED_ORIGINS = [ #specifies which origins are allowed to make requests t
 INSTALLED_APPS = [
     'accounts',
     'issues',
+    'users',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,6 +54,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders', #to enable the corsheaders functionality
 ]
+
+# settings.py
+# AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
