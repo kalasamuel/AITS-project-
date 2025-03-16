@@ -11,9 +11,15 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import environ # from the django-environ package installed
 
+env = environ.Env(DEBUG=(bool,False))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+environ.Env.read_env(BASE_DIR/".env")
+SECRET_KEY =env("SECRET_KEY")
+DEBUG=env("DEBUG")
 
 
 # Quick-start development settings - unsuitable for production
