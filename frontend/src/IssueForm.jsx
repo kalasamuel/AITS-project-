@@ -27,7 +27,7 @@ const IssueForm=()=>{
             <option key={index} value={type}>{type}</option>))}
             </select>
             <label>Course Code:</label>
-            <input type="text" required/>
+            <input type="text" placeholder='Example: CSC 1201' required/>
             <label>Attach your file:</label>
             <div className='file-upload-container'>
               <img src={myImage} alt="file-upload"/>

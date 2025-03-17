@@ -60,3 +60,13 @@
 .issue-form-container li button:hover{
   background: darkred;
 }
+.file-upload-container{
+  text-align: left;
+  margin-top: 10px;
+  background-color: antiquewhite;
+}
+.box-image{
+  height: auto;
+  display: block;
+  margin: 10px auto;
+}
