@@ -11,9 +11,15 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import environ # from the django-environ package installed
 
+env = environ.Env(DEBUG=(bool,False))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+environ.Env.read_env(BASE_DIR/".env")
+SECRET_KEY =env("SECRET_KEY")
+DEBUG=env("DEBUG")
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,23 +33,35 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CORS_ALLOWED_ORIGINS = [ #specifies which origins are allowed to make requests to django API
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
 
 # Application definition
 
 INSTALLED_APPS = [
     'accounts',
     'issues',
+    'users',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'corsheaders', #to enable the corsheaders functionality
 ]
+
+# settings.py
+# AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware', #adds CorsMiddleware to the middleware stack
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

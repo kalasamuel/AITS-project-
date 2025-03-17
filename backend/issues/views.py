@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-
 # Create your views here.
+from django.shortcuts import render, get_object_or_404
+from rest_framework import viewsets, permissions, status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
-def index(request):
-    return HttpResponse("Welcome Page")
+from accounts.permissions import IsStudent, IsLecturer, IsRegitrar
