@@ -72,8 +72,7 @@ class Student(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'student'})
     Student_Number = models.CharField(max_length=10, primary_key=True, default="2400725045")
     Reg_No = models.CharField(max_length=20, unique=True)
-    First_Name = models.CharField(max_length=255)
-    Last_Name = models.CharField(max_length=255)
+# Removed First_Name and Last_Name fields we using role.first_name and role.last_name instead
     Institutional_Email = models.EmailField(default="")
     Email = models.EmailField()
     Phone_Number = models.CharField(max_length=15)
@@ -82,7 +81,7 @@ class Student(models.Model):
     Year_of_Study = models.IntegerField()
 
     def __str__(self):
-        return f"{self.First_Name} {self.Last_Name} ({self.Reg_No})"
+        return f"{self.role.first_name} {self.role.last_name} ({self.Reg_No})"
 
     class Meta:
         verbose_name = "Student"
@@ -92,14 +91,13 @@ class Student(models.Model):
 class Lecturer(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'lecturer'})
     Lect_ID = models.AutoField(primary_key=True)
-    First_Name = models.CharField(max_length=255)
-    Last_Name = models.CharField(max_length=255)
+# Removed First_Name and Last_Name fields we using role.first_name and role.last_name instead
     Email = models.EmailField()
     Institutional_Email = models.EmailField(default="")
     Department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return f"{self.First_Name} {self.Last_Name}"
+        return f"{self.role.first_name} {self.role.last_name}"
 
     class Meta:
         verbose_name = "Lecturer"
@@ -109,14 +107,13 @@ class Lecturer(models.Model):
 class AcademicRegistrar(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     Registrar_ID = models.AutoField(primary_key=True)
-    First_Name = models.CharField(max_length=255)
-    Last_Name = models.CharField(max_length=255)
+# Removed First_Name and Last_Name fields we using role.first_name and role.last_name instead
     Email = models.EmailField()
     Institutional_Email = models.EmailField(default="")
     Notifications = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.First_Name} {self.Last_Name}"
+        return f"{self.role.first_name} {self.role.last_name}"
 
     class Meta:
         verbose_name = "Academic Registrar"
