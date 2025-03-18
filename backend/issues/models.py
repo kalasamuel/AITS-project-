@@ -53,14 +53,22 @@ class Notification(models.Model):
         
 class Course(models.Model):
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=20, unique=True)
-    lecturer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'lecturer'})
+    course_code = models.CharField(max_length=20, unique=True)
+    lecturer = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, limit_choices_to={'role': 'lecturer'}) 
+    department=models.ForeignKey(Department,on_delete=models.CASCADE) #links to department
 
+    def __str__(self):
+        return f"{self.course_code}=> {self.name}"
+    
 class Assignment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
+    description = models.TextField()
     due_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.title} ({self.course.course_code})"
 #links student (from CustomUser) to a course
 class Enrollment(models.Model):
     student=models.ForeignKey("accounts.CustomUser", on_delete=models.CASCADE, limit_choices_to={'role':'student'})
@@ -68,7 +76,7 @@ class Enrollment(models.Model):
     enrolled_at=models.DateTimeField(auto_now_add=True) # automatically records the time
     
     def __str__(self):
-        return f"{self.student.username} enrolled in {self.course.name}"
+        return f"{self.student.last_name} {self.student.first_name} enrolled in {self.course.name}"
     
     class Meta:
         unique_together = ('student', 'course') #ensure no duplictae enrollments
