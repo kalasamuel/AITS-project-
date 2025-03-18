@@ -12,10 +12,7 @@ const Dashboard=()=>{
           <li><Link to="/details">IssueDetails</Link></li>
           <li><Link to="/notifications">Notifications</Link></li>
           <li><Link to="/profile">Profile & Settings</Link></li>
-        </ul>
-      </div>
-      <div className="content">
-        <h1>Welcome to the Academic Issue Tracking System</h1>
+        </ul> 
       </div>
     </div>
   );
