@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import myImage from "./icons8-empty-box-50.png";
 import "./IssueForm.css";
+import Dashboard from "./Dashboard";
 const IssueForm=()=>{
   const [files,setFiles]=useState([]);
   const issueTypes=["Missing Marks","Appeals","Corrections"];
@@ -21,7 +22,7 @@ const IssueForm=()=>{
           <label>Issue Subject:</label>
           <input type="text" required/>
           <label>Description:</label>
-          <textarea rows="3" required></textarea>
+          <textarea placeholder='DESCRIBE YOUR ISSUE HERE.'rows="3" required></textarea>
           <label>Category/Type of issue:</label>
           <select required>{issueTypes.map((type,index)=>(
             <option key={index} value={type}>{type}</option>))}
