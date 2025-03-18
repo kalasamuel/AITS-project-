@@ -1,0 +1,97 @@
+.welcome-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+    text-align: center;
+    background-color: #f9f9f9; /* Optional: Add a background color */
+    box-sizing: border-box; /* Ensure padding is included in width/height calculations */
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.toggle-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.toggle-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #f4f4f4;
+    color: #333;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px 5px 0 0;
+    margin: 0 5px;
+    transition: background-color 0.3s;
+}
+
+.toggle-button.active {
+    background-color: blue;
+    color: white;
+}
+
+.toggle-button:hover {
+    background-color: #ddd;
+}
+
+.form-container {
+    width: 300px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better appearance */
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: darkblue;
+}
+
+.forgot-password {
+    margin-top: 10px;
+    color: blue;
+    cursor: pointer;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
