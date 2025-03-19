@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./IssuesList.css";
 
 const IssuesList = () => ({issues, addIssue}) => {
     const [searchIssue, setsearchIssue] = useState("");
