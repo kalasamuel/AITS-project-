@@ -5,15 +5,17 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from django.utils.timezone import now, timedelta
-from rest_framework import status
+from rest_framework import status, generics
 from .utils import send_verification_email
 from rest_framework import viewsets
-from .serializers import DepartmentSerializer, StudentSerializer
+from .serializers import DepartmentSerializer, StudentSerializer, RegistrationSerializer, VerifyAccountSerializer
 from django.core.mail import send_mail
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 import uuid
+from django.contrib.auth import get_user_model
+
 
 # Predefined Registrar Code (This should be stored securely in settings)
 REGISTRAR_CODE = "REG123456"  # This will be required during registration
@@ -26,7 +28,7 @@ class SelfRegisterView(APIView):
     def post(self, request):
         data = request.data
         email = data.get("Institutional_Email", "").strip().lower()
-        role = data.get("Role", "").strip().lower()
+        role = data.get("role", "").strip().lower()
         first_name = data.get("First_Name", "").strip()
         last_name = data.get("Last_Name", "").strip()
         student_number = data.get("Student_Number", "").strip()
@@ -96,7 +98,7 @@ class SelfRegisterView(APIView):
             code = request.POST.get("code")
 
             try:
-                user = CustomUser.objects.get(Institutional_Email=email)
+                user = CustomUser.objects.get(Institutional_Email=data['email'])
                 verification = VerificationCode.objects.get(user=user, code=code)
 
                 if verification.is_expired():
@@ -108,9 +110,7 @@ class SelfRegisterView(APIView):
                 login(request, user)
                 return JsonResponse({"message": "Verification successful. Redirecting to dashboard."})
             except (CustomUser.DoesNotExist, VerificationCode.DoesNotExist):
-                return JsonResponse({"error": "Invalid verification code."}, status=400)
-
-            return render(request, "verify.html")       
+                return JsonResponse({"error": "Invalid verification code."}, status=400)     
         else:
             return Response({"error": "Registration failed. Could not send verification email."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -124,3 +124,26 @@ class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
+
+
+CustomUser = get_user_model()
+
+class RegisterUserView(generics.CreateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = RegistrationSerializer
+    permission_classes = [AllowAny]
+
+class VerifyAccountView(generics.GenericAPIView):
+    serializer_class = VerifyAccountSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user = CustomUser.objects.get(email=serializer.validated_data['email'])
+            user.is_active = True
+            user.verification_code = None
+            user.verification_expiry = None
+            user.save()
+            return Response({"message": "Account verified successfully."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
