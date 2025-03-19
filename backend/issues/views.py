@@ -27,7 +27,7 @@ class LogIssueView(APIView):
         serializer = IssueSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save(student=request.user)
-            return Response("message":"Issue logged successful")
+            return Response({"message": "Issue logged successful"})
         return Response(serializer.errors, status=status.HTTP_404_REQUEST)
     
 #Only lecturers can view issues assigned to them filtered from the db 

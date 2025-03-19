@@ -17,4 +17,4 @@ class EnrollmentSerializer(serializers.ModelSerializer):
     course_name =serializers.CharField(source = 'course.name', read_only =True)
     class Meta:
         model =Enrollment
-        fields =['id', 'student', 'course', 'enrolled_at']
+        fields =['id', 'student', 'course', 'enrolled_at'] #filters specific fields

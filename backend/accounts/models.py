@@ -1,36 +1,33 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser  
-import random
 from django.utils.timezone import now
+import random
 import uuid
 
-    #custom User model with role-based access
+# Custom User Model
 class CustomUser(AbstractUser):
-    is_student = models.BooleanField(default=False)
-    is_lecturer = models.BooleanField(default=False)
-    is_registrar = models.BooleanField(default=False)
-
     ROLE_CHOICES = (
         ('student', 'Student'),
         ('lecturer', 'Lecturer'),
         ('registrar', 'Registrar'),
     )
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
+    user = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
+    First_Name =models.CharField(max_length=25)
+    Last_Name =models.CharField(max_length=25)
     Institutional_Email = models.EmailField(unique=True)
     Email = models.EmailField()  # For issue notifications and forgot password
     Student_Number = models.CharField(max_length=10, blank=True, null=True)  # Only for students
     Lecturer_ID = models.CharField(max_length=20, blank=True, null=True)  # Only for lecturers
     Year_of_Study = models.PositiveIntegerField(blank=True, null=True)  # Only for students
     is_verified = models.BooleanField(default=False)
-    
+
     def validate_student_year(self):
-        #Validates if a student is within the allowed study period
         if self.role == 'student' and self.Student_Number:
-            current_year = now().year % 100  # Get last two digits of current year
-            student_entry_year = int(self.Student_Number[:2])  # Extract first two digits
+            current_year = now().year % 100
+            student_entry_year = int(self.Student_Number[:2]) if self.Student_Number else 0
             return (current_year - student_entry_year) <= 6
-        return True  # this applies to students only, lecturers and registrars are always valid
-    
+        return True
+
     def generate_verification_code(self):
         self.verification_code = str(random.randint(100000, 999999))
         self.save()
@@ -39,7 +36,7 @@ class CustomUser(AbstractUser):
         'auth.Group',
         verbose_name='groups',
         blank=True,
-        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
+        help_text='The groups this user belongs to.',
         related_name="issues_user_groups",  
         related_query_name="issues_user",
     )
@@ -51,9 +48,10 @@ class CustomUser(AbstractUser):
         related_name="issues_user_permissions",  
         related_query_name="issues_user",
     )
+    
     def __str__(self):
         return f"{self.username} ({self.role})"
-    
+
 # Department Model
 class Department(models.Model):
     Dept_ID = models.AutoField(primary_key=True)
@@ -72,7 +70,7 @@ class Student(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'student'})
     Student_Number = models.CharField(max_length=10, primary_key=True, default="2400725045")
     Reg_No = models.CharField(max_length=20, unique=True)
-# Removed First_Name and Last_Name fields we using role.first_name and role.last_name instead
+    # Removed First_Name and Last_Name fields we using role.First_Name and role.Last_Name instead
     Institutional_Email = models.EmailField(default="")
     Email = models.EmailField()
     Phone_Number = models.CharField(max_length=15)
@@ -81,7 +79,7 @@ class Student(models.Model):
     Year_of_Study = models.IntegerField()
 
     def __str__(self):
-        return f"{self.role.first_name} {self.role.last_name} ({self.Reg_No})"
+        return f"{self.role.First_Name} {self.role.Last_Name} ({self.Reg_No})"
 
     class Meta:
         verbose_name = "Student"
@@ -91,13 +89,12 @@ class Student(models.Model):
 class Lecturer(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'lecturer'})
     Lect_ID = models.AutoField(primary_key=True)
-# Removed First_Name and Last_Name fields we using role.first_name and role.last_name instead
-    Email = models.EmailField()
+    # Removed First_Name and Last_Name fields we using role.First_Name and role.Last_Name instead
     Institutional_Email = models.EmailField(default="")
     Department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return f"{self.role.first_name} {self.role.last_name}"
+        return f"{self.role.First_Name} {self.role.Last_Name}"
 
     class Meta:
         verbose_name = "Lecturer"
@@ -105,20 +102,19 @@ class Lecturer(models.Model):
 
 # Academic Registrar Model
 class AcademicRegistrar(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'registrar'})
     Registrar_ID = models.AutoField(primary_key=True)
-# Removed First_Name and Last_Name fields we using role.first_name and role.last_name instead
+    # Removed First_Name and Last_Name fields we using role.First_Name and role.Last_Name instead
     Email = models.EmailField()
     Institutional_Email = models.EmailField(default="")
     Notifications = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.role.first_name} {self.role.last_name}"
+        return f"{self.role.First_Name} {self.role.Last_Name}"
 
     class Meta:
         verbose_name = "Academic Registrar"
         verbose_name_plural = "Academic Registrars"
-
 
 # Issue Model
 class Issue(models.Model):
@@ -152,4 +148,3 @@ class VerificationCode(models.Model):
 
     def is_expired(self):
         return now() > self.expires_at
-
