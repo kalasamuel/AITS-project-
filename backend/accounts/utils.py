@@ -23,7 +23,7 @@ def send_verification_email(user, subject):
             subject,
             email_message,
             "kala.samuel@students.mak.ac.ug",  # Temporary sender email for development
-            [user.email],  # Using `user.email` to send to Institutional_Email in the views.py file
+            [user.Institutional_Email],  # Using `user.Institutional_Email` to send to Institutional_Email in the views.py file
             fail_silently=False,
         )
         return True
