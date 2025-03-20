@@ -1,75 +1,65 @@
 .notifications-container {
-    background-color: g;
-    padding: 20px;
-    margin-left: 220px; /* Adjust based on your sidebar width */
+    width: 400px; 
+    padding: 20px; 
+    background-color: #f9f9f9; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    margin-top: 20px;
+    margin-left: 280px ; 
 }
 
-.notifications-container h1 {
-    font-size: 24px;
-    margin-bottom: 15px;
-}
-
-/* Notifications List Styling */
 .notifications-list {
-    border: 1px solid #ccc;
-    padding: 10px;
-    max-height: 300px;
-    overflow-y: auto;
+    margin-top: 20px;
 }
 
 .notification-item {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .notification-item:hover {
-    background-color: #f9f9f9; /* Highlight on hover */
-}
-
-.notification-item.read {
-    background-color: #e0e0e0;
-}
-
-.notification-item.unread {
-    background-color: #fff;
+    background-color: #f0f0f0;
 }
 
 .notification-item.selected {
-    background-color: #d0d0d0; /* Highlight the selected notification */
+    background-color: #e6f7ff;
+    border-color: #91d5ff;
 }
 
 .notification-title {
     font-weight: bold;
+    font-size: 16px;
 }
 
-/* Notification Details Styling */
 .notification-details {
     margin-top: 20px;
     padding: 15px;
+    background-color: #fff;
     border: 1px solid #ddd;
-}
-
-.notification-details h2 {
-    margin-bottom: 10px;
-}
-
-.notification-details p {
-    margin: 5px 0;
-}
-
-/* New Issue Button Styling */
-.new-issue-button {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: blue;
-    color: white;
-    border: none;
-    width: 100%;
-    cursor: pointer;
     border-radius: 5px;
 }
 
+.no-notifications {
+    color: #888;
+    font-style: italic;
+}
+
+.new-issue-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
 .new-issue-button:hover {
-    background-color: darkblue;
+    background-color: #0056b3;
 }
