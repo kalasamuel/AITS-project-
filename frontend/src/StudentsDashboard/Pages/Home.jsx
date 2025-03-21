@@ -6,9 +6,9 @@ import "./Home.css";
 const Home = () => {
     
     const sampleIssues = [
-        { id: 1, title: "Login Issue", description: "Unable to login to the portal", status: "Pending", department: "IT" },
-        { id: 2, title: "Network Problem", description: "Internet is not working", status: "In Progress", department: "Infrastructure" },
-        { id: 3, title: "Course Material Missing", description: "Course material for Math 101 is missing", status: "Resolved", department: "Academics" },
+        { id: 1, title: "Login Issue", description: "Unable to login to the portal", status: "Pending", department: "COCIS" },
+        { id: 2, title: "Network Problem", description: "Internet is not working", status: "In Progress", department: "COCIS" },
+        { id: 3, title: "Course Material Missing", description: "Course material for Math 101 is missing", status: "Resolved", department: "COCIS" },
     ];
 
     return (
