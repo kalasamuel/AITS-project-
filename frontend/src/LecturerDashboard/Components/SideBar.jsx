@@ -1,17 +1,35 @@
-import React from 'react';
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { NavLink } from "react-router-dom";
 import './SideBar.css';
 
-
 function SideBar() {
+    const [active, setActive] = useState(null);
+
+    const handleSetActive = (index) => {
+        setActive(index);
+    };
+
+    const links = [
+        { name: "DASHBOARD", path: "/" },
+        { name: "ASSIGNED ISSUES", path: "/issuesubmission" },
+        { name: "RESOLVED ISSUES", path: "/issuedetails" },
+        { name: "NOTIFICATIONS", path: "/notifications" },
+        { name: "PROFILE & SETTINGS", path: "/profileandsettings" }
+    ];
+
     return (
         <nav className="sidebar">
             <div className="sidebar-links">
-                <Link to="/" className="nav-link">DASHBOARD</Link> 
-                <Link to="/issuesubmission" className="nav-link">ASSIGNED ISSUES</Link>
-                <Link to="/issuedetails" className="nav-link">RESOLVED ISSUES</Link>
-                <Link to="/notifications" className="nav-link">NOTIFICATIONS</Link>
-                <Link to="/profileandsettings" className="nav-link">PROFILE & SETTINGS</Link>
+                {links.map((link, index) => (
+                    <NavLink
+                        key={index}
+                        to={link.path}
+                        className={`nav-link ${active === index ? "active" : ""}`}
+                        onClick={() => handleSetActive(index)}
+                    >
+                        {link.name}
+                    </NavLink>
+                ))}
             </div>
         </nav>
     );
