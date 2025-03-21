@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import NavBar from "./LectureDashboard/Components/NavBar.jsx";
 import SideBar from "./LectureDashboard/Components/SideBar.jsx";
-import Home from "./LectureDashboard/Pages/Home.jsx";
-import IssueSubmission from "./LectureDashboard/Pages/IssueSubmission.jsx";
+import Dashboard from "./LectureDashboard/Pages/Dashboard.jsx";
+import AssignedIssues from "./LectureDashboard/Pages/AssignedIssues.jsx";
 import IssueDetails from "./LectureDashboard/Pages/IssueDetails.jsx";
 import Notifications from "./LectureDashboard/Pages/Notifications.jsx";
 import ProfileAndSettings from "./LectureDashboard/Pages/ProfileAndSettings.jsx";
@@ -31,11 +31,11 @@ function App() {
                             />
                             <Route
                                 path="/"
-                                element={isAuthenticated ? <Home /> : <Navigate to="/welcome" />}
+                                element={isAuthenticated ? <Dashboard /> : <Navigate to="/welcome" />}
                             />
                             <Route
-                                path="/issuesubmission"
-                                element={isAuthenticated ? <IssueSubmission /> : <Navigate to="/welcome" />}
+                                path="/assignedissues"
+                                element={isAuthenticated ? <AssignedIssues /> : <Navigate to="/welcome" />}
                             />
                             <Route
                                 path="/issuedetails"
