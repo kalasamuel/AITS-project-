@@ -1,0 +1,97 @@
+.dashboard-container {
+  padding: 20px;
+  margin-left: 220px; 
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+
+.search-sort {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.search-sort input {
+  flex: 3; 
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-sort select {
+  flex: 1; 
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.issues-list {
+  border: 1px solid #ccc;
+  padding: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.issue-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+}
+
+.issue-item:hover {
+  background-color: #f9f9f9;
+}
+
+.no-issues {
+  text-align: center;
+  color: gray;
+}
+
+
+.status {
+  font-weight: bold;
+}
+
+.resolved { color: green; }
+.in-progress { color: orange; }
+.pending { color: blue; }
+.denied { color: red; }
+
+
+.issue-details {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+}
+
+.issue-details h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.issue-details p {
+  margin: 5px 0;
+}
+
+
+.new-issue-button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: blue;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 5px;
+}
+
+.new-issue-button:hover {
+  background-color: darkblue;
+}

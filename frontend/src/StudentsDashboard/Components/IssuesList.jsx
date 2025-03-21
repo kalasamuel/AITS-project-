@@ -1,30 +1,42 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./IssuesList.css";
+import "./IssuesList.css"; 
 
-const IssuesList = () => ({issues, addIssue}) => {
-    const [searchIssue, setsearchIssue] = useState("");
-    const [filter, setFilter] = useState("All");
-    const [selectedIssue, setSelectedIssue] = useState(null);
-    const navigate = useNavigate();
+const IssuesList = ({ issues, addIssue }) => {
+  const navigate = useNavigate();
+  const [selectedIssue, setSelectedIssue] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState("All");
 
-    return(
-        <div className="issues-rectangle">
-            <h1>Students Dashboard</h1>
-            <div className="search-sort">
-                <input type = "text" placeholder = "Search issues...."
-                value={searchIssue}
-                onChange={(e) => setSearchIssue(e.target.value)}/>
+  
+  const filteredIssues = issues.filter(issue => 
+    (filter === "All" || issue.status === filter) &&
+    issue.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-                <select onChange={(e) => setFilter(e.target.value)}>
-                   <option value="All" >All</option>
-                   <option value="Resolved">Resolved</option>
-                   <option value="In progress">In Progress</option>
-                   <option value="Pending">Pending</option>
-                </select>
-            </div>
+  return (
+    <div className="dashboard-container">
+      <h1>Students Dashboard</h1>
+      
+      
+      <div className="search-sort">
+        <input 
+          type="text" 
+          placeholder="Search issues..." 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <select onChange={(e) => setFilter(e.target.value)}>
+          <option value="All">All</option>
+          <option value="Resolved">Resolved</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Pending">Pending</option>
+          
+        </select>
+      </div>
 
-        <div className="issues-list">
+      
+      <div className="issues-list">
         {filteredIssues.length > 0 ? (
           filteredIssues.map(issue => (
             <div 
@@ -41,6 +53,7 @@ const IssuesList = () => ({issues, addIssue}) => {
         )}
       </div>
 
+      
       {selectedIssue && (
         <div className="issue-details">
           <h2>My Current Issues</h2>
@@ -51,10 +64,12 @@ const IssuesList = () => ({issues, addIssue}) => {
         </div>
       )}
 
-        <button className="new-issue-button" onClick={() => navigate("/issuesubmission")}>
+      
+      <button className="new-issue-button" onClick={() => navigate("/issuesubmission")}>
         New Issue
       </button>
-            
-        </div>
-    );
+    </div>
+  );
 };
+
+export default IssuesList;
