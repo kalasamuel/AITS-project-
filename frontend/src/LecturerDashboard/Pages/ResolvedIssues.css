@@ -1,0 +1,28 @@
+.resolved-issues{
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+.controls{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+inpiut,select{
+    padding:8px;
+    font-size:14px;
+}
+table{
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+th,td
+{padding:10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+th{
+    background: #4caf50;
+    color: white;
+}
