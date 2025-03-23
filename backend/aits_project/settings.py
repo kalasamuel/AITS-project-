@@ -44,7 +44,6 @@ CORS_ALLOWED_ORIGINS = [ #specifies which origins are allowed to make requests t
 INSTALLED_APPS = [
     'accounts',
     'issues',
-    'users',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -74,7 +73,7 @@ ROOT_URLCONF = 'aits_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [], #os.path.join(BASE_DIR, "template") if importing a template
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -152,3 +151,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Adding this setting to force DRF to return JSON responses on the 
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',  #Force JSON responses
+    ),
+}
