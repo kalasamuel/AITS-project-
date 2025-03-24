@@ -6,7 +6,7 @@ import Home from "./StudentsDashboard/Pages/Home.jsx";
 import IssueSubmission from "./StudentsDashboard/Pages/IssueSubmission.jsx";
 import IssueDetails from "./StudentsDashboard/Pages/IssueDetails.jsx";
 import Notifications from "./StudentsDashboard/Pages/Notifications.jsx";
-import ProfileAndSettings from "./StudentsDashboard/Pages/ProfileAndSettings.jsx";
+import ProfileAndSettings from "./StudentsDashboard/Pages/ProfileAndsettings.jsx";
 import Welcome from "./Welcome/Welcome.jsx";
 import './styles.css';
 
