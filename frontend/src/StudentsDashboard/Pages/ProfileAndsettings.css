@@ -7,12 +7,13 @@
 
 .profile-pic-section {
   margin-top: 20px;
-  margin-left: 20;
+  
 }
 
 .profile-pic {
   width: 150px;
   height: 150px;
+  margin-left: 90px;
   border: 2px dashed #ccc;
   border-radius: 50%;
   display: flex;

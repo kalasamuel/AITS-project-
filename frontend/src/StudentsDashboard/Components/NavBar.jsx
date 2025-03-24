@@ -10,7 +10,7 @@ function NavBar({ setIsAuthenticated, profilePic }) {
     const handleLogout = () => {
         setIsAuthenticated(false); 
         navigate('/welcome'); 
-    };
+    };` `
 
     return (
         <nav className="navbar">
@@ -23,7 +23,7 @@ function NavBar({ setIsAuthenticated, profilePic }) {
         ) : (
           <span className="navbar-placeholder">No Profile Pic</span>
         )}
-                <button className="logout-button" onClick={handleLogout}>
+        <button className="logout-button" onClick={handleLogout}>
                     Log Out
                 </button>
             </div>

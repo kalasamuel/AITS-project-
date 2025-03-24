@@ -1,54 +1,63 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #007bff; 
-    color: white; 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-  }
-  
-  .navbar-content {
-    display: flex;
-    align-items: center;
-  }
-  
-  .aits {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 0;
-  }
-  
-  .navbar-profile {
-    display: flex;
-    align-items: center;
-    gap: 15px; 
-  }
-  
-  .navbar-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%; 
-    object-fit: cover; 
-    border: 2px solid white; 
-  }
-  
-  .navbar-placeholder {
-    font-size: 14px;
-    color: #f0f0f0; 
-  }
-  
-  .logout-button {
-    padding: 8px 15px;
-    background-color: #ff4d4d; 
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .logout-button:hover {
-    background-color: #e60000; /* Darker red on hover */
-  }
+  display: flex;
+  justify-content: center; /* Center the content horizontally */
+  align-items: center; /* Center the content vertically */
+  padding: 10px 20px;
+  background-color: #007bff; /* Blue background */
+  color: white; /* White text */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* Ensure navbar stays on top */
+  height: 50px;
+}
+
+.navbar-content {
+  text-align: center; /* Center the text */
+}
+
+.aits {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.navbar-profile {
+  position: absolute; /* Position the profile section */
+  right: 50px; /* Align it to the right */
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Space between profile picture and logout button */
+}
+
+.navbar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Circular profile picture */
+  object-fit: cover; /* Ensure the image fits within the circle */
+  border: 2px solid white; /* White border around the profile picture */
+}
+
+.navbar-placeholder {
+  font-size: 14px;
+  color: #f0f0f0; /* Light gray text */
+  background-color: black; /* Default background color */
+  width: 100px;
+  height: 50px;
+  border-radius: 50%; /* Circular shape */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.logout-button {
+  padding: 8px 15px;
+  background-color: #ff4d4d; /* Red background for logout button */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
