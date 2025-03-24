@@ -1,15 +1,11 @@
 import React from 'react';
 import './NavBar.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
-function NavBar({ setIsAuthenticated }) {
+function NavBar({ setIsAuthenticated, profilePic }) {
     const navigate = useNavigate();
 
-    const handleProfilePicClick = () => {
-        document.getElementById('profile-pic-input').click();
-    };
+    
 
     const handleLogout = () => {
         setIsAuthenticated(false); 
@@ -22,12 +18,11 @@ function NavBar({ setIsAuthenticated }) {
                 <h1 className="aits">ACADEMIC ISSUE TRACKING SYSTEM</h1>
             </div>
             <div className="navbar-profile">
-                <FontAwesomeIcon
-                    icon={faUserCircle}
-                    className="profile-icon"
-                    onClick={handleProfilePicClick}
-                />
-                <input type="file" id="profile-pic-input" className="file-input" />
+            {profilePic ? (
+          <img src={profilePic} alt="Profile" className="navbar-img" />
+        ) : (
+          <span className="navbar-placeholder">No Profile Pic</span>
+        )}
                 <button className="logout-button" onClick={handleLogout}>
                     Log Out
                 </button>

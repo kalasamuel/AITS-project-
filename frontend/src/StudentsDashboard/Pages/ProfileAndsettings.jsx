@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import "./ProfileAndSettings.css";
 
-const ProfileAndSettings = () => {
-  const [profilePic, setProfilePic] = useState(null);
+const ProfileAndSettings = ({profilePic, setProfilePic}) => {
   const uniqueId = `profile-pic-input-${Math.random().toString(36).substr(2, 9)}`;
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];

@@ -12,13 +12,16 @@ import './styles.css';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false); 
-    const location = useLocation(); 
+    const location = useLocation();
+    const [profilePic, setProfilePic] = useState(null);
 
     return (
         <div>
             
             {location.pathname !== '/welcome' && isAuthenticated && (
-                <NavBar setIsAuthenticated={setIsAuthenticated} />
+                <NavBar setIsAuthenticated={setIsAuthenticated}
+                        profilePic = {profilePic}
+                />
             )}
             <div className="main-layout">
                 {isAuthenticated && location.pathname !== '/welcome' && <SideBar />}
@@ -47,7 +50,7 @@ function App() {
                             />
                             <Route
                                 path="/profileandsettings"
-                                element={isAuthenticated ? <ProfileAndSettings /> : <Navigate to="/welcome" />}
+                                element={isAuthenticated ? <ProfileAndSettings profilePic={profilePic} setProfilePic={setProfilePic} /> : <Navigate to="/welcome" />}
                             />
                         </Routes>
                     </div>
