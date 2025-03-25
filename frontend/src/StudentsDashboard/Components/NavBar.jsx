@@ -10,7 +10,7 @@ function NavBar({ setIsAuthenticated, profilePic }) {
     const handleLogout = () => {
         setIsAuthenticated(false); 
         navigate('/welcome'); 
-    };` `
+    };
 
     return (
         <nav className="navbar">

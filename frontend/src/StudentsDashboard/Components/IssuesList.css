@@ -120,3 +120,12 @@ h1 {
     font-size: 14px;
     color: #999;
 }
+
+.background-image {
+    height: 100vh;
+    width: 100vw;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+}
