@@ -1,6 +1,6 @@
 import React from "react";
 import IssuesList from "../Components/IssuesList";
-import "./Home.css";
+
 
 const IssueDetails = () => {
     
