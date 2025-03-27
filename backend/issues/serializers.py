@@ -1,13 +1,12 @@
 from rest_framework import serializers
-from .models import Issue, Enrollment, Course
-from accounts.models import CustomUser  # Use CustomUser instead of Student
+from .models import Issue, Enrollment, Course, Assignment
 
 class IssueSerializer(serializers.ModelSerializer):
-    student_name = serializers.CharField(source='Student.username', read_only=True)
-    assigned_to = serializers.CharField(source="Assigned_to.username", read_only=True)
+    student_name = serializers.CharField(source='student.username', read_only=True)
+    assigned_to = serializers.CharField(source="assigned_to.username", read_only=True)
     class Meta:
         model = Issue
-        fields = ['Issue_ID', 'Issue_Type', 'Description', 'Status', 'Assigned_to', 'student_name', 'Created_at']
+        fields = ['issue_id', 'issue_type', 'description', 'status', 'assigned_to', 'student_name', 'created_at']
 
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,10 +15,14 @@ class CourseSerializer(serializers.ModelSerializer):
 
 #Returns structured data for enrolled students.
 class EnrollmentSerializer(serializers.ModelSerializer):
-    student_mail = serializers.CharField(source="student.Institutional_Email", read_only=True)
+    student_mail = serializers.CharField(source="student.institutional_email", read_only=True)
     course_name = serializers.CharField(source="course.name", read_only=True)
 
     class Meta:
         model = Enrollment
-        fields = ['id', 'student', 'student_mail', 'course', 'course_name', 'enrolled_at']
+        fields = ['issue_id', 'student', 'student_mail', 'course', 'course_name', 'enrolled_at']
         
+class AssignmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Assignment
+        fields = '__all__'   
