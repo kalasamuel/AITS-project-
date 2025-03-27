@@ -55,19 +55,19 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         return data
 
-def create(self, validated_data):
-    validated_data.pop("confirm_password")  # Remove confirm_password from validated data
-    user = CustomUser.objects.create_user(**validated_data)
+    def create(self, validated_data):
+        validated_data.pop("confirm_password")  # Remove confirm_password from validated data
+        user = CustomUser.objects.create_user(**validated_data)
 
-    # Generate Verification Code
-    user.verification_code = str(random.randint(100000, 999999))
-    user.verification_expiry = now() + timedelta(minutes=10)
-    user.save()
+        # Generate Verification Code
+        user.verification_code = str(random.randint(100000, 999999))
+        user.verification_expiry = now() + timedelta(minutes=10)
+        user.save()
 
-    # Send email
-    send_verification_email(user, "AITS Registration Verification Code")
+        # Send email
+        send_verification_email(user, "AITS Registration Verification Code")
 
-    return user
+        return user
 
 class VerifyAccountSerializer(serializers.Serializer):
     institutional_email = serializers.EmailField()

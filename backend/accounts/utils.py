@@ -2,6 +2,7 @@ import random
 import datetime
 from django.core.mail import send_mail
 from django.utils.timezone import now
+from django.conf import settings
 
 def send_verification_email(user, subject):
     """
@@ -22,8 +23,8 @@ def send_verification_email(user, subject):
         send_mail(
             subject,
             email_message,
-            "kala.samuel@students.mak.ac.ug",  # Temporary sender email for development
-            [user.Institutional_Email],  # Using `user.Institutional_Email` to send to Institutional_Email in the views.py file
+            settings.EMAIL_HOST_USER,  # aits.mak.ac@gmail.com is the email sender
+            [user.institutional_email],  #email receiver
             fail_silently=False,
         )
         return True
@@ -37,8 +38,8 @@ def send_gmail_notification(user, subject, message):
         send_mail(
             subject,
             message,
-            "kala.samuel@students.mak.ac.ug",  # Temporary sender email for development
-            [user.personal_email],  # Send to Gmail instead of institutional email
+            settings.EMAIL_HOST_USER,  # Temporary sender email for development
+            [user.email],  # sends to gmail for password resets and forgot password
             fail_silently=False,
         )
         return True

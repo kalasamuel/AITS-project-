@@ -92,7 +92,7 @@ class SelfRegisterView(APIView):
                 return Response(validation_error, status=status.HTTP_400_BAD_REQUEST)
 
         elif role == "lecturer":
-            if not email.endswith("@mak.ac.ug"):
+            if not email.endswith("@lecturers.mak.ac.ug"):
                 return Response({"error": "Invalid institutional email for lecturers."}, status=status.HTTP_400_BAD_REQUEST)
             validation_error = validate_lecturer_registration(data)
             if validation_error:
@@ -152,7 +152,7 @@ class VerifyAccountView(APIView):
                 return Response({"error": "Verification code has expired."}, status=status.HTTP_400_BAD_REQUEST)
 
             # Activate user and delete verification code
-            user.is_verified = True
+            user.is_verified = False #Turn to True if you want to by-pass registration for now
             user.save()
             verification.delete()
             login(request, user)
