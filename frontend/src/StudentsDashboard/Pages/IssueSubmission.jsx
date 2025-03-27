@@ -16,10 +16,10 @@ const IssueSubmission = ({ addIssue }) => {
     const newIssue = {
       id: Date.now(),
       title: issueType,
-      description,
+      description: description,
       status: 'Pending',
-      department,
-      file
+      department: department,
+      file: file,
     };
     addIssue(newIssue);
     setIssueType('');
