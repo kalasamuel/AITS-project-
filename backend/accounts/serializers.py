@@ -70,7 +70,7 @@ def create(self, validated_data):
     return user
 
 class VerifyAccountSerializer(serializers.Serializer):
-    institutional_email = serializers.emailField()
+    institutional_email = serializers.EmailField()
     verification_code = serializers.CharField()
 
     def validate(self, data):

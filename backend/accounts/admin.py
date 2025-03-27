@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Lecturer, Student, AcademicRegistrar, Department
+from .models import *
  
 #registering models here
 @admin.register(CustomUser)
@@ -9,6 +9,6 @@ class CustomUserAdmin(admin.ModelAdmin):
 
 admin.site.register(Lecturer)
 admin.site.register(Student)
-admin.site.register(AcademicRegistrar)
+admin.site.register(Registrar)
 admin.site.register(Department)
 

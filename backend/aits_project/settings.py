@@ -159,3 +159,10 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',  #Force JSON responses
     ),
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com' #this is the google mail smtp host
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True #using TLS for secure connection
+EMAIL_HOST_USER = 'aits.mak.ac@gmail.com'
+EMAIL_HOST_PASSWORD = 'trkr wapc czpn nolw'
