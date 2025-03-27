@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser  
 from django.utils.timezone import now
-import random
-import uuid
+import random, uuid, datetime
 
 # Custom User Model
 class CustomUser(AbstractUser):
@@ -11,16 +10,16 @@ class CustomUser(AbstractUser):
         ('lecturer', 'Lecturer'),
         ('registrar', 'Registrar'),
     )
-    user = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
-    First_Name =models.CharField(max_length=25)
-    Last_Name =models.CharField(max_length=25)
-    Institutional_Email = models.EmailField(unique=True)
-    Email = models.EmailField()  # For issue notifications and forgot password
-    Student_Number = models.CharField(max_length=10, blank=True, null=True)  # Only for students
-    Lecturer_ID = models.CharField(max_length=20, blank=True, null=True)  # Only for lecturers
-    Year_of_Study = models.PositiveIntegerField(blank=True, null=True)  # Only for students
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
+    institutional_email = models.EmailField(max_length=255, unique=True, null=True, blank=True)
+    email = models.EmailField()  # For notifications and password reset
+    student_number = models.CharField(max_length=10, blank=True, null=True)  # Only for students
+    lecturer_id = models.CharField(max_length=20, blank=True, null=True)  # Only for lecturers
+    year_of_study = models.PositiveIntegerField(blank=True, null=True)  # Only for students
+    verification_code = models.CharField(max_length=6, blank=True, null=True)
+    verification_expiry = models.DateTimeField(blank=True, null=True)
     is_verified = models.BooleanField(default=False)
-
+    
     def validate_student_year(self):
         if self.role == 'student' and self.Student_Number:
             current_year = now().year % 100
@@ -30,7 +29,9 @@ class CustomUser(AbstractUser):
 
     def generate_verification_code(self):
         self.verification_code = str(random.randint(100000, 999999))
+        self.verification_expiry = now() + datetime.timedelta(minutes=10)  # 10 minutes expiry
         self.save()
+        
         
     groups = models.ManyToManyField(
         'auth.Group',
@@ -50,13 +51,23 @@ class CustomUser(AbstractUser):
     )
     
     def __str__(self):
-        return f"{self.username} ({self.role})"
+        return f"{self.last_name} {self.first_name} ({self.role})"
+
+class Student(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    student_number = models.CharField(max_length=10, unique=True)
+    year_of_study = models.IntegerField()
+    
+    def validate_year_of_study(self):
+        current_year = now().year % 100
+        student_entry_year = int(self.student_number[:2])
+        return (current_year - student_entry_year) <= 6
 
 # Department Model
 class Department(models.Model):
-    Dept_ID = models.AutoField(primary_key=True)
-    Name = models.CharField(max_length=255)
-    Faculty = models.CharField(max_length=255)
+    department_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    faculty = models.CharField(max_length=255)
 
     def __str__(self):
         return self.Name
@@ -64,81 +75,29 @@ class Department(models.Model):
     class Meta:
         verbose_name = "Department"
         verbose_name_plural = "Departments"
-
-# Student Model
-class Student(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'student'})
-    Student_Number = models.CharField(max_length=10, primary_key=True, default="2400725045")
-    Reg_No = models.CharField(max_length=20, unique=True)
-    # Removed First_Name and Last_Name fields we using role.First_Name and role.Last_Name instead
-    Institutional_Email = models.EmailField(default="")
-    Email = models.EmailField()
-    Phone_Number = models.CharField(max_length=15)
-    Department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
-    Course = models.CharField(max_length=255)
-    Year_of_Study = models.IntegerField()
-
-    def __str__(self):
-        return f"{self.role.First_Name} {self.role.Last_Name} ({self.Reg_No})"
-
-    class Meta:
-        verbose_name = "Student"
-        verbose_name_plural = "Students"
-
-# Lecturer Model
+        
 class Lecturer(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'lecturer'})
-    Lect_ID = models.AutoField(primary_key=True)
-    # Removed First_Name and Last_Name fields we using role.First_Name and role.Last_Name instead
-    Institutional_Email = models.EmailField(default="")
-    Department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
-
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    lecturer_id = models.CharField(max_length=20, unique=True)
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
     def __str__(self):
-        return f"{self.role.First_Name} {self.role.Last_Name}"
-
-    class Meta:
-        verbose_name = "Lecturer"
-        verbose_name_plural = "Lecturers"
+        return f"{self.role.first_name} {self.role.last_name}"
 
 # Academic Registrar Model
-class AcademicRegistrar(models.Model):
+class Registrar(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'registrar'})
-    Registrar_ID = models.AutoField(primary_key=True)
-    # Removed First_Name and Last_Name fields we using role.First_Name and role.Last_Name instead
-    Email = models.EmailField()
-    Institutional_Email = models.EmailField(default="")
-    Notifications = models.TextField(blank=True, null=True)
+    registrar_id = models.AutoField(primary_key=True)
+    # Removed first_name and Last_Name fields we using role.first_name and role.Last_Name instead
+    email = models.EmailField()
+    institutional_email = models.EmailField(default="")
+    notifications = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.role.First_Name} {self.role.Last_Name}"
+        return f"{self.role.first_name} {self.role.Last_Name}"
 
     class Meta:
         verbose_name = "Academic Registrar"
         verbose_name_plural = "Academic Registrars"
-
-# Issue Model
-class Issue(models.Model):
-    CATEGORY_CHOICES = (
-        ('missing_marks', 'Missing Marks'),
-        ('course_registration', 'Course Registration'),
-        ('timetable_conflict', 'Timetable Conflict'),
-        ('general_complaint', 'General Complaint'),
-    )
-    STATUS_CHOICES = (
-        ('pending', 'Pending'),
-        ('in_progress', 'In Progress'),
-        ('resolved', 'Resolved'),
-    )
-
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    assigned_lecturer = models.ForeignKey(Lecturer, on_delete=models.SET_NULL, null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.title} ({self.status})"
 
 class VerificationCode(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
