@@ -1,59 +1,55 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import './Notifications.css';
-
 const Notifications = () => {
-  const [notifications, setNotifications] = useState([
-    { id: 1, title: 'System Update', message: 'The system will be down for maintenance at midnight.', read: false },
-    { id: 2, title: 'New Feature', message: 'We have added a new feature to the dashboard.', read: true },
-    { id: 3, title: 'Reminder', message: 'Don’t forget to submit your assignments by the end of the week.', read: false },
-  ]);
-
-  const [selectedNotification, setSelectedNotification] = useState(null);
-  const navigate = useNavigate();
-
-  const handleNotificationClick = (notification) => {
-    setSelectedNotification(notification);
-    setNotifications(notifications.map(n => 
-      n.id === notification.id ? { ...n, read: true } : n
-    ));
-  };
-
+  const notifications=[
+    {type:'New Issue Assignment',message:'You have been assigned a new issue',date:'2025-02-15'},
+    {type:"New Issue Assigned",message:"You have been assigned 2 pending issues",date:"2025-02-15"},
+    {type:"New Issue Assigned",message:"You have been assigned a new issue",date:"2025-02-15"},
+  ];
+  const studentsUpdates=[
+    {title:'Student Prod Update',message:'Tyrone has uploaded a new document'},
+    {title:'New Issue Assigned',message:'You have been assigned a new issue'},
+  ];
   return (
-    <div className="notifications-container">
-      <h1>Notifications</h1>
-      
-      {/* Notifications List */}
-      <div className="notifications-list">
-        {notifications.length > 0 ? (
-          notifications.map(notification => (
-            <div 
-              key={notification.id} 
-              className={`notification-item ${notification.read ? 'read' : 'unread'} ${selectedNotification && selectedNotification.id === notification.id ? 'selected' : ''}`} 
-              onClick={() => handleNotificationClick(notification)}
-            >
-              <span className="notification-title">{notification.title}</span>
-            </div>
-          ))
-        ) : (
-          <p className="no-notifications">No notifications found.</p>
-        )}
-      </div>
+    <div className="main-content">
+      <section className="lecturer-section">
+        <h2>Lecturer's Dashboard</h2>
+        <div className="notifications-table">
+          <h3>Notifications</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              {notifications.map((note,index)=>(
+                <tr key={index}>
+                  <td>{note.type}</td>
+                  <td>{note.message}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-      {/* Notification Details */}
-      {selectedNotification && (
-        <div className="notification-details">
-          <h2>{selectedNotification.title}</h2>
-          <p>{selectedNotification.message}</p>
-        </div>
-      )}
-
-      {/* New Issue Button */}
-      <button className="new-issue-button" onClick={() => navigate('/issuesubmission')}>
-        New Issue
-      </button>
     </div>
+    </section>
+    <section className="student-updates">
+      <h2>Student Prod Update</h2>
+      <div className="updates-list">
+          {studentsUpdates.map((update,index)=>(
+            <div key={index} className="update-item">
+              <strong>{update.title}</strong>
+              <p>{update.message}</p>
+      </div>
+          ))}
+      </div>
+    </section>
+  </div>
   );
 };
-
 export default Notifications;
+    
+  
+
