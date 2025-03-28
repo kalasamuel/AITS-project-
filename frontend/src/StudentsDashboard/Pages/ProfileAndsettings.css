@@ -1,8 +1,10 @@
 .profile-container {
   padding: 20px;
-  max-width: 400px;
-  margin-left: 220px;
+  background-color: white;
+  width: 750px;
+  margin-left: 100px;
   text-align: center;
+  transition: all 0.3s ease;
 }
 
 .profile-pic-section {
@@ -13,19 +15,20 @@
 .profile-pic {
   width: 150px;
   height: 150px;
-  margin-left: 90px;
+  margin:auto;
   border: 2px dashed #ccc;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 .profile-pic img {
   width: 100%;
   height: 100%;
+  border-radius: 50%;
   object-fit: cover;
 }
 
@@ -73,7 +76,6 @@
   margin-top: 10px;
 }
 
-/* Change Password Section */
 .change-password {
   border: 1px solid #ccc;
   padding: 15px;
@@ -110,4 +112,52 @@
 .error-message {
   color: red;
   margin-top: 10px;
+}
+
+@media (max-width: 1024px) {
+  .profile-container {
+    margin-left: 80px; 
+    width: calc(100% - 200px); 
+  }
+
+  .profile-pic {
+    width: 120px; 
+    height: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    margin-left: 50px; 
+    width: calc(100% - 150px); 
+  }
+
+  .profile-pic {
+    width: 100px; 
+    height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    margin-left: 50px; 
+    width: calc(100% - 100px); 
+  }
+
+  .profile-pic {
+    width: 80px; 
+    height: 80px;
+  }
+
+  .bio-data input,
+  .change-password input {
+    font-size: 14px; 
+    padding: 6px; 
+  }
+
+  .save-btn,
+  .change-btn {
+    font-size: 14px; 
+    padding: 8px; 
+  }
 }
