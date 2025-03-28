@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import './Notifications.css';
 
 const Notifications = () => {
+  const navigate = useNavigate();
   const [notifications] = useState([
     { id: 1, title: 'System Update', message: 'The system will be down for maintenance at midnight.' },
     { id: 2, title: 'New Feature', message: 'We have added a new feature to the dashboard.' },
     { id: 3, title: 'Reminder', message: 'Don’t forget to submit your assignments by the end of the week.' },
   ]);
 
-  const [selectedNotification, setSelectedNotification] = useState(null);
-  const navigate = useNavigate();
+  const [expandedNotification, setExpandedNotification] = useState(null)
+  
 
   const handleNotificationClick = (notification) => {
-    setSelectedNotification(notification);
+    if (expandedNotification && expandedNotification.id === notification.id) {
+      setExpandedNotification(null); 
+    } else {
+      setExpandedNotification(notification); 
+    } 
   };
 
   return (
@@ -25,23 +30,22 @@ const Notifications = () => {
           notifications.map(notification => (
             <div 
               key={notification.id} 
-              className={`notification-item ${selectedNotification && selectedNotification.id === notification.id ? 'selected' : ''}`} 
-              onClick={() => handleNotificationClick(notification)}
-            >
-              <span className="notification-title">{notification.title}</span>
+              className={`notification-item ${
+                expandedNotification?.id === notification.id ? "expanded" : ""}`} 
+              onClick={() => handleNotificationClick(notification)}>
+              <div className="notification-title">{notification.title}</div>
+              {expandedNotification?.id === notification.id && (
+                <div className="notification-details">
+                  <p>{notification.message}</p>
+                </div>)}
             </div>
-          ))
-        ) : (
+          )))
+           : (
           <p className="no-notifications">No notifications found.</p>
         )}
       </div>
 
-      {selectedNotification && (
-        <div className="notification-details">
-          <h2>{selectedNotification.title}</h2>
-          <p>{selectedNotification.message}</p>
-        </div>
-      )}
+      
 
       <button className="new-issue-button" onClick={() => navigate('/issuesubmission')}>
         New Issue

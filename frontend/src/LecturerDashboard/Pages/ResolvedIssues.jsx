@@ -24,7 +24,7 @@ const ResolvedIssues=()=>{
             resolutionTime:"1 day"},
 
     ];
-    const filteredIssues=issues.filter((issue)=>issue.type.toLowerCase().includes(searchTerm.toLowerCase())|| 
+    const filteredIssues=issues.filter((issue)=>
     issue.type.toLowerCase().includes(searchTerm.toLowerCase())||
     issue.regNo.toLowerCase().includes(searchTerm.toLowerCase()));
     const sortedIssues=[...filteredIssues].sort((a,b)=>{

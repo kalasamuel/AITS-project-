@@ -1,65 +1,98 @@
 .notifications-container {
-    width: 400px; 
-    padding: 20px; 
-    background-color: #f9f9f9; 
-    border: 1px solid #ddd; 
-    border-radius: 8px; 
-    margin-top: 20px;
-    margin-left: 280px ; 
+width: 400px;
+padding: 20px;
+background-color: #f9f9f9;
+border: 1px solid #b45924;
+border-radius: 8px;
+margin-top: 20px;
+margin-left: 280px;
+transition: all 0.3s ease;
 }
 
 .notifications-list {
-    margin-top: 20px;
+margin-top: 20px;
 }
 
 .notification-item {
-    padding: 15px;
-    margin-bottom: 10px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+padding: 15px;
+margin-bottom: 10px;
+background-color: #fff;
+border: 1px solid #ddd;
+border-radius: 5px;
+cursor: pointer;
+transition: background-color 0.3s ease;
 }
 
 .notification-item:hover {
-    background-color: #f0f0f0;
+background-color: #f0f0f0;
 }
 
-.notification-item.selected {
-    background-color: #e6f7ff;
-    border-color: #91d5ff;
+.notification-item.expanded {
+background-color: #fde1d1; 
+border-color: #152c1e;
 }
 
 .notification-title {
-    font-weight: bold;
-    font-size: 16px;
+font-weight: bold;
+font-size: 16px;
 }
 
 .notification-details {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+margin-top: 10px;
+font-size: 14px;
+color: #555;
 }
 
 .no-notifications {
-    color: #888;
-    font-style: italic;
-}
+color: #888;
+font-style: italic;
 
+}
 .new-issue-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+margin-top: 20px;
+padding: 10px 20px;
+background-color: #007bff;
+color: #fff;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+transition: background-color 0.3s ease;
 }
 
 .new-issue-button:hover {
-    background-color: #0056b3;
+background-color: #0056b3;
+}
+
+@media (max-width: 1024px) {
+.notifications-container {
+margin-left: 150px; 
+width: calc(100% - 200px); 
+}
+}
+
+@media (max-width: 768px) {
+.notifications-container {
+margin-left: 100px; 
+width: calc(100% - 150px); 
+}
+}
+
+@media (max-width: 480px) {
+.notifications-container {
+margin-left: 50px; 
+width: calc(100% - 100px); 
+}
+
+.notification-title {
+font-size: 14px; 
+}
+
+.notification-item {
+padding: 10px; 
+}
+
+.new-issue-button {
+font-size: 14px; 
+padding: 8px; 
+}
 }

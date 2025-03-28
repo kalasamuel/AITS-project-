@@ -21,17 +21,21 @@ class CustomUser(AbstractUser):
     is_verified = models.BooleanField(default=False)
     
     def validate_student_year(self):
-        if self.role == 'student' and self.Student_Number:
+        if self.role == 'student' and self.student_number:
             current_year = now().year % 100
-            student_entry_year = int(self.Student_Number[:2]) if self.Student_Number else 0
+            student_entry_year = int(self.student_number[:2]) if self.student_number else 0
             return (current_year - student_entry_year) <= 6
         return True
+
+    def save(self, *args, **kwargs):
+        if self.role == "student" and not self.validate_student_year():
+            raise ValueError("Registration denied, please visit the Registrar.")
+        super().save(*args, **kwargs)
 
     def generate_verification_code(self):
         self.verification_code = str(random.randint(100000, 999999))
         self.verification_expiry = now() + datetime.timedelta(minutes=10)  # 10 minutes expiry
         self.save()
-        
         
     groups = models.ManyToManyField(
         'auth.Group',
