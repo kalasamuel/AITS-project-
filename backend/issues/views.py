@@ -27,7 +27,8 @@ class LogIssueView(APIView):
     def post(self, request):
         serializer = IssueSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(Student=request.user) #ensures issue is linked to student
+            # Save issue with student and course info
+            serializer.save(student=request.user) #ensures issue is linked to student
             return Response({"message": "Issue logged successfully.", "data": serializer.data}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -42,13 +43,11 @@ class LecturerIssuesView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def patch(self, request, issue_id):
-        issue = get_object_or_404(Issue, id=issue_id, assigned_to=request.user)
+        issue = get_object_or_404(Issue, issue_id=issue_id, assigned_to=request.user)
         status_update = request.data.get("status")
-
         if status_update not in ["open", "in_progress", "resolved"]:
             return Response({"error": "Invalid status value."}, status=status.HTTP_400_BAD_REQUEST)
-
-        issue.status = status_update  #Fix capitalization
+        issue.status = status_update
         issue.save()
         return Response({"message": "Issue status updated successfully.", "data": IssueSerializer(issue).data}, status=status.HTTP_200_OK)
 
@@ -70,10 +69,10 @@ class AssignIssueView(APIView):
         lecturer = get_object_or_404(CustomUser, id=lecturer_id, role="lecturer")
 
         # Assign issue
-        issue.Assigned_to = lecturer
+        issue.assigned_to = lecturer
         issue.save()
 
-        return Response({"message": f"Issue assigned to {lecturer.username} successfully."}, status=status.HTTP_200_OK)
+        return Response({"message": f"Issue assigned to {lecturer.last_name} successfully."}, status=status.HTTP_200_OK)
 
 
 #views for course management with strict access control.
@@ -98,48 +97,25 @@ class EnrollCourseView(APIView):
 
         # Enroll student
         enrollment = Enrollment.objects.create(student=request.user, course=course)
-        return Response({"message": "Enrollment successful.", "data": EnrollmentSerializer(enrollment).data}, status=status.HTTP_201_CREATED)
-
+        return Response({
+            "message": "Enrollment successful.",
+            "data": EnrollmentSerializer(enrollment).data
+        }, status=status.HTTP_201_CREATED)
+        
 #LECTURER: View assigned courses
 class LecturerCoursesView(APIView):
     permission_classes = [IsAuthenticated, IsLecturer]
 
     def get(self, request):
-        """Allow lecturers to view only courses assigned to them."""
-        courses = Course.objects.filter(lecturer=request.user)
+        """Allow lecturers to view only courses assigned to them."""  # Filtering courses using the 'assigned_lecturer' field
+        courses = Course.objects.filter(assigned_lecturer=request.user)
         serializer = CourseSerializer(courses, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-# REGISTRAR: Assign students to courses
-class AssignCourseView(APIView):
-    permission_classes = [IsAuthenticated, IsRegistrar]
-
-    def post(self, request):
-        """Assign a student to a course (Only registrar can perform this)."""
-        student_id = request.data.get("student_id")
-        course_id = request.data.get("course_id")
-
-        # Validate input
-        if not student_id or not course_id:
-            return Response({"error": "Student ID and Course ID are required."}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Fetch student and course
-        student = get_object_or_404(CustomUser, id=student_id, role="student")
-        course = get_object_or_404(Course, id=course_id)
-
-        # Check if already enrolled
-        if Enrollment.objects.filter(student=student, course=course).exists():
-            return Response({"error": "Student is already enrolled in this course."}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Assign student to course
-        enrollment = Enrollment.objects.create(student=student, course=course)
-        return Response({"message": f"Student {student.username} assigned to {course.name}.", "data": EnrollmentSerializer(enrollment).data}, status=status.HTTP_200_OK)
-
 class CourseListAPIView(generics.ListAPIView):
     queryset = Course.objects.all()
-    serializer_class =CourseSerializer
-    
+    serializer_class = CourseSerializer
+
 class AssignmentListAPIView(generics.ListAPIView):
-    queryset=Assignment.objects.all()
+    queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
-    

@@ -3,10 +3,10 @@ from .models import Issue, Enrollment, Course, Assignment
 
 class IssueSerializer(serializers.ModelSerializer):
     student_name = serializers.CharField(source='student.username', read_only=True)
-    assigned_to = serializers.CharField(source="assigned_to.username", read_only=True)
+    assigned_to_username = serializers.CharField(source="assigned_to.username", read_only=True)
     class Meta:
         model = Issue
-        fields = ['issue_id', 'issue_type', 'description', 'status', 'assigned_to', 'student_name', 'created_at']
+        fields = ['issue_id', 'issue_type', 'description', 'status', 'assigned_to_username', 'student_name', 'created_at']
 
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,8 +20,8 @@ class EnrollmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Enrollment
-        fields = ['issue_id', 'student', 'student_mail', 'course', 'course_name', 'enrolled_at']
-        
+        fields = ['id', 'student', 'student_mail', 'course', 'course_name', 'enrolled_at']
+
 class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment

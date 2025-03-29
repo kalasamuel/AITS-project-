@@ -13,8 +13,6 @@ urlpatterns = [
     # COURSE MANAGEMENT
     path("enroll/", EnrollCourseView.as_view(), name="enroll-course"),
     path("lecturer/courses/", LecturerCoursesView.as_view(), name="lecturer-courses"),
-    path("assign-course/", AssignCourseView.as_view(), name="assign-course"),
-
     # ISSUE MANAGEMENT
     path("log-issue/", LogIssueView.as_view(), name="log-issue"),
     path("lecturer/issues/", LecturerIssuesView.as_view(), name="lecturer-issues"),
