@@ -1,6 +1,17 @@
 from django.db import models
 from accounts.models import *
 
+class Course(models.Model):
+    name = models.CharField(max_length=255)
+    code = models.CharField(max_length=20, unique=True)
+    assigned_lecturer = models.ForeignKey(
+        CustomUser, on_delete=models.SET_NULL, limit_choices_to={'role': 'lecturer'},
+        null=True, blank=True, related_name='assigned_courses'
+    )
+
+    def __str__(self):
+        return f"{self.code} - {self.name}"
+    
 class Issue(models.Model):
     """
     Represents an issue in the system.
@@ -24,7 +35,7 @@ class Issue(models.Model):
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='open')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True, related_name="course_issues")
     student = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'student'},
         null=True, blank=True, related_name="student_issues"
@@ -47,25 +58,15 @@ class Notification(models.Model):
     message = models.TextField()
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE, related_name='issue_notifications') 
     created_at = models.DateTimeField(auto_now_add=True)
-    recipient = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='user_notifications')
-
+    recipient = models.ForeignKey(
+        CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='user_notifications'
+    )
     def __str__(self):
         return f"Notification {self.notification_id}: {self.message[:50]}..."
 
     class Meta:
         verbose_name = "Notification"
         verbose_name_plural = "Notifications"
-        
-class Course(models.Model):
-    name = models.CharField(max_length=255)
-    code = models.CharField(max_length=20, unique=True)
-    assigned_lecturer = models.ForeignKey(
-        CustomUser, on_delete=models.SET_NULL, limit_choices_to={'role': 'lecturer'},
-        null=True, blank=True, related_name='assigned_courses'
-    )
-
-    def __str__(self):
-        return f"{self.code} - {self.name}"
     
 class Assignment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -80,10 +81,10 @@ class Assignment(models.Model):
 class Enrollment(models.Model):
     student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'student'})
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    enrolled_at = models.DateTimeField(auto_now_add=True) #Automatically records enrollment time
+    enrolled_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.student.username} enrolled in {self.course.name}"
+        return f"{self.student.last_name} {self.student.first_name} enrolled in {self.course.name}"
 
     class Meta:
         unique_together = ('student', 'course') # Ensure no duplicate enrollments
