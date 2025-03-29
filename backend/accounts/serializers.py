@@ -2,13 +2,9 @@ from rest_framework import serializers
 from .models import *
 from .utils import send_verification_email
 from django.utils.timezone import now
+from django.contrib.auth import authenticate
 from datetime import timedelta
 import random
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ['id', 'username', 'institutional_email', 'email', 'role', 'student_number', 'lecturer_id', 'year_of_study', 'is_verified']
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,28 +29,33 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'role', 'student_number', 'lecturer_id', 'year_of_study', 'password', 'confirm_password', 'registrar_id']
-
+        fields = ['username', 'first_name', 'last_name', 'password', 'confirm_password', 'role', 'institutional_email', 'student_number', "email", 'lecturer_id', 'year_of_study', 'registrar_id']
+        extra_kwargs = {'password': {'write_only': True}}
 
     def validate(self, data):
+        if data['password'] != data['confirm_password']:
+            raise serializers.ValidationError({"password": "Passwords do not match."})
+        
         role = data.get("role")
-        student_number = data.get("student_number")
-        year_of_study = data.get("year_of_study")
-        lecturer_id = data.get("lecturer_id")
-        current_year = now().year % 100  # Get last two digits of current year
-
         if role == "student":
-            if not student_number or not year_of_study:
-                raise serializers.ValidationError("Student ID and Year of Study are required for students.")
-            if (current_year - int(str(student_number)[:2])) > 6:
+            if not data.get("student_number") or not data.get("year_of_study"):
+                raise serializers.ValidationError("Student number and year of study are required for students.")
+            # Additional validation: compare current year last 2 digits with student_number prefix
+            current_year = now().year % 100
+            try:
+                student_prefix = int(str(data["student_number"])[:2])
+            except ValueError:
+                raise serializers.ValidationError("Invalid student number format.")
+            if (current_year - student_prefix) > 6:
                 raise serializers.ValidationError("Registration denied, please visit the Registrar.")
-
         elif role == "lecturer":
-            if not lecturer_id:
+            if not data.get("lecturer_id"):
                 raise serializers.ValidationError("Lecturer ID is required for lecturers.")
-
+        elif role == "registrar":
+            if not data.get("registrar_id"):
+                raise serializers.ValidationError("Registrar ID is required for registrars.")
         return data
-
+    
     def create(self, validated_data):
         validated_data.pop("confirm_password")  # Remove confirm_password from validated data
         user = CustomUser.objects.create_user(**validated_data)
@@ -82,17 +83,19 @@ class VerifyAccountSerializer(serializers.Serializer):
             raise serializers.ValidationError("Invalid verification code.")
         return data
 
-class StudentSerializer(serializers.Serializer):
-    class Meta:
-        model = Student
-        fields = '__all__'
+class LoginSerializer(serializers.Serializer):
+    institutional_email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
 
-class LecturerSerializer(serializers.Serializer):
-    class Meta:
-        model= Lecturer
-        fields = '__all__'
-        
-class RegistrarSerializer(serializers.ModelSerializer):
-    class Meta:
-        model =Registrar
-        fields = '__all__'
+    def validate(self, data):
+        institutional_email = data.get('institutional_email')
+        password = data.get('password')
+        if institutional_email and password:
+            user = authenticate(username=institutional_email, password=password)
+            if user:
+                data['user'] = user
+            else:
+                raise serializers.ValidationError("Invalid credentials")
+        else:
+            raise serializers.ValidationError("Both institutional_email and password are required.")
+        return data

@@ -7,8 +7,5 @@ class CustomUserAdmin(admin.ModelAdmin):
     list_display = ('username', 'last_name', 'first_name', 'institutional_email', 'role', 'is_verified')
     search_fields = ('username','last_name', 'first_name', 'institutional_email', 'role')
 
-admin.site.register(Lecturer)
-admin.site.register(Student)
-admin.site.register(Registrar)
 admin.site.register(Department)
 
