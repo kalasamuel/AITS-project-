@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import *
 from .utils import send_verification_email
 from django.utils.timezone import now
@@ -99,3 +100,27 @@ class LoginSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError("Both institutional_email and password are required.")
         return data
+    
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['institutional_email'] = user.institutional_email
+        token['role'] = user.role
+        return token
+
+    def validate(self, attrs):
+        institutional_email = attrs.get("institutional_email")
+        password = attrs.get("password")
+        if not institutional_email or not password:
+            raise serializers.ValidationError({"detail": "Both institutional_email and password are required."})
+        try:
+            user = CustomUser.objects.get(institutional_email=institutional_email)
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError({"detail": "No active account found with the given credentials."})
+        if not user.check_password(password):
+            raise serializers.ValidationError({"detail": "Invalid password."})
+        if not user.is_active:
+            raise serializers.ValidationError({"detail": "This account is inactive. Please contact support."})
+        attrs["user"] = user
+        return super().validate(attrs)
