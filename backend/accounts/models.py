@@ -68,7 +68,7 @@ class Department(models.Model):
     faculty = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.Name
+        return self.name
 
     class Meta:
         verbose_name = "Department"
