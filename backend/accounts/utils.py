@@ -24,7 +24,7 @@ def send_verification_email(user, subject):
             subject,
             email_message,
             settings.EMAIL_HOST_USER,  # aits.mak.ac@gmail.com is the email sender
-            [user.institutional_email],  #email receiver
+            [user.institutional_email],  #email receiver, sending to institutional_email field
             fail_silently=False,
         )
         return True

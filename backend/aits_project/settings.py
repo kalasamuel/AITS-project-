@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import environ # from the django-environ package installed
+from datetime import timedelta
 
 env = environ.Env(DEBUG=(bool,False))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -34,7 +35,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 CORS_ALLOWED_ORIGINS = [ #specifies which origins are allowed to make requests to django API
-    "http://localhost:5173",
+    "http://localhost:5173",    # React frontend
     "http://127.0.0.1:5173",
 ]
 
@@ -50,12 +51,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework_simplejwt',
     'rest_framework',
     'corsheaders', #to enable the corsheaders functionality
 ]
 
-# settings.py
-# AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -91,14 +92,6 @@ WSGI_APPLICATION = 'aits_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -106,7 +99,7 @@ DATABASES = {
         'USER' : 'postgres',
         'PASSWORD' : 'password',
         'HOST' : 'localhost',
-        'POST' : '5432',
+        'PORT' : '5432',
     }
 }
 
@@ -158,6 +151,12 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',  #Force JSON responses
     ),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",  #default to authenticated access
+    ),
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -166,3 +165,15 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True #using TLS for secure connection
 EMAIL_HOST_USER = 'aits.mak.ac@gmail.com'
 EMAIL_HOST_PASSWORD = 'trkr wapc czpn nolw'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Ensures default authentication works
+]
+
+
+# these are the JWT Settings
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
