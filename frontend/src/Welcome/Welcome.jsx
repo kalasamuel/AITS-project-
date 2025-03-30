@@ -52,8 +52,14 @@ const Welcome = ({ setIsAuthenticated }) => {
 
     users.push(newUser);
     localStorage.setItem('users', JSON.stringify(users));
-    alert('Sign-up successful! Please log in.');
-    setIsLogin(true); 
+    
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  localStorage.setItem("otp", otp); 
+  alert(`Your OTP is: ${otp}`); 
+
+  
+  navigate("/otp-verification", { state: { email } });
+    
   };
 
   return (

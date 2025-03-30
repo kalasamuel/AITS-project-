@@ -8,6 +8,7 @@ import IssueDetails from "./StudentsDashboard/Pages/IssueDetails.jsx";
 import Notifications from "./StudentsDashboard/Pages/Notifications.jsx";
 import ProfileAndSettings from "./StudentsDashboard/Pages/ProfileAndsettings.jsx";
 import Welcome from "./Welcome/Welcome.jsx";
+import OtpVerification from "./Welcome/OtpVerification";
 import './styles.css';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
                                 path="/welcome"
                                 element={<Welcome setIsAuthenticated={setIsAuthenticated} />}
                             />
+                            <Route path="/otp-verification" element={<OtpVerification />} />
                             <Route
                                 path="/"
                                 element={isAuthenticated ? <Home /> : <Navigate to="/welcome" />}
