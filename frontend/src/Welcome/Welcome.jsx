@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Welcome.css';
 
-const Welcome = ({ setIsAuthenticated }) => {
+const Welcome = ({ setIsAuthenticated, setUserType }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,8 +19,9 @@ const Welcome = ({ setIsAuthenticated }) => {
 
     if (user) {
       alert(`Welcome back, ${user.fullName}!`);
-      setIsAuthenticated(true); 
-      navigate('/'); 
+      setIsAuthenticated(true);
+      setUserType(user.role); 
+      navigate(user.role === 'lecturer' ? '/lecturer/home' : '/'); 
     } else {
       alert('Invalid email or password!');
     }
@@ -52,14 +53,12 @@ const Welcome = ({ setIsAuthenticated }) => {
 
     users.push(newUser);
     localStorage.setItem('users', JSON.stringify(users));
-    
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  localStorage.setItem("otp", otp); 
-  alert(`Your OTP is: ${otp}`); 
 
-  
-  navigate("/otp-verification", { state: { email } });
-    
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    localStorage.setItem('otp', otp);
+    alert(`Your OTP is: ${otp}`);
+
+    navigate('/otp-verification', { state: { email } });
   };
 
   return (

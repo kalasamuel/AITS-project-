@@ -1,6 +1,6 @@
 import React from 'react';
-import './Notifications.css';
-const Notifications = () => {
+import './LecturerNotifications.css';
+const LecturerNotifications = () => {
   const notifications=[
     {type:'New Issue Assignment',message:'You have been assigned a new issue',date:'2025-02-15'},
     {type:"New Issue Assigned",message:"You have been assigned 2 pending issues",date:"2025-02-15"},
@@ -49,7 +49,7 @@ const Notifications = () => {
   </div>
   );
 };
-export default Notifications;
+export default LecturerNotifications;
     
   
 
