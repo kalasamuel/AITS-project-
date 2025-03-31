@@ -26,7 +26,9 @@ const ResolvedIssues=()=>{
     ];
     const filteredIssues=issues.filter((issue)=>
     issue.type.toLowerCase().includes(searchTerm.toLowerCase())||
-    issue.regNo.toLowerCase().includes(searchTerm.toLowerCase()));
+    issue.regNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    issue.studentName.toLowerCase().includes(searchTerm.toLowerCase())||
+    issue.status.toLowerCase().includes(searchTerm.toLowerCase()));
     const sortedIssues=[...filteredIssues].sort((a,b)=>{
             return sortOrder==="asc"?a.studentName.localeCompare(b.studentName):
             b.studentName.localeCompare(a.studentName);
