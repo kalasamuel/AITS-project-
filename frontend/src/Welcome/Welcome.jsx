@@ -7,7 +7,7 @@ const Welcome = ({ setIsAuthenticated, setUserType }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [referenceNumber, setReferenceNumber] = useState(''); // Updated variable name
+  const [referenceNumber, setReferenceNumber] = useState(''); 
   const [role, setRole] = useState('student');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
@@ -20,8 +20,8 @@ const Welcome = ({ setIsAuthenticated, setUserType }) => {
     if (user) {
       alert(`Welcome back, ${user.fullName}!`);
       setIsAuthenticated(true);
-      setUserType(user.role); // Set the user type (student, lecturer, registrar)
-      navigate(user.role === 'lecturer' ? '/lecturer/home' : '/'); // Redirect based on role
+      setUserType(user.role); 
+      navigate(user.role === 'lecturer' ? '/lecturer/home' : '/'); 
     } else {
       alert('Invalid email or password!');
     }
@@ -46,7 +46,7 @@ const Welcome = ({ setIsAuthenticated, setUserType }) => {
     const newUser = {
       fullName,
       email,
-      referenceNumber, // Updated key
+      referenceNumber, 
       role,
       password,
     };
@@ -139,11 +139,11 @@ const Welcome = ({ setIsAuthenticated, setUserType }) => {
               </select>
             </div>
             <div className="form-group">
-              <label>Reference Number</label> {/* Updated label */}
+              <label>Reference Number</label> 
               <input
                 type="text"
-                value={referenceNumber} // Updated variable
-                onChange={(e) => setReferenceNumber(e.target.value)} // Updated handler
+                value={referenceNumber} 
+                onChange={(e) => setReferenceNumber(e.target.value)} 
                 required
               />
             </div>
