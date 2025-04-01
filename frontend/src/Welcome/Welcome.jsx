@@ -7,7 +7,7 @@ const Welcome = ({ setIsAuthenticated, setUserType }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [studentNumber, setStudentNumber] = useState('');
+  const [referenceNumber, setReferenceNumber] = useState(''); // Updated variable name
   const [role, setRole] = useState('student');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
@@ -20,8 +20,8 @@ const Welcome = ({ setIsAuthenticated, setUserType }) => {
     if (user) {
       alert(`Welcome back, ${user.fullName}!`);
       setIsAuthenticated(true);
-      setUserType(user.role); 
-      navigate(user.role === 'lecturer' ? '/lecturer/home' : '/'); 
+      setUserType(user.role); // Set the user type (student, lecturer, registrar)
+      navigate(user.role === 'lecturer' ? '/lecturer/home' : '/'); // Redirect based on role
     } else {
       alert('Invalid email or password!');
     }
@@ -46,7 +46,7 @@ const Welcome = ({ setIsAuthenticated, setUserType }) => {
     const newUser = {
       fullName,
       email,
-      studentNumber,
+      referenceNumber, // Updated key
       role,
       password,
     };
@@ -63,7 +63,7 @@ const Welcome = ({ setIsAuthenticated, setUserType }) => {
 
   return (
     <div className="welcome-container">
-      <h1>Welcome to AITS</h1>
+      <h1 className='welcome-to'>Welcome to AITS</h1>
       <div className="toggle-container">
         <button
           className={`toggle-button ${isLogin ? 'active' : ''}`}
@@ -127,15 +127,6 @@ const Welcome = ({ setIsAuthenticated, setUserType }) => {
               />
             </div>
             <div className="form-group">
-              <label>Student Number</label>
-              <input
-                type="text"
-                value={studentNumber}
-                onChange={(e) => setStudentNumber(e.target.value)}
-                required
-              />
-            </div>
-            <div className="form-group">
               <label>Role</label>
               <select
                 value={role}
@@ -146,6 +137,15 @@ const Welcome = ({ setIsAuthenticated, setUserType }) => {
                 <option value="lecturer">Lecturer</option>
                 <option value="registrar">Registrar</option>
               </select>
+            </div>
+            <div className="form-group">
+              <label>Reference Number</label> {/* Updated label */}
+              <input
+                type="text"
+                value={referenceNumber} // Updated variable
+                onChange={(e) => setReferenceNumber(e.target.value)} // Updated handler
+                required
+              />
             </div>
             <div className="form-group">
               <label>Password</label>
