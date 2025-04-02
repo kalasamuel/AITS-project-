@@ -17,6 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.routers import DefaultRouter
+from accounts.views import SelfRegisterView, VerifyAccountView, DepartmentViewSet
+from issues.views import IssueViewSet
+
+router = DefaultRouter()
+router.register(r'departments', DepartmentViewSet)
+router.register(r'issues', IssueViewSet)  # issue tracking API
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

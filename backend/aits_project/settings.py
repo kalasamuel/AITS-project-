@@ -35,7 +35,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 CORS_ALLOWED_ORIGINS = [ #specifies which origins are allowed to make requests to django API
-    "http://localhost:5173",    # React frontend
+    "http://localhost:5173",    # React frontend url
     "http://127.0.0.1:5173",
 ]
 
@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework_simplejwt',
     'rest_framework',
-    'corsheaders', #to enable the corsheaders functionality
+    'corsheaders', #to enable the corsheaders functionality so thast the frontend communicates with backend
 ]
 
 #AUTH_USER_MODEL = 'accounts.CustomUser'
@@ -152,9 +152,12 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',  #Force JSON responses
     ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": (
+        'rest_framework.permissions.AllowAny',
         "rest_framework.permissions.IsAuthenticated",  #default to authenticated access
     ),
 }
