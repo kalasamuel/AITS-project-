@@ -127,7 +127,7 @@ const Welcome = ({ setIsAuthenticated, setUserType }) => {
               />
             </div>
             <div className="form-group">
-              <label>Student Number</label>
+              <label>Reference Number</label>
               <input
                 type="text"
                 value={studentNumber}
