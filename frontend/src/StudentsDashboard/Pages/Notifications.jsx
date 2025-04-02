@@ -47,7 +47,7 @@ const Notifications = () => {
 
       
 
-      <button className="new-issue-button" onClick={() => navigate('/issuesubmission')}>
+      <button className="new-issue-button" onClick={() => navigate('/student/issuesubmission')}>
         New Issue
       </button>
     </div>
