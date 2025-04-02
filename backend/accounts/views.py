@@ -167,8 +167,10 @@ class RegisterUserView(generics.CreateAPIView):
 
 ### Login View using JWT ###
 class LoginView(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request, *args, **kwargs):
-        serializer = CustomTokenObtainPairSerializer(data=request.data)
+        serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data["user"]
             refresh = RefreshToken.for_user(user)

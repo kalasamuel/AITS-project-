@@ -17,11 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView
-from accounts.views import RegisterUserView, SelfRegisterView
+from accounts.views import RegisterUserView, SelfRegisterView, LoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/register/', SelfRegisterView.as_view()),
+    path('auth/login/', LoginView.as_view()),
     path('api/accounts/', include('accounts.urls')),
     path('api/issues/', include('issues.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
