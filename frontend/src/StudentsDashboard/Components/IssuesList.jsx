@@ -89,7 +89,7 @@ const IssuesList = ({ issues }) => {
       
       <button
         className="new-issue-button"
-        onClick={() => navigate("/issuesubmission")}
+        onClick={() => navigate("/student/issuesubmission")}
       >
         New Issue
       </button>

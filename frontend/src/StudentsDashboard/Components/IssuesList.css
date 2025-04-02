@@ -8,11 +8,12 @@
     width: calc(100% - 200px);
     max-width: 800px;
     margin-top: 80px;
-    font-family: Arial, sans-serif;
     color: #000000;
     border: #b45924 solid;
-    position: sticky;
+    position: relative; /* Changed from sticky to relative */
     background-color: #fff;
+    height: auto; /* Ensure height adjusts to content */
+    box-sizing: border-box;
 }
 
 h1 {
