@@ -15,8 +15,6 @@ import uuid
 # Registrar Code (Store securely in settings)
 REGISTRAR_CODE = "REG123456"
 
-CustomUser = get_user_model()
-
 
 ### Helper Functions for Role-Based Validation ###
 def validate_student_registration(data):
@@ -69,10 +67,8 @@ class SelfRegisterView(APIView):
         """
         Handles self-registration for Students, Lecturers, and Registrars.
         """
-    def post(self, request):
-        """
-        Handles self-registration for Students, Lecturers, and Registrars.
-        """
+        # return Response({"message": "Registration successful. Check your email for the verification code."}, status=status.HTTP_201_CREATED)
+
         data = request.data
         institutional_email = data.get("institutional_email", "").strip().lower()
         role = data.get("role", "").strip().lower()
@@ -108,7 +104,7 @@ class SelfRegisterView(APIView):
         # Create User (Inactive until verification)
         user = CustomUser.objects.create(
             username=institutional_email,
-            institutional_email=institutional_email,
+            # institutional_email=institutional_email,
             email=email,
             first_name=first_name,
             last_name=last_name,
@@ -126,7 +122,7 @@ class SelfRegisterView(APIView):
 
         # Generate and Send Verification Code
         verification_code = VerificationCode.objects.create(
-            user=user, code=str(uuid.uuid4())[:6], expires_at=now() + timedelta(minutes=10)
+            user=user, code=str(uuid.uuid4()), expires_at=now() + timedelta(minutes=10)
         )
         email_sent = send_verification_email(user, verification_code.code)
 
