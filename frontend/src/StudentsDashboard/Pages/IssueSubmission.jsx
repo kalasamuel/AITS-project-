@@ -16,7 +16,7 @@ const IssueSubmission = ({ addIssue }) => {
     e.preventDefault();
     const newIssue = {
       id: Date.now(),
-      title: issueType,
+      issueType: issueType,
       courseCode: courseCode,
       description: description,
       status: 'Pending',
@@ -37,7 +37,13 @@ const IssueSubmission = ({ addIssue }) => {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <h2>Issue Type</h2>
-          <select value={issueType} onChange={(e) => setIssueType(e.target.value)}>
+          <input
+            type="text"
+            value={issueType}
+            onChange={(e) => setIssueType(e.target.value)}
+            placeholder="Enter issue type"
+          />
+          <select onChange={(e) => setIssueType(e.target.value)}>
             <option value="">Select issue type</option>
             <option value="Missing Marks">Missing Marks</option>
             <option value="Wrong Registration Number">Wrong Registration Number</option>
