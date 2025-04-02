@@ -109,3 +109,33 @@ button:hover {
 .forgot-password:hover {
     text-decoration: underline;
 }
+
+/* Medium screens (Tablets) */
+@media (max-width: 768px) {
+    .welcome-to {
+        font-size: 28px;
+    }
+
+    .form-container {
+        max-width: 300px; /* Reduce form width slightly */
+    }
+}
+
+/* Small screens (Mobile Phones) */
+@media (max-width: 480px) {
+    .welcome-to {
+        font-size: 24px;
+    }
+
+    .toggle-container {
+        flex-direction: column; /* Stack buttons vertically */
+    }
+
+    .form-container {
+        max-width: 90%; /* Makes the form take most of the screen */
+    }
+
+    button {
+        font-size: 14px;
+    }
+}
