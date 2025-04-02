@@ -1,0 +1,75 @@
+.notifications-container {
+    background-color: g;
+    padding: 20px;
+    margin-left: 220px; /* Adjust based on your sidebar width */
+}
+
+.notifications-container h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+/* Notifications List Styling */
+.notifications-list {
+    border: 1px solid #ccc;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.notification-item:hover {
+    background-color: #f9f9f9; /* Highlight on hover */
+}
+
+.notification-item.read {
+    background-color: #e0e0e0;
+}
+
+.notification-item.unread {
+    background-color: #fff;
+}
+
+.notification-item.selected {
+    background-color: #d0d0d0; /* Highlight the selected notification */
+}
+
+.notification-title {
+    font-weight: bold;
+}
+
+/* Notification Details Styling */
+.notification-details {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+}
+
+.notification-details h2 {
+    margin-bottom: 10px;
+}
+
+.notification-details p {
+    margin: 5px 0;
+}
+
+/* New Issue Button Styling */
+.new-issue-button {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: blue;
+    color: white;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.new-issue-button:hover {
+    background-color: darkblue;
+}

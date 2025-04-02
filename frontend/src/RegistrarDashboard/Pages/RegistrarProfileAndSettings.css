@@ -1,0 +1,163 @@
+.profile-container {
+    padding: 20px;
+    width: 750px;
+    background-color: white;
+    margin-left: 100px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  
+  .profile-pic-section {
+    margin-top: 20px;
+    
+  }
+  
+  .profile-pic {
+    width: 150px;
+    height: 150px;
+    margin:auto;
+    border: 2px dashed #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .profile-pic img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .profile-pic .placeholder {
+    color: #888;
+    font-size: 14px;
+  }
+  
+  .bio-data {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .bio-data h2 {
+    margin-bottom: 10px;
+  }
+  
+  .bio-data label {
+    display: block;
+    margin-top: 10px;
+  }
+  
+  .bio-data input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .save-btn {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px;
+  }
+  
+  .success-message {
+    color: green;
+    margin-top: 10px;
+  }
+  
+  .change-password {
+    border: 1px solid #ccc;
+    padding: 15px;
+  }
+  
+  .change-password h2 {
+    margin-bottom: 10px;
+  }
+  
+  .change-password label {
+    display: block;
+    margin-top: 10px;
+  }
+  
+  .change-password input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .change-btn {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px;
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }
+  
+  @media (max-width: 1024px) {
+    .profile-container {
+      margin-left: 80px; 
+      width: calc(100% - 200px); 
+    }
+  
+    .profile-pic {
+      width: 120px; 
+      height: 120px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .profile-container {
+      margin-left: 50px; 
+      width: calc(100% - 150px); 
+    }
+  
+    .profile-pic {
+      width: 100px; 
+      height: 100px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .profile-container {
+      margin-left: 50px; 
+      width: calc(100% - 100px); 
+    }
+  
+    .profile-pic {
+      width: 80px; 
+      height: 80px;
+    }
+  
+    .bio-data input,
+    .change-password input {
+      font-size: 14px; 
+      padding: 6px; 
+    }
+  
+    .save-btn,
+    .change-btn {
+      font-size: 14px; 
+      padding: 8px; 
+    }
+  }
