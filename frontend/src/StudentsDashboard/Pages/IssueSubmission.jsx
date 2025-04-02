@@ -3,6 +3,7 @@ import './IssueSubmission.css';
 
 const IssueSubmission = ({ addIssue }) => {
   const [issueType, setIssueType] = useState('');
+  const [courseCode, setCourseCode] = useState('');
   const [description, setDescription] = useState('');
   const [department, setDepartment] = useState('');
   const [file, setFile] = useState(null);
@@ -15,7 +16,8 @@ const IssueSubmission = ({ addIssue }) => {
     e.preventDefault();
     const newIssue = {
       id: Date.now(),
-      title: issueType,
+      issueType: issueType,
+      courseCode: courseCode,
       description: description,
       status: 'Pending',
       department: department,
@@ -23,6 +25,7 @@ const IssueSubmission = ({ addIssue }) => {
     };
     addIssue(newIssue);
     setIssueType('');
+    setCourseCode('');
     setDescription('');
     setDepartment('');
     setFile(null);
@@ -40,12 +43,21 @@ const IssueSubmission = ({ addIssue }) => {
             onChange={(e) => setIssueType(e.target.value)}
             placeholder="Enter issue type"
           />
-          <select onChange={(e) => setIssueType(e.target.value)}>
+          <select onChange={(e) => setIssueType(e.target.value)} value={issueType}>
             <option value="">Select issue type</option>
             <option value="Missing Marks">Missing Marks</option>
             <option value="Wrong Registration Number">Wrong Registration Number</option>
             <option value="Other">Other</option>
           </select>
+        </div>
+        <div className="form-group">
+          <h2>Course Code</h2>
+          <input
+            type="text"
+            value={courseCode}
+            onChange={(e) => setCourseCode(e.target.value)}
+            placeholder="Enter course code (e.g., CS101)"
+          />
         </div>
         <div className="form-group">
           <h2>Issue Description</h2>
