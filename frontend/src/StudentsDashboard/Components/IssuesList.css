@@ -4,16 +4,15 @@
     align-items: center;
     justify-content: flex-start;
     padding: 20px;
-    margin-left: 270px;
+    margin-left: 170px;
     margin-right: auto;
-    width: calc(100% - 200px);
-    max-width: 800px;
+    width: calc(100% - 100px);
     margin-top: 80px;
     font-family: Arial, sans-serif;
     color: #000000;
     border: #b45924 solid;
-    position: sticky;
-    background-color: #fff;
+    position: relative;
+    background-color: #200b32;
 }
 
 h1 {
