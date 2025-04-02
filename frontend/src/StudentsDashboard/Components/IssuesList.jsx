@@ -19,7 +19,7 @@ const IssuesList = ({ issues }) => {
   );
 
   return (
-    <div className="dashboard-container">
+    <div className="container">
       <h1>Students Dashboard</h1>
 
       
