@@ -16,12 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import TokenObtainPairView # imports JWT authentication view to provide access tokens
+from rest_framework.routers import DefaultRouter # imports DRF's routers which automatically generate URL routes for viewsets
 from accounts.views import SelfRegisterView, VerifyAccountView, DepartmentViewSet
-from issues.views import IssueViewSet
+from issues.views import IssueViewSet # to manage academic issue tracking
 
-router = DefaultRouter()
+#creating a router for viewsets
+router = DefaultRouter() # creates a REST framework router to automatically handle URL routing for viewsets
 router.register(r'departments', DepartmentViewSet)
 router.register(r'issues', IssueViewSet)  # issue tracking API
 
@@ -31,4 +32,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('api/issues/', include('issues.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/auth/register/', SelfRegisterView.as_view(), name='register'),
+    path('api/auth/verify/', VerifyAccountView.as_view(), name='verify'),
+    path('api/', include(router.urls)),  # includes issues and departments
 ]
