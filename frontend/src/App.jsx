@@ -29,7 +29,7 @@ function App() {
                                 path="/welcome"
                                 element={<Welcome setIsAuthenticated={setIsAuthenticated} setUserType={setUserType} />}
                             />
-                            <Route path="/otp-verification" element={<OtpVerification />} />
+                            <Route path="/otp-verification" element={<OtpVerification email = "institutional_email"/>} />
 
                             <Route
                                 path="/"
