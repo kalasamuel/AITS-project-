@@ -60,7 +60,10 @@ function App() {
                                             setProfilePic={setProfilePic}
                                         />
                                     ) : (
-                                        <LecturerRoutes isAuthenticated={isAuthenticated} />
+                                        <LecturerRoutes 
+                                        isAuthenticated={isAuthenticated} 
+                                        profilePic={profilePic}
+                                        setProfilePic={setProfilePic}/>
                                     )
                                 }
                             />

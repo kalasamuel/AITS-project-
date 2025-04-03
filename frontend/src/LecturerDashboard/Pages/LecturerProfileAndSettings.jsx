@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./ProfileAndSettings.css";
+import "./LecturerProfileAndSettings.css";
 
 const ProfileAndSettings = ({profilePic, setProfilePic}) => {
   const uniqueId = `profile-pic-input-${Math.random().toString(36).substr(2, 9)}`;
@@ -33,12 +33,12 @@ const ProfileAndSettings = ({profilePic, setProfilePic}) => {
     };
   
     const handleSaveBioData = () => {
-      // Save bio data logic
+
       setSuccessMessage('Bio data saved successfully!');
     };
   
     const handleChangePassword = () => {
-      // Change password logic
+      
       if (passwords.newPassword !== passwords.confirmPassword) {
         setErrorMessage('Passwords do not match!');
       } else {

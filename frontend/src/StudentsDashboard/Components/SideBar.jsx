@@ -39,6 +39,9 @@ function SideBar({ userType }) {
             <NavLink to="/lecturer/notifications" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
               NOTIFICATIONS
             </NavLink>
+            <NavLink to="/lecturer/profile-and-settings" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
+              PROFILE & SETTINGS
+            </NavLink>
           </>
         )}
       </div>
