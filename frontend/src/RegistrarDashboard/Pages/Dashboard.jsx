@@ -19,7 +19,6 @@ const RegistrarsDashboard = () => {
         }
     };
 
-    // Dynamic summary values
     const totalIssues = issues.length;
     const openCount = issues.filter(issue => issue.status === 'Open').length;
     const inProgressCount = issues.filter(issue => issue.status === 'In Progress').length;
@@ -29,7 +28,6 @@ const RegistrarsDashboard = () => {
         <div className="container">
             <h1 className="header">Registrar's Dashboard</h1>
 
-            {/* Summary Cards */}
             <div className="summary-container">
                 <SummaryCard title="Total Issues" value={totalIssues} className="card-total" />
                 <SummaryCard title="Open Issues" value={openCount} className="card-open" />
@@ -37,7 +35,6 @@ const RegistrarsDashboard = () => {
                 <SummaryCard title="Resolved Issues" value={resolvedCount} className="card-resolved" />
             </div>
 
-            {/* Issues Table */}
             <div className="table-container">
                 <h2 className="table-header">Recent Issues Table:</h2>
                 <table className="table">
@@ -73,7 +70,6 @@ const RegistrarsDashboard = () => {
     );
 };
 
-// Summary Card Component
 const SummaryCard = ({ title, value, className }) => (
     <div className={`card ${className}`}>
         <h3 className="card-title">{title}:</h3>

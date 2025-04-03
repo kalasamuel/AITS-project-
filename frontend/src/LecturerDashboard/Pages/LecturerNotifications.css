@@ -1,7 +1,7 @@
 .notifications-container {
     background-color: g;
     padding: 20px;
-    margin-left: 220px; /* Adjust based on your sidebar width */
+    margin-left: 220px; 
 }
 
 .notifications-container h1 {
@@ -9,7 +9,7 @@
     margin-bottom: 15px;
 }
 
-/* Notifications List Styling */
+
 .notifications-list {
     border: 1px solid #ccc;
     padding: 10px;
@@ -23,8 +23,9 @@
     cursor: pointer;
 }
 
+
 .notification-item:hover {
-    background-color: #f9f9f9; /* Highlight on hover */
+    background-color: #f9f9f9; 
 }
 
 .notification-item.read {
@@ -36,14 +37,13 @@
 }
 
 .notification-item.selected {
-    background-color: #d0d0d0; /* Highlight the selected notification */
+    background-color: #d0d0d0; 
 }
 
 .notification-title {
     font-weight: bold;
 }
 
-/* Notification Details Styling */
 .notification-details {
     margin-top: 20px;
     padding: 15px;
@@ -58,7 +58,7 @@
     margin: 5px 0;
 }
 
-/* New Issue Button Styling */
+
 .new-issue-button {
     margin-top: 20px;
     padding: 10px;

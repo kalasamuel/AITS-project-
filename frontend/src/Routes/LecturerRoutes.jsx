@@ -9,25 +9,21 @@ import LecturerProfileAndSettings from '../LecturerDashboard/Pages/LecturerProfi
 function LecturerRoutes({ isAuthenticated }) {
     return (
         <Routes>
-            {/* Lecturer Dashboard Home */}
+        
             <Route
                 path="/lecturer/home"
                 element={isAuthenticated ? <LecturerDashboard /> : <Navigate to="/welcome" />}
             />
 
-            {/* Assigned Issues */}
             <Route
                 path="/lecturer/assigned-issues"
                 element={isAuthenticated ? <AssignedIssues /> : <Navigate to="/welcome" />}
             />
 
-            {/* Resolved Issues */}
             <Route
                 path="/lecturer/resolved-issues"
                 element={isAuthenticated ? <ResolvedIssues /> : <Navigate to="/welcome" />}
             />
-
-            {/* Lecturer Notifications */}
             <Route
                 path="/lecturer/notifications"
                 element={isAuthenticated ? <LecturerNotifications /> : <Navigate to="/welcome" />}
