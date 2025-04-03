@@ -67,4 +67,14 @@ class ModelTestCase(TestCase):
         self.assertEqual(serializer.data['issue_type'], 'missing_marks')
         self.assertEqual(serializer.data['description'], 'My marks are missing for the final exam.')
     
+    def test_course_serializer(self):
+        serializer = CourseSerializer(instance=self.course)
+        self.assertEqual(serializer.data['name'], 'Data Structures')
     
+    def test_enrollment_serializer(self):
+        serializer = EnrollmentSerializer(instance=self.enrollment)
+        self.assertEqual(serializer.data['course_name'], 'Data Structures')
+    
+    def test_assignment_serializer(self):
+        serializer = AssignmentSerializer(instance=self.assignment)
+        self.assertEqual(serializer.data['title'], 'Assignment 1')
