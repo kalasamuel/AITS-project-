@@ -1,10 +1,9 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Assigned from '../Registrar/Pages/Assigned.jsx';
+import Assigned from '../RegistrarDashboard/Pages/Assigned.jsx';
 import Dashboard from '../RegistrarDashboard/Pages/Dashboard.jsx';
 import Assignment from '../RegistrarDashboard/Pages/Assignment.jsx';
 import RegistrarResolvedIssues from '../RegistrarDashboard/Pages/RegistrarResolvedIssues.jsx';
-
 
 function RegistrarRoutes({ isAuthenticated }) {
     return (
