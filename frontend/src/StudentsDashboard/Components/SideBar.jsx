@@ -44,6 +44,25 @@ function SideBar({ userType }) {
             </NavLink>
           </>
         )}
+         {userType === "registrar" && (
+          <>
+            <NavLink to="/registrar/home" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
+              DASHBOARD
+            </NavLink>
+            <NavLink to="/registrar/assignment" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
+              ASSIGNMENT
+            </NavLink>
+            <NavLink to="/registrar/assigned" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
+              ASSIGNED
+            </NavLink>
+            <NavLink to="/registrar/resolved-issues" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
+              RESOLVED ISSUES
+            </NavLink>
+            <NavLink to="/registrar/profile-and-settings" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
+              PROFILE & SETTINGS
+            </NavLink>
+          </>
+         )}
       </div>
     </nav>
   );
