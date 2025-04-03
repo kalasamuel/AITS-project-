@@ -1,0 +1,121 @@
+.issue-submission-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    margin: 80px auto 20px auto; /* Centers container */
+    width: 90%; /* Uses a percentage-based width */
+    max-width: 800px;
+    font-family: Arial, sans-serif;
+    color: #000000;
+    border: 2px solid #b45924;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.form-group {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+textarea {
+    height: 120px;
+}
+
+/* Submit Button */
+.submit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.submit-button:hover {
+    background-color: darkblue;
+}
+
+/* 📱 Tablet Screens */
+@media (max-width: 1024px) {
+    .issue-submission-container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+}
+
+/* 📱 Mobile Screens */
+@media (max-width: 768px) {
+    .issue-submission-container {
+        width: 100%;
+        padding: 15px;
+        margin: 60px auto 10px auto;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    input, textarea, select {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .submit-button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+/* 📱 Extra Small Screens */
+@media (max-width: 480px) {
+    .issue-submission-container {
+        width: 95%;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 18px;
+    }
+
+    input, textarea, select {
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    .submit-button {
+        font-size: 13px;
+        padding: 8px;
+    }
+}
