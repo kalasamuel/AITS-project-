@@ -84,7 +84,7 @@ const Welcome = ({ setIsAuthenticated }) => {
       const data = await response.json();
       if (response.status === 201) {
         setMessage('Registration successful! Check your email for verification.');
-        setTimeout(() => setIsLogin(true), 3000);
+        setTimeout(() => navigate('/otp-verification'), 3000);
       } else {
         setError(data.error || 'Registration failed.');
       }

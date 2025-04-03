@@ -102,7 +102,7 @@ class SelfRegisterView(APIView):
         # Create User (Inactive until verification)
         user = CustomUser.objects.create(
             username=institutional_email,
-            # institutional_email=institutional_email,
+            institutional_email=institutional_email,
             email=email,
             first_name=first_name,
             last_name=last_name,
@@ -113,19 +113,17 @@ class SelfRegisterView(APIView):
             is_verified=False,
             role=role
         )
-
-
         user.set_password(password)
+
+        # Generate and save verification code
+        verification_code = random.randint(100000, 999999)
+        user.verification_code = verification_code
         user.save()
 
-        # Generate and Send Verification Code
-        email_sent = send_verification_email(user)
+        # Send verification email
+        send_verification_email(user.institutional_email, verification_code)
 
-        if email_sent:
-            return Response({"message": "Registration successful. Check your email for the verification code."}, status=status.HTTP_201_CREATED)
-        
-        return Response({"error": "Could not send verification email."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        return Response({"message": "Registration successful. Check your email for the verification code."}, status=status.HTTP_201_CREATED)
 
 ### Verify Account View ###
 class VerifyAccountView(APIView):

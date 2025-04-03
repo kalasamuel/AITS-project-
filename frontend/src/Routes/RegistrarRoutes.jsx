@@ -5,7 +5,6 @@ import RegistrarDashboard from '../RegistrarDashboard/Pages/Dashboard.jsx';
 import Assignment from '../RegistrarDashboard/Pages/Assignment.jsx';
 import RegistrarResolvedIssues from '../RegistrarDashboard/Pages/RegistrarResolvedIssues.jsx';
 import ProfileAndsettings from '../RegistrarDashboard/Pages/RegistrarProfileAndsettings.jsx'; 
-
     function RegistrarRoutes({ isAuthenticated,profilePic, setProfilePic }) {
     return (
         <Routes>
