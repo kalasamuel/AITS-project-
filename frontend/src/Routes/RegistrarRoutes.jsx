@@ -4,9 +4,9 @@ import Assigned from '../RegistrarDashboard/Pages/Assigned.jsx';
 import RegistrarDashboard from '../RegistrarDashboard/Pages/Dashboard.jsx';
 import Assignment from '../RegistrarDashboard/Pages/Assignment.jsx';
 import RegistrarResolvedIssues from '../RegistrarDashboard/Pages/RegistrarResolvedIssues.jsx';
-import ProfileAndsettings from '../RegistrarDashboard/Pages/RegistrarProfileAndsettings.jsx'; // Import added
+import ProfileAndsettings from '../RegistrarDashboard/Pages/RegistrarProfileAndsettings.jsx'; 
 
-function RegistrarRoutes({ isAuthenticated }) {
+    function RegistrarRoutes({ isAuthenticated,profilePic, setProfilePic }) {
     return (
         <Routes>
             <Route
@@ -27,7 +27,7 @@ function RegistrarRoutes({ isAuthenticated }) {
             />
             <Route
                 path="/registrar/profile-and-settings"
-                element={isAuthenticated ? <ProfileAndsettings /> : <Navigate to="/welcome" />}
+                element={isAuthenticated ? <ProfileAndsettings profilePic={profilePic} setProfilePic={setProfilePic} /> : <Navigate to="/welcome" />}
             />
         </Routes>
     );

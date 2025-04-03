@@ -6,7 +6,7 @@ import LecturerNotifications from '../LecturerDashboard/Pages/LecturerNotificati
 import ResolvedIssues from '../LecturerDashboard/Pages/ResolvedIssues.jsx';
 import LecturerProfileAndSettings from '../LecturerDashboard/Pages/LecturerProfileAndSettings.jsx';
 
-function LecturerRoutes({ isAuthenticated }) {
+function LecturerRoutes({ isAuthenticated,profilePic, setProfilePic }) {
     return (
         <Routes>
         
@@ -30,7 +30,7 @@ function LecturerRoutes({ isAuthenticated }) {
             />
              <Route
                 path="/lecturer/profile-and-settings"
-                element={isAuthenticated ? <LecturerProfileAndSettings /> : <Navigate to="/welcome" />}
+                element={isAuthenticated ? <LecturerProfileAndSettings profilePic={profilePic} setProfilePic={setProfilePic} /> : <Navigate to="/welcome" />}
                             />
         </Routes>
     );
