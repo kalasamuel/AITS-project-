@@ -4,28 +4,20 @@
     align-items: center;
     justify-content: flex-start;
     padding: 20px;
-    margin-left: 270px; 
-    margin-right: auto;
-    width: calc(100% - 100px); 
-    max-width: 800px; 
-    margin-top: 80px;
+    margin: 80px auto 20px auto; /* Centers container */
+    width: 90%; /* Uses a percentage-based width */
+    max-width: 800px;
     font-family: Arial, sans-serif;
     color: #000000;
-    border: #b45924 solid;
-    position: sticky;
+    border: 2px solid #b45924;
     background-color: #fff;
-    transition: all 0.3s ease; 
-
+    transition: all 0.3s ease;
 }
 
 h1 {
     font-size: 24px;
     margin-bottom: 15px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-    margin-left: 5px;
+    text-align: center;
 }
 
 h2 {
@@ -33,75 +25,97 @@ h2 {
     margin-bottom: 5px;
 }
 
-input[type="text"], textarea, select, input[type="file"] {
+.form-group {
     width: 100%;
-    padding: 10px;
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-top: 5px;
-    margin-left: 5px;
+    font-size: 16px;
 }
 
 textarea {
-    height: 100px;
-    margin-left: 5px;
+    height: 120px;
 }
 
-select {
-    margin-left: 5px;
-}
-input[type="file"] {
-    padding: 0;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin-left: 5px;
-}
-
+/* Submit Button */
 .submit-button {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     background-color: blue;
     color: white;
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    font-size: 16px;
 }
 
 .submit-button:hover {
     background-color: darkblue;
 }
 
+/* 📱 Tablet Screens */
 @media (max-width: 1024px) {
     .issue-submission-container {
-        margin-left: 150px; 
-        width: calc(100% - 200px); 
-    }
-}
-
-@media (max-width: 768px) {
-    .issue-submission-container {
-        margin-left: 100px; 
-        width: calc(100% - 150px); 
-    }
-}
-
-@media (max-width: 480px) {
-    .issue-submission-container {
-        margin-left: 50px; 
-        width: calc(100% - 100px); 
+        width: 95%;
+        padding: 15px;
     }
 
     h1 {
-        font-size: 20px; /
+        font-size: 22px;
+    }
+}
+
+/* 📱 Mobile Screens */
+@media (max-width: 768px) {
+    .issue-submission-container {
+        width: 100%;
+        padding: 15px;
+        margin: 60px auto 10px auto;
     }
 
-    input[type="text"], textarea, select, input[type="file"] {
-        font-size: 14px; 
-        padding: 8px; 
+    h1 {
+        font-size: 20px;
+    }
+
+    input, textarea, select {
+        font-size: 14px;
+        padding: 10px;
     }
 
     .submit-button {
-        font-size: 14px; 
-        padding: 8px; 
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+/* 📱 Extra Small Screens */
+@media (max-width: 480px) {
+    .issue-submission-container {
+        width: 95%;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 18px;
+    }
+
+    input, textarea, select {
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    .submit-button {
+        font-size: 13px;
+        padding: 8px;
     }
 }

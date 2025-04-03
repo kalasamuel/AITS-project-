@@ -4,13 +4,11 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status, generics, viewsets
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.utils.timezone import now, timedelta
+from django.utils.timezone import now
 from django.contrib.auth import login
-from django.contrib.auth import get_user_model
 from .models import CustomUser, Department, VerificationCode
 from .utils import send_verification_email
 from .serializers import *
-import uuid
 
 # Registrar Code (Store securely in settings)
 REGISTRAR_CODE = "REG123456"
@@ -121,10 +119,7 @@ class SelfRegisterView(APIView):
         user.save()
 
         # Generate and Send Verification Code
-        verification_code = VerificationCode.objects.create(
-            user=user, code=str(uuid.uuid4()), expires_at=now() + timedelta(minutes=10)
-        )
-        email_sent = send_verification_email(user, verification_code.code)
+        email_sent = send_verification_email(user)
 
         if email_sent:
             return Response({"message": "Registration successful. Check your email for the verification code."}, status=status.HTTP_201_CREATED)
