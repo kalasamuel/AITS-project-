@@ -1,3 +1,4 @@
+/* Sidebar Styles */
 .sidebar {
     width: 180px;
     height: 100vh;
@@ -5,13 +6,19 @@
     padding: 1rem;
     position: fixed;
     top: 70px; 
-    left: 0;
+    left: -180px; /* Initially hidden */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    transition: width 0.3s ease;
+    transition: left 0.3s ease; /* Smooth sliding */
 }
 
+/* When Sidebar is Open */
+.sidebar.open {
+    left: 0;
+}
+
+/* Sidebar Links */
 .sidebar-links {
     display: flex;
     flex-direction: column;
@@ -36,6 +43,30 @@
     color: white; 
     font-weight: bold; 
 }
+
+/* Menu Button */
+.menu-button {
+    position: fixed; /* Fix it at the top left */
+    top: 10px; /* Adjust as needed */
+    left: 10px; /* Adjust as needed */
+    width: 50px;  /* Make it a square */
+    height: 50px; /* Same as width */
+    background-color: black; /* Matches sidebar */
+    color: white;
+    border: none;
+    border-radius: 4px; /* Optional: Keeps it slightly rounded */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000; /* Ensure it stays above other elements */
+}
+
+.menu-button:hover {
+    background-color: #333; /* Slight hover effect */
+}
+
+/* Responsive Breakpoints */
 @media (max-width: 1024px) {
     .sidebar {
         width: 150px; 
