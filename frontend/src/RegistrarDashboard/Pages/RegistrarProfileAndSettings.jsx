@@ -33,12 +33,10 @@ const ProfileAndSettings = ({profilePic, setProfilePic}) => {
     };
   
     const handleSaveBioData = () => {
-      // Save bio data logic
       setSuccessMessage('Bio data saved successfully!');
     };
   
     const handleChangePassword = () => {
-      // Change password logic
       if (passwords.newPassword !== passwords.confirmPassword) {
         setErrorMessage('Passwords do not match!');
       } else {
@@ -73,13 +71,13 @@ const ProfileAndSettings = ({profilePic, setProfilePic}) => {
       </div>
       <div className="bio-data">
         <h2>Bio Data</h2>
-        <label>Lecturer Name</label>
+        <label>Student Name</label>
         <input type="text" name="name" value={bioData.name} onChange={handleBioDataChange} />
-        <label>Lecturer Email</label>
+        <label>Student Email</label>
         <input type="email" name="email" value={bioData.email} onChange={handleBioDataChange} />
         <label>Academic Program</label>
         <input type="text" name="program" value={bioData.program} onChange={handleBioDataChange} />
-        <label>Staff Number</label>
+        <label>Registration Number</label>
         <input type="text" name="registrationNumber" value={bioData.registrationNumber} onChange={handleBioDataChange} />
         <button className="save-btn" onClick={handleSaveBioData}>Save</button>
         {successMessage && <p className="success-message">{successMessage}</p>}

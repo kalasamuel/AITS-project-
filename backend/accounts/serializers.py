@@ -118,6 +118,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             user = CustomUser.objects.get(institutional_email=institutional_email)
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError({"detail": "No active account found with the given credentials."})
+
         if not user.check_password(password):
             raise serializers.ValidationError({"detail": "Invalid password."})
         if not user.is_active:

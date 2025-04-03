@@ -19,7 +19,7 @@ const IssuesList = ({ issues }) => {
   );
 
   return (
-    <div className="dashboard-container">
+    <div className="container">
       <h1>Students Dashboard</h1>
 
       
@@ -89,7 +89,7 @@ const IssuesList = ({ issues }) => {
       
       <button
         className="new-issue-button"
-        onClick={() => navigate("/issuesubmission")}
+        onClick={() => navigate("/student/issuesubmission")}
       >
         New Issue
       </button>

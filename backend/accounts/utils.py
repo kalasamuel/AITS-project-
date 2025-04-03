@@ -1,36 +1,15 @@
-import random
-import datetime
 from django.core.mail import send_mail
-from django.utils.timezone import now
 from django.conf import settings
 
-def send_verification_email(user, subject):
+def send_verification_email(institutional_email, code):
     """
-    Generates a verification code, sets an expiry, and sends it to the user's institutional email.
-    Used for registration verification and password reset.
+    Sends verification code to the user's institutional email.
     """
-    try:
-        # Generate 6-digit verification code
-        verification_code = str(random.randint(100000, 999999))
-        user.verification_code = verification_code
-        user.verification_expiry = now() + datetime.timedelta(minutes=10)
-        user.save()
+    subject = "AITS Verification Code"
+    message = f"Your verification code is: {code}. Enter this code to activate your account."
+    sender = settings.EMAIL_HOST_USER
 
-        # Email content
-        email_message = f"Your verification code is: {verification_code}. It expires in 10 minutes."
-
-        # Send email
-        send_mail(
-            subject,
-            email_message,
-            settings.EMAIL_HOST_USER,  # aits.mak.ac@gmail.com is the email sender
-            [user.institutional_email],  #email receiver, sending to institutional_email field
-            fail_silently=False,
-        )
-        return True
-    except Exception as e:
-        print(f"[ERROR] Email sending failed: {e}")
-        return False
+    send_mail(subject, message, sender, [institutional_email], fail_silently=False)
 
 def send_gmail_notification(user, subject, message):
     """Send an email notification to the user's personal Gmail."""

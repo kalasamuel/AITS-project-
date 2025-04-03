@@ -13,7 +13,7 @@ class CustomUser(AbstractUser):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    institutional_email = models.EmailField(max_length=255, unique=True, null=True, blank=True)
+    institutional_email = models.EmailField(unique=True, null=True, blank=True)
     email = models.EmailField()  # For notifications and password reset
     student_number = models.CharField(max_length=10, blank=True, null=True)  # Only for students
     lecturer_id = models.CharField(max_length=20, blank=True, null=True)  # Only for lecturers
@@ -23,19 +23,22 @@ class CustomUser(AbstractUser):
     verification_code = models.CharField(max_length=6, blank=True, null=True)
     verification_expiry = models.DateTimeField(blank=True, null=True)
     is_verified = models.BooleanField(default=False)
-    
-    def validate_student_year(self):
-        if self.role == 'student' and self.student_number:
-            current_year = now().year % 100
-            student_entry_year = int(self.student_number[:2]) if self.student_number else 0
-            return (current_year - student_entry_year) <= 6
-        return True
+    try:
+        def validate_student_year(self):
+            if self.role == 'student' and self.student_number:
+                current_year = now().year % 100
+                student_entry_year = int(self.student_number[:2]) if self.student_number else 0
+                return (current_year - student_entry_year) <= 6
+            return True
 
-    def save(self, *args, **kwargs):
-        if self.role == "student" and not self.validate_student_year():
-            raise ValueError("Registration denied, please visit the Registrar.")
-        super().save(*args, **kwargs)
-
+        def save(self, *args, **kwargs):
+            if self.role == "student" and not self.validate_student_year():
+                raise ValueError("Registration denied, please visit the Registrar.")
+            super().save(*args, **kwargs)
+    except Exception as e:
+        e="Registration denied, please visit the Registrar."
+        print(e)
+        
     def generate_verification_code(self):
         self.verification_code = str(random.randint(100000, 999999))
         self.verification_expiry = now() + datetime.timedelta(minutes=10)  # 10 minutes expiry

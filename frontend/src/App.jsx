@@ -6,6 +6,7 @@ import Welcome from "./Welcome/Welcome.jsx";
 import OtpVerification from "./Welcome/OtpVerification";
 import StudentRoutes from "./Routes/StudentRoutes.jsx";
 import LecturerRoutes from "./Routes/LecturerRoutes.jsx";
+import RegistrarRoutes from "./Routes/RegistrarRoutes.jsx";
 import './styles.css';
 
 function App() {
@@ -24,14 +25,12 @@ function App() {
                 <div className="main-content">
                     <div className="content">
                         <Routes>
-                            
                             <Route
                                 path="/welcome"
                                 element={<Welcome setIsAuthenticated={setIsAuthenticated} setUserType={setUserType} />}
                             />
                             <Route path="/otp-verification" element={<OtpVerification />} />
 
-                            
                             <Route
                                 path="/"
                                 element={
@@ -40,6 +39,8 @@ function App() {
                                             <Navigate to="/student/home" />
                                         ) : userType === "lecturer" ? (
                                             <Navigate to="/lecturer/home" />
+                                        ) : userType === "registrar" ? (
+                                            <Navigate to="/registrar/home" />
                                         ) : (
                                             <Navigate to="/welcome" />
                                         )
@@ -49,7 +50,6 @@ function App() {
                                 }
                             />
 
-                            
                             <Route
                                 path="/*"
                                 element={
@@ -59,8 +59,20 @@ function App() {
                                             profilePic={profilePic}
                                             setProfilePic={setProfilePic}
                                         />
+                                    ) : userType === "lecturer" ? (
+                                        <LecturerRoutes 
+                                            isAuthenticated={isAuthenticated} 
+                                            profilePic={profilePic}
+                                            setProfilePic={setProfilePic}
+                                        />
+                                    ) : userType === "registrar" ? (
+                                        <RegistrarRoutes
+                                            isAuthenticated={isAuthenticated}
+                                            profilePic={profilePic}
+                                            setProfilePic={setProfilePic}
+                                        />
                                     ) : (
-                                        <LecturerRoutes isAuthenticated={isAuthenticated} />
+                                        <Navigate to="/welcome" />
                                     )
                                 }
                             />

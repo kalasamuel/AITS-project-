@@ -1,11 +1,11 @@
-.dashboard-container {
+.container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     padding: 20px;
     margin-left: 270px;
-    margin-right: auto;
+
     width: calc(100% - 200px);
     max-width: 800px;
     margin-top: 80px;

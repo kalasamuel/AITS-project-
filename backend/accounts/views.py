@@ -4,18 +4,14 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status, generics, viewsets
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.utils.timezone import now, timedelta
+from django.utils.timezone import now
 from django.contrib.auth import login
-from django.contrib.auth import get_user_model
 from .models import CustomUser, Department, VerificationCode
 from .utils import send_verification_email
 from .serializers import *
-import uuid
 
 # Registrar Code (Store securely in settings)
 REGISTRAR_CODE = "REG123456"
-
-CustomUser = get_user_model()
 
 
 ### Helper Functions for Role-Based Validation ###
@@ -69,10 +65,8 @@ class SelfRegisterView(APIView):
         """
         Handles self-registration for Students, Lecturers, and Registrars.
         """
-    def post(self, request):
-        """
-        Handles self-registration for Students, Lecturers, and Registrars.
-        """
+        # return Response({"message": "Registration successful. Check your email for the verification code."}, status=status.HTTP_201_CREATED)
+
         data = request.data
         institutional_email = data.get("institutional_email", "").strip().lower()
         role = data.get("role", "").strip().lower()
@@ -119,22 +113,17 @@ class SelfRegisterView(APIView):
             is_verified=False,
             role=role
         )
-
-
         user.set_password(password)
+
+        # Generate and save verification code
+        verification_code = random.randint(100000, 999999)
+        user.verification_code = verification_code
         user.save()
 
-        # Generate and Send Verification Code
-        verification_code = VerificationCode.objects.create(
-            user=user, code=str(uuid.uuid4())[:6], expires_at=now() + timedelta(minutes=10)
-        )
-        email_sent = send_verification_email(user, verification_code.code)
+        # Send verification email
+        send_verification_email(user.institutional_email, verification_code)
 
-        if email_sent:
-            return Response({"message": "Registration successful. Check your email for the verification code."}, status=status.HTTP_201_CREATED)
-        
-        return Response({"error": "Could not send verification email."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        return Response({"message": "Registration successful. Check your email for the verification code."}, status=status.HTTP_201_CREATED)
 
 ### Verify Account View ###
 class VerifyAccountView(APIView):
@@ -171,8 +160,10 @@ class RegisterUserView(generics.CreateAPIView):
 
 ### Login View using JWT ###
 class LoginView(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request, *args, **kwargs):
-        serializer = CustomTokenObtainPairSerializer(data=request.data)
+        serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data["user"]
             refresh = RefreshToken.for_user(user)
