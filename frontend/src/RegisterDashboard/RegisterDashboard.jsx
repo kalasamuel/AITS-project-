@@ -13,3 +13,6 @@ const RegisterDashboard = () => {
   );
 }
 export default RegisterDashboard;
+
+// This is the RegisterDashboard component. It serves as a placeholder for the registration dashboard page. You can add more functionality and styling as needed.
+//                                 path="/student/*"  
