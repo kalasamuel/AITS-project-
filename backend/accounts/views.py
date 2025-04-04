@@ -57,6 +57,27 @@ def validate_registrar_registration(data):
     return None
 
 
+from datetime import timedelta
+from django.utils import timezone
+from .models import VerificationCode  # Ensure this import points to the correct model location
+
+def create_verification_code_db(user, code):
+    # Get the current time
+    current_time = timezone.now()
+
+    # Calculate the expiration time (30 minutes from now)
+    expires_at = current_time + timedelta(minutes=30)
+
+    # Create and save the VerificationCode object
+    verification_code = VerificationCode.objects.create(
+        user=user,
+        code=code,
+        expires_at=expires_at
+    )
+
+    return verification_code
+
+
 ### Self-Registration View ###
 class SelfRegisterView(APIView):
     permission_classes = [AllowAny]
@@ -65,8 +86,6 @@ class SelfRegisterView(APIView):
         """
         Handles self-registration for Students, Lecturers, and Registrars.
         """
-        # return Response({"message": "Registration successful. Check your email for the verification code."}, status=status.HTTP_201_CREATED)
-
         data = request.data
         institutional_email = data.get("institutional_email", "").strip().lower()
         role = data.get("role", "").strip().lower()
@@ -118,6 +137,9 @@ class SelfRegisterView(APIView):
         # Generate and save verification code
         verification_code = random.randint(100000, 999999)
         user.verification_code = verification_code
+
+        create_verification_code_db(user, verification_code)
+
         user.save()
 
         # Send verification email
@@ -144,7 +166,7 @@ class VerifyAccountView(APIView):
             login(request, user)
             return Response({"message": "Verification successful. Redirecting to dashboard."}, status=status.HTTP_200_OK)
         except (CustomUser.DoesNotExist, VerificationCode.DoesNotExist):
-            return Response({"error": "Invalid verification code."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Invalid verification code."}, status=status.HTTP_403_FORBIDDEN)
 
 
 ### Department Management API ###
@@ -178,4 +200,5 @@ class LoginView(APIView):
                     "last_name": user.last_name,
                 },
             }, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)

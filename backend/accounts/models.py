@@ -17,7 +17,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField()  # For notifications and password reset
     student_number = models.CharField(max_length=10, blank=True, null=True)  # Only for students
     lecturer_id = models.CharField(max_length=20, blank=True, null=True)  # Only for lecturers
-    registrar_id = models.CharField(max_length=10, blank=True)
+    registrar_id = models.CharField(max_length=10, blank=True, null=True)
     year_of_study = models.PositiveIntegerField(blank=True, null=True)  # Only for students
     notifications = models.TextField(blank=True, null=True)
     verification_code = models.CharField(max_length=6, blank=True, null=True)
@@ -60,6 +60,8 @@ class CustomUser(AbstractUser):
         related_name="issues_user_permissions",  
         related_query_name="issues_user",
     )
+
+    USERNAME_FIELD = 'institutional_email'
     
     def __str__(self):
         return f"{self.last_name} {self.first_name} ({self.role})"
@@ -79,7 +81,7 @@ class Department(models.Model):
         
 class VerificationCode(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    code = models.UUIDField(default=uuid.uuid4, unique=True)
+    code = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField()
 

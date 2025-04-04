@@ -9,7 +9,6 @@ const Welcome = ({ setIsAuthenticated }) => {
     first_name: '',
     last_name: '',
     institutional_email: '',
-    email: '',
     student_number: '',
     year_of_study: '',
     lecturer_id: '',
@@ -34,23 +33,30 @@ const Welcome = ({ setIsAuthenticated }) => {
   };
   
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const user = users.find((user) => user.institutional_email === formData.institutional_email && user.password === formData.password);
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await fetch('http://127.0.0.1:8000/auth/login/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
-    if (user) {
-      alert(`Welcome back, ${user.first_name} ${user.last_name}!`);
-      setIsAuthenticated(true);
-      navigate('/');
-    } else {
-      setError('Invalid email or password!');
+      const data = await response.json();
+      if (response.status === 200) {
+        localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem('refresh_token', data.refresh_token);
+        localStorage.setItem('user_role', data.user.role);
+        navigate("/");
+      } else {
+        setError(data.error || 'Login failed.');
+      }
+    } catch (error) {
+      setError('An error occurred. Login failed.');
     }
   };
 
   const handleSignUp = async (e) => {
-    e.preventDefault();
-    setError('');
     setMessage('');
 
     if (!formData.first_name || !formData.last_name || !formData.institutional_email || !formData.email || !formData.password || !formData.confirm_password) {
@@ -75,7 +81,7 @@ const Welcome = ({ setIsAuthenticated }) => {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/register/', {
+      const response = await fetch('http://127.0.0.1:8000/auth/register/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -84,7 +90,7 @@ const Welcome = ({ setIsAuthenticated }) => {
       const data = await response.json();
       if (response.status === 201) {
         setMessage('Registration successful! Check your email for verification.');
-        setTimeout(() => navigate('/otp-verification'), 3000);
+        setTimeout(() => navigate(`/otp-verification?institutional_email=${formData.institutional_email}`), 3000); // add a timeout to allow for sending of mail
       } else {
         setError(data.error || 'Registration failed.');
       }

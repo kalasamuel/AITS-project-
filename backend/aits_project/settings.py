@@ -35,8 +35,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 CORS_ALLOWED_ORIGINS = [ #specifies which origins are allowed to make requests to django API
-    "http://localhost:5173",    # React frontend
+    "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "http://localhost:5174",
 ]
 
 
@@ -56,7 +57,7 @@ INSTALLED_APPS = [
     'corsheaders', #to enable the corsheaders functionality
 ]
 
-#AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

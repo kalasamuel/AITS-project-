@@ -3,14 +3,15 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import NavBar from "./StudentsDashboard/Components/NavBar.jsx";
 import SideBar from "./StudentsDashboard/Components/SideBar.jsx";
 import Welcome from "./Welcome/Welcome.jsx";
-import OtpVerification from "./Welcome/OtpVerification";
 import StudentRoutes from "./Routes/StudentRoutes.jsx";
 import LecturerRoutes from "./Routes/LecturerRoutes.jsx";
 import RegistrarRoutes from "./Routes/RegistrarRoutes.jsx";
 import './styles.css';
+import VerifyAccount from './Welcome/VerifictaionCode.jsx';
+import useIsAuthenticated from '../hooks/useIsAuthenticated.js';
 
 function App() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const { isAuthenticated, userRole } = useIsAuthenticated();
     const [userType, setUserType] = useState(""); 
     const [profilePic, setProfilePic] = useState(null);
     const location = useLocation();
@@ -18,28 +19,29 @@ function App() {
     return (
         <div>
             {location.pathname !== '/welcome' && isAuthenticated && (
-                <NavBar setIsAuthenticated={setIsAuthenticated} profilePic={profilePic} />
+                <NavBar  profilePic={profilePic} />
             )}
             <div className="main-layout">
-                {isAuthenticated && location.pathname !== '/welcome' && <SideBar userType={userType} />}
+                {(isAuthenticated && location.pathname !== '/welcome') && <SideBar userType={userRole} />}
                 <div className="main-content">
                     <div className="content">
                         <Routes>
                             <Route
                                 path="/welcome"
-                                element={<Welcome setIsAuthenticated={setIsAuthenticated} setUserType={setUserType} />}
+                                element={<Welcome setUserType={setUserType} />}
                             />
-                            <Route path="/otp-verification" element={<OtpVerification />} />
+
+                            <Route path="/otp-verification" element={<VerifyAccount  />} />
 
                             <Route
                                 path="/"
                                 element={
                                     isAuthenticated ? (
-                                        userType === "student" ? (
+                                        userRole === "student" ? (
                                             <Navigate to="/student/home" />
-                                        ) : userType === "lecturer" ? (
+                                        ) : userRole === "lecturer" ? (
                                             <Navigate to="/lecturer/home" />
-                                        ) : userType === "registrar" ? (
+                                        ) : userRole === "registrar" ? (
                                             <Navigate to="/registrar/home" />
                                         ) : (
                                             <Navigate to="/welcome" />
@@ -50,31 +52,31 @@ function App() {
                                 }
                             />
 
-                            <Route
-                                path="/*"
+                            <Route path="/student/*" 
                                 element={
-                                    userType === "student" ? (
-                                        <StudentRoutes
-                                            isAuthenticated={isAuthenticated}
-                                            profilePic={profilePic}
-                                            setProfilePic={setProfilePic}
-                                        />
-                                    ) : userType === "lecturer" ? (
-                                        <LecturerRoutes 
-                                            isAuthenticated={isAuthenticated} 
-                                            profilePic={profilePic}
-                                            setProfilePic={setProfilePic}
-                                        />
-                                    ) : userType === "registrar" ? (
-                                        <RegistrarRoutes
-                                            isAuthenticated={isAuthenticated}
-                                            profilePic={profilePic}
-                                            setProfilePic={setProfilePic}
-                                        />
-                                    ) : (
-                                        <Navigate to="/welcome" />
-                                    )
-                                }
+                                <StudentRoutes
+                                    isAuthenticated={isAuthenticated}
+                                    profilePic={profilePic}
+                                    setProfilePic={setProfilePic}
+                                />} 
+                            />
+
+                            <Route path="/lecturer/*" 
+                                element={
+                                <LecturerRoutes
+                                    isAuthenticated={isAuthenticated}
+                                    profilePic={profilePic}
+                                    setProfilePic={setProfilePic}
+                                />} 
+                            />
+
+                            <Route path="/registrar/*" 
+                                element={
+                                <RegistrarRoutes
+                                    isAuthenticated={isAuthenticated}
+                                    profilePic={profilePic}
+                                    setProfilePic={setProfilePic}
+                                />} 
                             />
                         </Routes>
                     </div>

@@ -5,10 +5,8 @@ import { useNavigate } from 'react-router-dom';
 function NavBar({ setIsAuthenticated, profilePic }) {
     const navigate = useNavigate();
 
-    
-
     const handleLogout = () => {
-        setIsAuthenticated(false); 
+        localStorage.clear()
         navigate('/welcome'); 
     };
 
