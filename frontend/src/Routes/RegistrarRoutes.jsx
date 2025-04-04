@@ -1,35 +1,33 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Assigned from '../RegistrarDashboard/Pages/Assigned.jsx';
-import Dashboard from '../RegistrarDashboard/Pages/Dashboard.jsx';
+import RegistrarDashboard from '../RegistrarDashboard/Pages/Dashboard.jsx';
 import Assignment from '../RegistrarDashboard/Pages/Assignment.jsx';
 import RegistrarResolvedIssues from '../RegistrarDashboard/Pages/RegistrarResolvedIssues.jsx';
-
-function RegistrarRoutes({ isAuthenticated }) {
+import ProfileAndsettings from '../RegistrarDashboard/Pages/RegistrarProfileAndsettings.jsx'; 
+    function RegistrarRoutes({ isAuthenticated,profilePic, setProfilePic }) {
     return (
         <Routes>
             <Route
                 path="/registrar/home"
-                element={isAuthenticated ? <Dashboard /> : <Navigate to="/welcome" />}
+                element={isAuthenticated ? <RegistrarDashboard /> : <Navigate to="/welcome" />}
             />
             <Route
                 path="/registrar/assignment"
-                element={isAuthenticated ? < Assignment/> : <Navigate to="/welcome" />}
+                element={isAuthenticated ? <Assignment /> : <Navigate to="/welcome" />}
             />
             <Route
                 path="/registrar/assigned"
                 element={isAuthenticated ? <Assigned /> : <Navigate to="/welcome" />}
             />
-
-            
             <Route
-                path="/lecturer/resolved-issues"
+                path="/registrar/resolved-issues"
                 element={isAuthenticated ? <RegistrarResolvedIssues /> : <Navigate to="/welcome" />}
             />
-             <Route
+            <Route
                 path="/registrar/profile-and-settings"
-                element={isAuthenticated ? <RegistrarProfileAndSettings /> : <Navigate to="/welcome" />}
-                            />
+                element={isAuthenticated ? <ProfileAndsettings profilePic={profilePic} setProfilePic={setProfilePic} /> : <Navigate to="/welcome" />}
+            />
         </Routes>
     );
 }

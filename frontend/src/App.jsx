@@ -30,8 +30,12 @@ function App() {
                                 path="/welcome"
                                 element={<Welcome setUserType={setUserType} />}
                             />
+<<<<<<< HEAD
 
                             <Route path="/otp-verification" element={<VerifyAccount  />} />
+=======
+                            <Route path="/otp-verification" element={<OtpVerification email = "institutional_email"/>} />
+>>>>>>> 4d9cc2ef6271b16cac6d9fa23f9290f1a24067ed
 
                             <Route
                                 path="/"

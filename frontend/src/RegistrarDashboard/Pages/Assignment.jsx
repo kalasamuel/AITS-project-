@@ -7,15 +7,11 @@ const AssignmentPage = () => {
         { id: '#1236', studentName: 'Charlie', department: 'CHUSS', courseCode: 'LIT202', issueType: 'Exam results', status: 'In Progress', assignedTo: '', adminNumber: '' },
         { id: '#1238', studentName: 'Eve', department: 'CEDAT', courseCode: 'MTH300', issueType: 'Open', status: 'Open', assignedTo: '', adminNumber: '' },
     ]);
-
-    // Function to handle input changes for lecturer name and admin number
     const handleInputChange = (issueId, field, value) => {
         setIssues(issues.map(issue =>
             issue.id === issueId ? { ...issue, [field]: value } : issue
         ));
     };
-
-    // Function to assign an issue when the "Assign" button is clicked
     const assignIssue = (issueId) => {
         setIssues(issues.map(issue =>
             issue.id === issueId ? { ...issue, status: 'Assigned' } : issue
@@ -26,8 +22,6 @@ const AssignmentPage = () => {
     return (
         <div className="container">
             <h1 className="header">Assign Issues to Lecturers</h1>
-
-            {/* Issues Table */}
             <div className="table-container">
                 <h2 className="table-header">Issues Pending Assignment:</h2>
                 <table className="table">

@@ -1,4 +1,4 @@
-/* General container styling */
+
 .container {
     display: flex;
     min-height: 100vh;
@@ -7,8 +7,6 @@
 }
 
 
-
-/* Main content styling */
 .main-content {
     width: 80%;
     padding: 20px;
@@ -30,7 +28,6 @@
     color: #555;
 }
 
-/* Table styling */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -62,7 +59,6 @@
     color: #555;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
     .container {
         flex-direction: column;

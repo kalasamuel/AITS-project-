@@ -63,7 +63,7 @@ textarea {
     background-color: darkblue;
 }
 
-/* 📱 Tablet Screens */
+
 @media (max-width: 1024px) {
     .issue-submission-container {
         width: 95%;
@@ -75,7 +75,6 @@ textarea {
     }
 }
 
-/* 📱 Mobile Screens */
 @media (max-width: 768px) {
     .issue-submission-container {
         width: 100%;
@@ -98,7 +97,6 @@ textarea {
     }
 }
 
-/* 📱 Extra Small Screens */
 @media (max-width: 480px) {
     .issue-submission-container {
         width: 95%;

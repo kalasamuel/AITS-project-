@@ -9,6 +9,7 @@ from django.contrib.auth import login
 from .models import CustomUser, Department, VerificationCode
 from .utils import send_verification_email
 from .serializers import *
+from django.http import JsonResponse
 
 # Registrar Code (Store securely in settings)
 REGISTRAR_CODE = "REG123456"
@@ -148,25 +149,38 @@ class SelfRegisterView(APIView):
         return Response({"message": "Registration successful. Check your email for the verification code."}, status=status.HTTP_201_CREATED)
 
 ### Verify Account View ###
+
 class VerifyAccountView(APIView):
     permission_classes = [AllowAny]
-
     def post(self, request):
-        institutional_email = request.data.get("institutional_email", "").strip().lower()
-        code = request.data.get("code", "").strip()
+        """
+        Handles OTP verification for account activation.
+        """
+        email = request.data.get("email")
+        otp = request.data.get("otp")
 
-        try:
-            user = CustomUser.objects.get(institutional_email=institutional_email)
-            verification = VerificationCode.objects.get(user=user, code=code)
-            if verification.expires_at < now():
-                return Response({"error": "Verification code has expired."}, status=status.HTTP_400_BAD_REQUEST)
-            user.is_verified = True  # Activate user after successful verification
+        if not email or not otp:
+            return Response({"error": "Missing email or OTP"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = CustomUser.objects.filter(institutional_email=email).first()
+        if not user:
+            return Response({"error": "User not found."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if user.verification_code == otp:
+            user.is_verified = True
+            user.verification_code = None  # Clear OTP after verification
             user.save()
+<<<<<<< HEAD
             verification.delete()  # Remove the used code
             login(request, user)
             return Response({"message": "Verification successful. Redirecting to dashboard."}, status=status.HTTP_200_OK)
         except (CustomUser.DoesNotExist, VerificationCode.DoesNotExist):
             return Response({"error": "Invalid verification code."}, status=status.HTTP_403_FORBIDDEN)
+=======
+            return Response({"message": "OTP verified successfully. Your account is now active."}, status=status.HTTP_200_OK)
+        
+        return Response({"error": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
+>>>>>>> 4d9cc2ef6271b16cac6d9fa23f9290f1a24067ed
 
 
 ### Department Management API ###
