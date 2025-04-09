@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const VerifyAccount = () => {
+const VerifyAccount = ({ setIsAuthenticated }) => {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -10,13 +10,20 @@ const VerifyAccount = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/verify/", { code });
-      if (response.data.success) {
-        navigate("/login");
+      const currentUrl = window.location.href;
+      const queryString = currentUrl.split("?")[1];
+      const queryParams = queryString.split("=");
+      const institutional_email = queryParams[1];
+
+      const response = await axios.post("http://127.0.0.1:8000/api/verify/", { code, institutional_email });
+      if (response.status === 200) {
+        navigate("/");
+        setIsAuthenticated(true)
       } else {
         setError("Invalid verification code.");
       }
     } catch (err) {
+      console.log(err)
       setError("Error verifying code. Try again.");
     }
   };

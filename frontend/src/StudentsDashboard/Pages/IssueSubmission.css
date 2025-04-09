@@ -4,8 +4,8 @@
     align-items: center;
     justify-content: flex-start;
     padding: 20px;
-    margin: 80px auto 20px auto; /* Centers container */
-    width: 90%; /* Uses a percentage-based width */
+    margin: 80px auto 20px auto; 
+    width: 90%; 
     max-width: 800px;
     font-family: Arial, sans-serif;
     color: #000000;
@@ -47,7 +47,6 @@ textarea {
     height: 120px;
 }
 
-/* Submit Button */
 .submit-button {
     width: 100%;
     padding: 12px;
@@ -63,7 +62,7 @@ textarea {
     background-color: darkblue;
 }
 
-/* 📱 Tablet Screens */
+
 @media (max-width: 1024px) {
     .issue-submission-container {
         width: 95%;
@@ -75,7 +74,7 @@ textarea {
     }
 }
 
-/* 📱 Mobile Screens */
+
 @media (max-width: 768px) {
     .issue-submission-container {
         width: 100%;
@@ -98,7 +97,7 @@ textarea {
     }
 }
 
-/* 📱 Extra Small Screens */
+
 @media (max-width: 480px) {
     .issue-submission-container {
         width: 95%;

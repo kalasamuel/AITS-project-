@@ -92,7 +92,7 @@ class LoginSerializer(serializers.Serializer):
         institutional_email = data.get('institutional_email')
         password = data.get('password')
         if institutional_email and password:
-            user = authenticate(username=institutional_email, password=password)
+            user = authenticate(institutional_email=institutional_email, password=password)
             if user:
                 data['user'] = user
             else:

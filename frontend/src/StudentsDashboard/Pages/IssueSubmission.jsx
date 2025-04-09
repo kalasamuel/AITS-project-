@@ -39,7 +39,7 @@ const IssueSubmission = () => {
       const response = await axios.post('/api/issues/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Ensure user is authenticated
+          Authorization: `Bearer ${localStorage.getItem('token')}`, 
         },
       });
 
