@@ -1,68 +1,72 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import "./SideBar.css";
+import { MdHome, MdAssignment, MdDetails, MdNotifications, MdSettings, MdDashboard, MdTaskAlt, MdCheckCircleOutline } from "react-icons/md";
 
-function SideBar({ userType }) {
+function SideBar({ userType, isOpen, toggleSidebar }) {
   return (
-    <nav className="sidebar">
+    <nav className={`sidebar ${isOpen ? 'open' : ''}`}>
+      <button className="menu-button" onClick={toggleSidebar}>
+        ☰
+      </button>
       <div className="sidebar-links">
         {userType === "student" && (
           <>
             <NavLink to="/student/home" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-              HOME
+              <MdHome className="nav-icon" /> HOME
             </NavLink>
             <NavLink to="/student/issuesubmission" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-              ISSUE SUBMISSION
+              <MdAssignment className="nav-icon" /> ISSUE SUBMISSION
             </NavLink>
             <NavLink to="/student/issuedetails" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-              ISSUE DETAILS
+              <MdDetails className="nav-icon" /> ISSUE DETAILS
             </NavLink>
             <NavLink to="/student/notifications" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-              NOTIFICATIONS
+              <MdNotifications className="nav-icon" /> NOTIFICATIONS
             </NavLink>
             <NavLink to="/student/profileandsettings" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-              PROFILE & SETTINGS
+              <MdSettings className="nav-icon" /> PROFILE & SETTINGS
             </NavLink>
           </>
         )}
         {userType === "lecturer" && (
           <>
             <NavLink to="/lecturer/home" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-              DASHBOARD
+              <MdDashboard className="nav-icon" /> DASHBOARD
             </NavLink>
             <NavLink to="/lecturer/assigned-issues" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-              ASSIGNED ISSUES
+              <MdTaskAlt className="nav-icon" /> ASSIGNED ISSUES
             </NavLink>
             <NavLink to="/lecturer/resolved-issues" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-              RESOLVED ISSUES
+              <MdCheckCircleOutline className="nav-icon" /> RESOLVED ISSUES
             </NavLink>
             <NavLink to="/lecturer/notifications" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-              NOTIFICATIONS
+              <MdNotifications className="nav-icon" /> NOTIFICATIONS
             </NavLink>
             <NavLink to="/lecturer/profile-and-settings" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-              PROFILE & SETTINGS
+              <MdSettings className="nav-icon" /> PROFILE & SETTINGS
             </NavLink>
           </>
         )}
-         {userType === "registrar" && (
+        {userType === "registrar" && (
           <>
             <NavLink to="/registrar/home" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-              DASHBOARD
+              <MdDashboard className="nav-icon" /> DASHBOARD
             </NavLink>
             <NavLink to="/registrar/assignment" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-              ASSIGNMENT
+              <MdAssignment className="nav-icon" /> ASSIGNMENT
             </NavLink>
             <NavLink to="/registrar/assigned" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-              ASSIGNED
+              <MdTaskAlt className="nav-icon" /> ASSIGNED
             </NavLink>
             <NavLink to="/registrar/resolved-issues" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-              RESOLVED ISSUES
+              <MdCheckCircleOutline className="nav-icon" /> RESOLVED ISSUES
             </NavLink>
             <NavLink to="/registrar/profile-and-settings" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-              PROFILE & SETTINGS
+              <MdSettings className="nav-icon" /> PROFILE & SETTINGS
             </NavLink>
           </>
-         )}
+        )}
       </div>
     </nav>
   );
