@@ -1,16 +1,17 @@
 .navbar {
   display: flex;
-  justify-content: space-between; 
-  align-items: center; 
-  padding: 10px 20px;
-  background-color: #152c1e; 
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px; /* Increased padding */
+  background-color: #152c1e; /* Darker, more professional background */
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   width: 100%;
-  z-index: 1000; 
-  height: 50px;
+  z-index: 1000;
+  height: 60px; /* Slightly increased height */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 .navbar-content {
@@ -23,33 +24,36 @@
 .aits {
   text-align: center;
   color: white;
-  font-size: 35px;
+  font-size: 1.5rem; /* Use rem for better scalability */
   font-weight: bold;
   margin: 0;
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Show ellipsis if text overflows */
 }
 
 .navbar-profile {
   display: flex;
   align-items: center;
-  gap: 15px; 
-  margin-right: 20px;
+  gap: 1rem; /* Use rem for spacing */
+  margin-right: 1rem;
 }
 
 .navbar-img {
   width: 40px;
   height: 40px;
-  border-radius: 50%; 
-  object-fit: cover; 
-  border: 2px solid white; 
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
 }
 
 .navbar-placeholder {
-  font-size: 14px;
-  color: #f0f0f0; 
-  background-color: black; 
-  width: 100px;
-  height: 50px;
-  border-radius: 50%; 
+  font-size: 0.9rem; /* Use rem */
+  color: #f0f0f0;
+  background-color: #333; /* Darker placeholder background */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,12 +61,67 @@
 }
 
 .logout-button {
-  padding: 8px 4px;
-  background-color: #830505; 
+  padding: 0.6rem 1rem; /* Use rem */
+  background-color: #830505;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 0.9rem; /* Use rem */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
 }
 
+.logout-button:hover {
+  background-color: #a60707;
+}
+
+/* Hamburger Button Styles (for smaller screens) */
+.hamburger-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 1.5rem; /* Larger icon */
+  cursor: pointer;
+  display: none; /* Initially hidden on larger screens */
+  margin-right: 1rem;
+  padding: 0; /* Remove default button padding */
+}
+
+.hamburger-button:hover {
+  color: #ddd;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+  .navbar-content .aits {
+      font-size: 1.2rem; /* Adjust font size for smaller screens */
+  }
+
+  .navbar-profile {
+      margin-right: 0.5rem;
+  }
+
+  .logout-button {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.8rem;
+  }
+
+  .hamburger-button {
+      display: block; /* Show on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-content .aits {
+      font-size: 1rem;
+  }
+
+  .navbar-profile {
+      gap: 0.5rem;
+  }
+
+  .logout-button {
+      font-size: 0.7rem;
+      padding: 0.3rem 0.6rem;
+  }
+}
