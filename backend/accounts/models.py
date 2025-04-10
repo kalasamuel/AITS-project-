@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser  
 from django.utils.timezone import now
-import random, uuid, datetime
+import random, datetime
 
 # Custom User Model
 class CustomUser(AbstractUser):

@@ -1,17 +1,19 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status, generics, viewsets
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.utils.timezone import now
-from django.contrib.auth import login
 from .models import CustomUser, Department, VerificationCode
 from .utils import send_verification_email
-from .serializers import *
-from django.http import JsonResponse
+from .serializers import RegistrationSerializer, DepartmentSerializer, CustomTokenObtainPairSerializer
+from datetime import timedelta
+from django.utils import timezone
+from .models import VerificationCode 
+import random
 
-# Registrar Code (Store securely in settings)
+# Registrar Code (to be stored securely in settings)
 REGISTRAR_CODE = "REG123456"
 
 
@@ -56,11 +58,6 @@ def validate_registrar_registration(data):
     if registrar_code != REGISTRAR_CODE:
         return {"error": "Invalid Registrar Code. Please contact the Admin."}
     return None
-
-
-from datetime import timedelta
-from django.utils import timezone
-from .models import VerificationCode  # Ensure this import points to the correct model location
 
 def create_verification_code_db(user, code):
     # Get the current time
@@ -152,36 +149,28 @@ class SelfRegisterView(APIView):
 
 class VerifyAccountView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
         """
         Handles OTP verification for account activation.
         """
         email = request.data.get("email")
+        print(f"The Webmail received from the Frontend is: {email}")
         otp = request.data.get("otp")
+        print(f"The Code received from the Frontend is: {otp}")
 
         if not email or not otp:
             return Response({"error": "Missing email or OTP"}, status=status.HTTP_400_BAD_REQUEST)
 
-        user = CustomUser.objects.filter(institutional_email=email).first()
-        if not user:
-            return Response({"error": "User not found."}, status=status.HTTP_400_BAD_REQUEST)
+        user = get_object_or_404(CustomUser, institutional_email=email)
 
         if user.verification_code == otp:
             user.is_verified = True
-            user.verification_code = None  # Clear OTP after verification
+            user.verification_code = None  # Clears code after verification
             user.save()
-<<<<<<< HEAD
-            verification.delete()  # Remove the used code
-            login(request, user)
-            return Response({"message": "Verification successful. Redirecting to dashboard."}, status=status.HTTP_200_OK)
-        except (CustomUser.DoesNotExist, VerificationCode.DoesNotExist):
-            return Response({"error": "Invalid verification code."}, status=status.HTTP_403_FORBIDDEN)
-=======
             return Response({"message": "OTP verified successfully. Your account is now active."}, status=status.HTTP_200_OK)
-        
-        return Response({"error": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
->>>>>>> 4d9cc2ef6271b16cac6d9fa23f9290f1a24067ed
 
+        return Response({"error": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
 
 ### Department Management API ###
 class DepartmentViewSet(viewsets.ModelViewSet):
@@ -199,20 +188,7 @@ class LoginView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
-        serializer = LoginSerializer(data=request.data)
+        serializer = CustomTokenObtainPairSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.validated_data["user"]
-            refresh = RefreshToken.for_user(user)
-            access_token = str(refresh.access_token)
-            return Response({
-                "access_token": access_token,
-                "refresh_token": str(refresh),
-                "user": {
-                    "institutional_email": user.institutional_email,
-                    "role": user.role,
-                    "first_name": user.first_name,
-                    "last_name": user.last_name,
-                },
-            }, status=status.HTTP_200_OK)
-
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)

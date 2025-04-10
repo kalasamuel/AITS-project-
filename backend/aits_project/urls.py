@@ -22,7 +22,7 @@ from accounts.views import SelfRegisterView, LoginView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/register/', SelfRegisterView.as_view()),
-    path('auth/login/', LoginView.as_view()),
+    path('auth/login/', LoginView.as_view(), name="login"),
     path('api/', include('accounts.urls')),
     path('api/issues/', include('issues.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
