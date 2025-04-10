@@ -1,86 +1,123 @@
-/* Sidebar Styles */
 .sidebar {
-    width: 180px;
-    height: 100vh;
-    background-color: black;
-    padding: 1rem;
+    width: 250px;
+    height: calc(100vh - 70px);
+    background-color: #222;
+    padding: 1.5rem;
     position: fixed;
-    top: 70px; 
-    left: -180px; /* Initially hidden */
+    top: 70px;
+    left: -250px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    transition: left 0.3s ease; /* Smooth sliding */
-}
-
-/* When Sidebar is Open */
-.sidebar.open {
+    transition: left 0.3s ease;
+    z-index: 999;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .sidebar.open {
     left: 0;
-}
-
-/* Sidebar Links */
-.sidebar-links {
+  }
+  
+  .sidebar-links {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-}
-
-.nav-link {
+    gap: 1.2rem;
+    margin-top: 1rem;
+  }
+  
+  .nav-link {
     text-decoration: none;
+    color: #eee;
+    padding: 0.75rem 1.2rem;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, color 0.3s ease, padding-left 0.2s ease;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+  }
+  
+  .nav-link:hover {
+    background-color: #333;
+    color: #fff;
+    padding-left: 1.5rem;
+  }
+  
+  .nav-link.active {
+    background-color: #b45924;
     color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.nav-link:hover {
-    background-color: #ddd;
-    color: black;
-}
-
-.nav-link.active {
-    background-color: #b45924; 
-    color: white; 
-    font-weight: bold; 
-}
-
-/* Menu Button */
-.menu-button {
-    position: fixed; /* Fix it at the top left */
-    top: 10px; /* Adjust as needed */
-    left: 10px; /* Adjust as needed */
-    width: 50px;  /* Make it a square */
-    height: 50px; /* Same as width */
-    background-color: black; /* Matches sidebar */
+    font-weight: bold;
+  }
+  
+  .nav-icon {
+    margin-right: 0.75rem;
+    font-size: 1.2rem;
+  }
+  
+  .menu-button {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
     color: white;
     border: none;
-    border-radius: 4px; /* Optional: Keeps it slightly rounded */
-    display: flex;
+    font-size: 1.8rem;
+    display: none;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 1000; /* Ensure it stays above other elements */
-}
-
-.menu-button:hover {
-    background-color: #333; /* Slight hover effect */
-}
-
-/* Responsive Breakpoints */
-@media (max-width: 1024px) {
+    z-index: 1000;
+    padding: 0;
+  }
+  
+  .menu-button:hover {
+    color: #ddd;
+  }
+  
+  @media (max-width: 1024px) {
     .sidebar {
-        width: 150px; 
+      width: 220px;
     }
-}
-
-@media (max-width: 768px) {
+  }
+  
+  @media (max-width: 768px) {
     .sidebar {
-        width: 120px; 
+      width: 200px;
     }
-}
-
-@media (max-width: 480px) {
+    .menu-button {
+      display: flex;
+    }
+  }
+  
+  @media (max-width: 480px) {
     .sidebar {
-        width: 90px; 
+      width: 180px;
     }
-}
+    .nav-link {
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+    }
+    .nav-icon {
+      font-size: 1rem;
+      margin-right: 0.5rem;
+    }
+    .menu-button {
+      font-size: 1.6rem;
+      width: 35px;
+      height: 35px;
+      top: 12px;
+      left: 12px;
+    }
+  }
+  
+  @media (min-width: 769px) {
+    .sidebar {
+      left: 0;
+      width: 250px;
+    }
+    .menu-button {
+      display: none;
+    }
+  }
+  
