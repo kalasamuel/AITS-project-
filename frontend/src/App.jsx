@@ -12,30 +12,28 @@ import useIsAuthenticated from '../hooks/useIsAuthenticated.js';
 
 function App() {
     const { isAuthenticated, userRole } = useIsAuthenticated();
-    const [userType, setUserType] = useState("");
     const [profilePic, setProfilePic] = useState(null);
     const location = useLocation();
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => {
+        setIsSidebarOpen((prev) => !prev);
+    };
 
     return (
         <div>
             {isAuthenticated && location.pathname !== '/welcome' && (
-                <NavBar profilePic={profilePic} />
+                <NavBar profilePic={profilePic} toggleSidebar={toggleSidebar} />
             )}
             <div className="main-layout">
                 {isAuthenticated && location.pathname !== '/welcome' && (
-                    <SideBar userType={userRole} />
+                    <SideBar userType={userRole} isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
                 )}
                 <div className="main-content">
                     <div className="content">
                         <Routes>
-                            <Route
-                                path="/welcome"
-                                element={<Welcome setIsAuthenticated={setUserType} />}
-                            />
-                            <Route
-                                path="/otp-verification"
-                                element={<OtpVerification />}
-                            />
+                            <Route path="/welcome" element={<Welcome />} />
+                            <Route path="/otp-verification" element={<OtpVerification />} />
                             <Route
                                 path="/"
                                 element={
