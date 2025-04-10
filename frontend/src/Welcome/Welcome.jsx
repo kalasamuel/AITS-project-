@@ -48,7 +48,16 @@ const Welcome = () => {
         localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('refresh_token', data.refresh_token);
         localStorage.setItem('user_role', data.user.role);
-        navigate("/");
+
+        if (data.user.role === 'student') {
+          navigate('/student/home');
+        } else if (data.user.role === 'lecturer') {
+          navigate('/lecturer/home');
+        } else if (data.user.role === 'registrar') {
+          navigate('/registrar/home');
+        } else {
+          navigate('/welcome');
+        }
       } else {
         setError(data.error || 'Login failed.');
       }
