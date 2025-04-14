@@ -21,7 +21,7 @@
 .sidebar-links {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 3.5rem; 
   margin-top: 1rem;
 }
 
@@ -112,7 +112,7 @@
   }
   
   .sidebar-links {
-    gap: 2.5rem;
+    gap: 3rem; 
   }
   
   .nav-link {
@@ -133,6 +133,10 @@
     padding: 0.9rem;
   }
   
+  .sidebar-links {
+    gap: 2.5rem; 
+  }
+
   .nav-link {
     padding: 0.5rem 0.8rem;
     font-size: 0.9rem;
@@ -158,6 +162,10 @@
     left: -140px;
     padding: 0.8rem;
   }
+
+  .sidebar-links {
+    gap: 2rem; 
+  }
   
   .nav-link {
     padding: 0.5rem 0.7rem;
@@ -179,7 +187,7 @@
   }
   
   .sidebar-links {
-    gap: 0.9rem;
+    gap: 1.5rem; 
   }
   
   .nav-link {
@@ -212,7 +220,7 @@
   }
   
   .sidebar-links {
-    gap: 1.2rem;
+    gap: 2rem; 
   }
   
   .nav-link {
@@ -229,7 +237,7 @@
   }
   
   .sidebar-links {
-    gap: 1rem;
+    gap: 1.5rem; 
   }
   
   .nav-link {
