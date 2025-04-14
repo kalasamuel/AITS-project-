@@ -122,7 +122,7 @@ const Welcome = () => {
 
   return (
     <div className="welcome-container">
-      <h1>Welcome to AITS</h1>
+      <h1 className='welcome-to'>Welcome to AITS</h1>
       <div className="toggle-container">
         <button className={`toggle-button ${isLogin ? 'active' : ''}`} onClick={() => setIsLogin(true)}>Log In</button>
         <button className={`toggle-button ${!isLogin ? 'active' : ''}`} onClick={() => setIsLogin(false)}>Sign Up</button>
