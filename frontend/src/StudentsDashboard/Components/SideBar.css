@@ -131,6 +131,7 @@
     width: 160px;
     left: -160px;
     padding: 0.9rem;
+    display: none;
   }
   
   .sidebar-links {
@@ -161,6 +162,7 @@
     width: 140px;
     left: -140px;
     padding: 0.8rem;
+    display: none;
   }
 
   .sidebar-links {
@@ -184,6 +186,7 @@
     width: 130px;
     left: -130px;
     padding: 0.7rem;
+    display: none;
   }
   
   .sidebar-links {
