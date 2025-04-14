@@ -133,6 +133,10 @@
     padding: 0.9rem;
     display: none;
   }
+  .sidebar.open {
+    display: flex; 
+    left: 0; 
+  }
   
   .sidebar-links {
     gap: 2.5rem; 
@@ -165,6 +169,11 @@
     display: none;
   }
 
+  .sidebar.open {
+    display: flex; 
+    left: 0; 
+  }
+
   .sidebar-links {
     gap: 2rem; 
   }
@@ -187,6 +196,11 @@
     left: -130px;
     padding: 0.7rem;
     display: none;
+  }
+
+  .sidebar.open {
+    display: flex; 
+    left: 0; 
   }
   
   .sidebar-links {
