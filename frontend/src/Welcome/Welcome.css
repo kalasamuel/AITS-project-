@@ -150,5 +150,41 @@ button:hover {
   color: #2747cc;
 }
 
+@media (max-width: 768px) {
+  .welcome-container {
+    margin-left: 0;
+    padding: 1rem;
+  }
+
+  .form-container {
+    max-width: 320px;
+    padding: 1rem;
+  }
+
+  .toggle-container {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    max-width: 100%;
+    padding: 1rem;
+  }
+
+  .toggle-button {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  button {
+    font-size: 0.95rem;
+  }
+}
 
 
