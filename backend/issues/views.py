@@ -19,7 +19,6 @@ class IssueViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(student=self.request.user)  #shows the student who raised the issue
 
-#applying permissions to different API views. Restricting access to required user
 
 #STUDENT: Logs an issue   Students can log issues but cannot assign them.
 class LogIssueView(APIView):

@@ -57,6 +57,18 @@ COURSE_CODES = (
     ("BHM", "BHM"), ("BARCH", "BARCH"), ("BPLAN", "BPLAN"),
 )
 
+DEPARTMENT_COURSECODE={
+    "cocis": ["BSCS", "BIT", "BSE", "BIS"],
+    "cedat": ["BME", "BEE", "BCE", "BARCH", "BPLAN", "BAGRIC"],
+    "chuss": ["BAS", "BAE", "BMC", "BLS"],
+    "conas": ["BSc", "BSTAT", "BENV"],
+    "law": ["LLB"],
+    "cobams": ["BBA", "BPS", "BHRM", "BPA", "BDEV"],
+    "cees": ["BEd"],
+    "cahs": ["BAG", "BFOOD", "BFORE", "BTOUR"],
+    "chs": ["BPH", "BNS", "BPHARM", "BDS"],
+    "vet": ["BVM"]
+}
 
 class Course(models.Model):
     name = models.CharField(max_length=255, choices=COURSES)
