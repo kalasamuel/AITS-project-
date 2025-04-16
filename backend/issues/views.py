@@ -3,6 +3,7 @@ from rest_framework import viewsets, permissions, status, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from accounts.permissions import IsStudent, IsLecturer, IsRegistrar
 from .serializers import *
@@ -119,3 +120,18 @@ class CourseListAPIView(generics.ListAPIView):
 class AssignmentListAPIView(generics.ListAPIView):
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
+    
+class IssueSubmissionView(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request, format=None):
+        serializer = IssueSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            issue = serializer.save()
+            return Response({
+                "message": "Issue submitted successfully.",
+                "issue_id": issue.issue_id,
+                "status": issue.status
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
