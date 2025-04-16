@@ -32,14 +32,14 @@ const IssueSubmission = () => {
     formData.append('description', description);
     formData.append('department', department);
     if (file) {
-      formData.append('file', file);
+      formData.append('support_file', file);
     }
 
     try {
-      const response = await axios.post('/api/issues/', formData, {
+      await axios.post('http://127.0.0.1:8000/api/issues/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Ensure user is authenticated
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`, 
         },
       });
 
@@ -70,10 +70,11 @@ const IssueSubmission = () => {
             value={issueType}
             required
           >
-            <option value="">Select issue type</option>
-            <option value="Missing Marks">Missing Marks</option>
-            <option value="Wrong Registration Number">Wrong Registration Number</option>
-            <option value="Other">Other</option>
+            <option value="" disabled>Select issue type</option>
+            <option value="missing_marks">Missing Marks</option>
+            <option value="wrong_registration_number">Wrong Registration Number</option>
+            <option value="wrong_marks">Wrong Marks</option>
+            <option value="other">Other</option>
           </select>
         </div>
 
@@ -84,7 +85,7 @@ const IssueSubmission = () => {
             type="text"
             value={courseCode}
             onChange={(e) => setCourseCode(e.target.value)}
-            placeholder="Enter course code (e.g., CS101)"
+            placeholder="Enter course code (e.g., BSCS)"
             required
           />
         </div>
@@ -108,10 +109,10 @@ const IssueSubmission = () => {
             onChange={(e) => setDepartment(e.target.value)}
             required
           >
-            <option value="">Select department</option>
-            <option value="COCIS">COCIS</option>
-            <option value="CEDAT">CEDAT</option>
-            <option value="CHUSS">CHUSS</option>
+            <option value="" disabled>Select department</option>
+            <option value="cocis">COCIS</option>
+            <option value="cedat">CEDAT</option>
+            <option value="chuss">CHUSS</option>
           </select>
         </div>
 
