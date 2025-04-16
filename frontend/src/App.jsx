@@ -9,6 +9,13 @@ import RegistrarRoutes from "./Routes/RegistrarRoutes.jsx";
 import OtpVerification from "./Welcome/OtpVerification.jsx";
 import './styles.css';
 import useIsAuthenticated from '../hooks/useIsAuthenticated.js';
+import axios from 'axios';
+
+const token = localStorage.getItem('access_token');
+if (token) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
+
 
 function App() {
     const { isAuthenticated, userRole } = useIsAuthenticated();
