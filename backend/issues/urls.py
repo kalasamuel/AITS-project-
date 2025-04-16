@@ -21,4 +21,5 @@ urlpatterns = [
     path("courses/", CourseListAPIView.as_view(), name='course-list'),
     path("assignments/", AssignmentListAPIView.as_view(), name="assignment-list"),
     path('issue/', IssueSubmissionView.as_view(), name='submit-issue'),
+    path("registrar/all-issues/", RegistrarAllIssuesView.as_view(), name="registrar-all-issues"),
 ]

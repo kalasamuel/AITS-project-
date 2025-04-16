@@ -134,3 +134,11 @@ class IssueSubmissionView(APIView):
                 "status": issue.status
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class RegistrarAllIssuesView(APIView):
+    permission_classes = [IsAuthenticated, IsRegistrar]
+
+    def get(self, request):
+        issues = Issue.objects.all().order_by('-created_at')
+        serializer = IssueSerializer(issues, many=True)
+        return Response(serializer.data, status=200)

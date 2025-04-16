@@ -107,10 +107,10 @@ class SelfRegisterView(APIView):
             if not institutional_email.endswith("@students.mak.ac.ug"):
                 return Response({"error": "Invalid Makerere Webmail address for students."}, status=status.HTTP_400_BAD_REQUEST)
         elif role == "lecturer":
-            if not institutional_email.endswith("@students.mak.ac.ug"): # Just for development purposes, should be @lecturer.mak.ac.ug
+            if not institutional_email.endswith("@gmail.com"): # Just for development purposes, should be @lecturer.mak.ac.ug
                 return Response({"error": "Invalid Makerere Webmail address for lecturers."}, status=status.HTTP_400_BAD_REQUEST)
         elif role == "registrar":
-            if not institutional_email.endswith("@students.mak.ac.ug"): # Just for development purposes, should be @registrar.mak.ac.ug
+            if not institutional_email.endswith("@gmail.com"): # Just for development purposes, should be @registrar.mak.ac.ug
                 return Response({"error": "Invalid Makerere Webmail address for registrar."}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"error": "Invalid role selected."}, status=status.HTTP_400_BAD_REQUEST)

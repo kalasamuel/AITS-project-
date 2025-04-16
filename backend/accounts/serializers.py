@@ -91,7 +91,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['role'] = user.role
         return token
 
-
+    username_field='institutional_email'
     def validate(self, attrs):
         institutional_email = attrs.get("institutional_email")
         password = attrs.get("password")
