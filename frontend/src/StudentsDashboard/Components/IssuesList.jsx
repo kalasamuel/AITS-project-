@@ -45,7 +45,7 @@ const IssuesList = ({ issues }) => {
             >
               <div className="issue-summary">
                 <span>{issue.title}</span>
-                <span className={`status ${issue.status.toLowerCase()}`}>
+                <span className={`status ${issue.status.toLowerCase().replace(/\s+/g, '-')}`}>
                   {issue.status}
                 </span>
               </div>
