@@ -20,6 +20,7 @@ const IssueSubmission = () => {
     "BDS", "BSTAT", "BPS", "BHRM", "BPA", "BDEV", "BPSY", "BAS", "BAE", "BMC", "BIS", "BENV", "BLS", "BAGRIC", "BFOOD",
     "BFORE", "BTOUR", "BHM", "BARCH", "BPLAN"
   ];
+
   const DEPARTMENT_COURSECODE = {
     "cocis": ["BSCS", "BIT", "BSE", "BIS"],
     "cedat": ["BME", "BEE", "BCE", "BARCH", "BPLAN", "BAGRIC"],
@@ -32,6 +33,7 @@ const IssueSubmission = () => {
     "chs": ["BPH", "BNS", "BPHARM", "BDS"],
     "vet": ["BVM"]
   };
+
   const handleFileChange = (e) => {
     setFile(e.target.files[0] || null);
   };
@@ -93,6 +95,7 @@ const IssueSubmission = () => {
   const filteredCourseCodes = courseCodes.filter((code) =>
     code.toLowerCase().includes(filter.toLowerCase())
   );
+
   const handleInputClick = () => {
     setShowDropdown(true);
   };
@@ -111,18 +114,23 @@ const IssueSubmission = () => {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="issueType"><h2>Issue Type</h2></label>
-          <select
+          <input
+            type="text"
             id="issueType"
-            onChange={(e) => setIssueType(e.target.value)}
+            list="issueTypeOptions"
             value={issueType}
+            onChange={(e) => setIssueType(e.target.value)}
+            placeholder="Type or choose an issue type"
             required
-          >
-            <option value="" disabled>Select issue type</option>
-            <option value="missing_marks">Missing Marks</option>
-            <option value="wrong_registration_number">Wrong Registration Number</option>
-            <option value="wrong_marks">Wrong Marks</option>
-            <option value="other">Other</option>
-          </select>
+          />
+          <datalist id="issueTypeOptions">
+            <option value="Missing Marks" />
+            <option value="Wrong Registration Number" />
+            <option value="Wrong Marks" />
+            <option value="Wrong Course Code" />
+            <option value="Wrong Course Name" />
+            <option value="Missing Course Work marks" />
+          </datalist>
         </div>
 
         <div className="form-group">
@@ -137,11 +145,11 @@ const IssueSubmission = () => {
           />
           {showDropdown && (
           <select
-          id="courseCode"
-          size = "4"
-          value ={courseCode}
-          onChange={(e) => setCourseCode(e.target.value)}
-          required
+            id="courseCode"
+            size="4"
+            value={courseCode}
+            onChange={(e) => setCourseCode(e.target.value)}
+            required
           >
             {filteredCourseCodes.map((code) => (
               <option key={code} value={code} onClick={() => handleOptionClick(code)}>
