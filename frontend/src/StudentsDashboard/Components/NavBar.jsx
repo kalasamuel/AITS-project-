@@ -21,7 +21,9 @@ function NavBar({ profilePic, toggleSidebar }) {
       </div>
       <div className="navbar-profile">
         {profilePic ? (
-          <img src={profilePic} alt="Profile" className="navbar-img" />
+          <div className="navbar-img-wrapper">
+            <img src={profilePic} alt="Profile" className="navbar-img" />
+          </div>
         ) : (
           <span className="navbar-placeholder">No Profile Pic</span>
         )}
