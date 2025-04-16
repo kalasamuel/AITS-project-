@@ -121,6 +121,7 @@ const Welcome = () => {
   };
 
   return (
+    <div className="welcome-page">
     <div className="welcome-container">
       <h1 className='welcome-to'>Welcome to AITS</h1>
       <div className="toggle-container">
@@ -228,6 +229,7 @@ const Welcome = () => {
       </div>
       {error && <p className="error-message">{error}</p>}
       {message && <p className="success-message">{message}</p>}
+    </div>
     </div>
   );
 };

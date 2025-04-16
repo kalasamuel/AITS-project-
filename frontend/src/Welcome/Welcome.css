@@ -7,11 +7,32 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
+  min-height: 100vh;
+}
+
+.welcome-page {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.welcome-page::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
   background-image: url('../assets/imageiv.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  min-height: 100vh;
+  z-index: -1;
 }
 
 .welcome-container {
@@ -21,11 +42,11 @@ body {
   justify-content: center;
   text-align: center;
   min-height: 100vh;
-  width: 100%;
   margin-left: 160px;
+  width: 480px;
   padding: 1.5rem;
-  background-color: rgba(255, 255, 255, 0.3); 
-  backdrop-filter: blur(5px);
+  background-color: rgba(255, 255, 255, 0.85); 
+  backdrop-filter: blur(5px); 
 }
 
 .welcome-to {
@@ -150,6 +171,8 @@ button:hover {
   color: #2747cc;
 }
 
+
+
 @media (max-width: 768px) {
   .welcome-container {
     margin-left: 0;
@@ -186,5 +209,3 @@ button:hover {
     font-size: 0.95rem;
   }
 }
-
-
