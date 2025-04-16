@@ -3,7 +3,6 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status, generics, viewsets
-from rest_framework_simplejwt.tokens import RefreshToken
 from django.utils.timezone import now
 from .models import CustomUser, Department, VerificationCode
 from .utils import send_verification_email
@@ -101,17 +100,17 @@ class SelfRegisterView(APIView):
             return Response({"error": "Passwords do not match."}, status=status.HTTP_400_BAD_REQUEST)
 
         if CustomUser.objects.filter(institutional_email=institutional_email).exists():
-            return Response({"error": "institutional_email is already registered."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Webmail is already registered."}, status=status.HTTP_400_BAD_REQUEST)
 
         # Role-specific email suffix checks
         if role == "student":
             if not institutional_email.endswith("@students.mak.ac.ug"):
                 return Response({"error": "Invalid Makerere Webmail address for students."}, status=status.HTTP_400_BAD_REQUEST)
         elif role == "lecturer":
-            if not institutional_email.endswith("@lecturers.mak.ac.ug"):
+            if not institutional_email.endswith("@students.mak.ac.ug"): # Just for development purposes, should be @lecturer.mak.ac.ug
                 return Response({"error": "Invalid Makerere Webmail address for lecturers."}, status=status.HTTP_400_BAD_REQUEST)
         elif role == "registrar":
-            if not institutional_email.endswith("@registrar.mak.ac.ug"):
+            if not institutional_email.endswith("@students.mak.ac.ug"): # Just for development purposes, should be @registrar.mak.ac.ug
                 return Response({"error": "Invalid Makerere Webmail address for registrar."}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"error": "Invalid role selected."}, status=status.HTTP_400_BAD_REQUEST)
