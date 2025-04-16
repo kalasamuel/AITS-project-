@@ -28,6 +28,10 @@ import ProfileAndsettings from '../RegistrarDashboard/Pages/RegistrarProfileAnds
                 path="/registrar/profile-and-settings"
                 element={isAuthenticated ? <ProfileAndsettings profilePic={profilePic} setProfilePic={setProfilePic} /> : <Navigate to="/welcome" />}
             />
+            <Route
+                path="*"
+                element={<Navigate to="/registrar/home" />}
+            />
         </Routes>
     );
 }
