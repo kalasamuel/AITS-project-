@@ -130,5 +130,43 @@
   opacity: 1;
 }
 
+@media (max-width: 768px) {
+  .navbar-content .aits {
+    font-size: 1.2rem;
+  }
+  .navbar-profile {
+    margin-right: 0.5rem;
+  }
+  .navbar-img-wrapper,
+  .navbar-placeholder {
+    width: 45px;
+    height: 45px;
+  }
+  .logout-button {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+  .hamburger-button {
+    display: block;
+  }
+}
 
+@media (max-width: 480px) {
+  .navbar-content .aits {
+    font-size: 1rem;
+  }
+  .navbar-profile {
+    gap: 0.5rem;
+  }
+  .navbar-img-wrapper,
+  .navbar-placeholder {
+    width: 40px;
+    height: 40px;
+    font-size: 0.8rem;
+  }
+  .logout-button {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+}
 
