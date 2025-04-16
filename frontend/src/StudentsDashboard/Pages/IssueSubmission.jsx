@@ -10,7 +10,28 @@ const IssueSubmission = () => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [filter, setFilter] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [error, setError] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
 
+  const courseCodes = [
+    "BSCS", "BIT", "BSE", "BBA", "LLB", "BME", "BEE", "BCE", "BFA", "BEd", "BSc", "BPH", "BVM", "BAG", "BNS", "BPHARM",
+    "BDS", "BSTAT", "BPS", "BHRM", "BPA", "BDEV", "BPSY", "BAS", "BAE", "BMC", "BIS", "BENV", "BLS", "BAGRIC", "BFOOD",
+    "BFORE", "BTOUR", "BHM", "BARCH", "BPLAN"
+  ];
+  const DEPARTMENT_COURSECODE = {
+    "cocis": ["BSCS", "BIT", "BSE", "BIS"],
+    "cedat": ["BME", "BEE", "BCE", "BARCH", "BPLAN", "BAGRIC"],
+    "chuss": ["BAS", "BAE", "BMC", "BLS"],
+    "conas": ["BSc", "BSTAT", "BENV"],
+    "law": ["LLB"],
+    "cobams": ["BBA", "BPS", "BHRM", "BPA", "BDEV"],
+    "cees": ["BEd"],
+    "cahs": ["BAG", "BFOOD", "BFORE", "BTOUR"],
+    "chs": ["BPH", "BNS", "BPHARM", "BDS"],
+    "vet": ["BVM"]
+  };
   const handleFileChange = (e) => {
     setFile(e.target.files[0] || null);
   };
@@ -19,6 +40,13 @@ const IssueSubmission = () => {
     e.preventDefault();
     setLoading(true);
     setMessage('');
+    setError('');
+
+    if (department && !DEPARTMENT_COURSECODE[department].includes(courseCode)) {
+      setError(`Invalid! Course code ${courseCode} does not belong to ${department.toUpperCase()}`);
+      setLoading(false);
+      return;
+    }
 
     if (!issueType || !courseCode || !description || !department) {
       setMessage('Please fill in all required fields.');
@@ -46,9 +74,14 @@ const IssueSubmission = () => {
       setMessage('Issue submitted successfully!');
       setIssueType('');
       setCourseCode('');
+      setFilter('');
       setDescription('');
       setDepartment('');
       setFile(null);
+
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 3000);  
+        
     } catch (error) {
       console.error('Error submitting issue:', error);
       setMessage('Error submitting issue. Please try again.');
@@ -57,10 +90,24 @@ const IssueSubmission = () => {
     setLoading(false);
   };
 
+  const filteredCourseCodes = courseCodes.filter((code) =>
+    code.toLowerCase().includes(filter.toLowerCase())
+  );
+  const handleInputClick = () => {
+    setShowDropdown(true);
+  };
+
+  const handleOptionClick = (code) => {
+    setCourseCode(code);
+    setFilter(code);
+    setShowDropdown(false);
+  };
+
   return (
     <div className="issue-submission-container">
       <h1>Issue Submission Form</h1>
-      {message && <p className="message">{message}</p>}
+      {showPopup && <div className="notification-popup">{message}</div>}
+      {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="issueType"><h2>Issue Type</h2></label>
@@ -81,13 +128,29 @@ const IssueSubmission = () => {
         <div className="form-group">
           <label htmlFor="courseCode"><h2>Course Code</h2></label>
           <input
-            id="courseCode"
+            id="courseCodeFilter"
             type="text"
-            value={courseCode}
-            onChange={(e) => setCourseCode(e.target.value)}
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
             placeholder="Enter course code (e.g., BSCS)"
-            required
+            onClick={handleInputClick}
           />
+          {showDropdown && (
+          <select
+          id="courseCode"
+          size = "4"
+          value ={courseCode}
+          onChange={(e) => setCourseCode(e.target.value)}
+          required
+          >
+            {filteredCourseCodes.map((code) => (
+              <option key={code} value={code} onClick={() => handleOptionClick(code)}>
+                {code}
+              </option>
+            ))}
+          </select>
+          )}
+          {error && <p className="error-message">{error}</p>}
         </div>
 
         <div className="form-group">
@@ -110,10 +173,18 @@ const IssueSubmission = () => {
             required
           >
             <option value="" disabled>Select department</option>
-            <option value="cocis">COCIS</option>
-            <option value="cedat">CEDAT</option>
-            <option value="chuss">CHUSS</option>
+            <option value="cocis">College of Computing and Information Sciences (COCIS)</option>
+            <option value="cedat">College of Engineering, Design, Art and Technology (CEDAT)</option>
+            <option value="chuss">College of Humanities and Social Sciences (CHUSS)</option>
+            <option value="conas">College of Natural Sciences (CONAS)</option>
+            <option value="law">School of Law</option>
+            <option value="cobams">College of Business and Management Sciences (COBAMS)</option>
+            <option value="cees">College of Education and External Studies (CEES)</option>
+            <option value="cahs">College of Agricultural and Environmental Sciences (CAES)</option>
+            <option value="chs">College of Health Sciences (CHS)</option>
+            <option value="vet">College of Veterinary Medicine, Animal Resources and Biosecurity (COVAB)</option>
           </select>
+          {error && <p className="error-message">{error}</p>}
         </div>
 
         <div className="form-group">
