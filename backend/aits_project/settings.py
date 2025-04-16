@@ -34,7 +34,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CORS_ALLOWED_ORIGINS = [ #specifies which origins are allowed to make requests to django API
+CORS_ALLOWED_ORIGINS = [ 
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:5174",
@@ -176,3 +176,7 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
+# Media files settings
+MEDIA_URL = '/media/' #this is the URL prefix for media files
+MEDIA_ROOT = BASE_DIR / 'media' #this is the file system path to the media files directory
