@@ -196,8 +196,31 @@ const IssueSubmission = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="file"><h2>Attach File (Optional)</h2></label>
-          <input id="file" type="file" onChange={handleFileChange} />
+          <label><h2>Attach File (Optional)</h2></label>
+          <div
+            className="file-drop-zone"
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={(e) => {
+              e.preventDefault();
+              const droppedFile = e.dataTransfer.files[0];
+              if (droppedFile) {
+                setFile(droppedFile);
+              }
+            }}
+            onClick={() => document.getElementById('file').click()}
+          >
+            {file ? (
+              <p>{file.name}</p>
+            ) : (
+              <p>Drag & drop a file here or click to select</p>
+            )}
+            <input
+              type="file"
+              id="file"
+              style={{ display: 'none' }}
+              onChange={handleFileChange}
+            />
+          </div>
         </div>
 
         <button type="submit" className="submit-button" disabled={loading}>
