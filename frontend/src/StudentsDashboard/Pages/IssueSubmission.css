@@ -4,8 +4,8 @@
     align-items: center;
     justify-content: flex-start;
     padding: 20px;
-    margin: 80px auto 20px auto; 
-    width: 90%; 
+    margin: 80px auto 20px auto;
+    width: 90%;
     max-width: 800px;
     margin-left: 220px;
     font-family: Arial, sans-serif;
@@ -13,43 +13,45 @@
     border: 2px solid #b45924;
     background-color: #fff;
     transition: all 0.3s ease;
-}
-
-h1 {
+  }
+  
+  h1 {
     font-size: 24px;
     margin-bottom: 15px;
     text-align: center;
-}
-
-h2 {
+  }
+  
+  h2 {
     font-size: 18px;
     margin-bottom: 5px;
-}
-
-.form-group {
+  }
+  
+  .form-group {
     width: 100%;
     margin-bottom: 20px;
-}
-
-label {
+  }
+  
+  label {
     font-weight: bold;
-}
-
-input, textarea, select {
+  }
+  
+  input,
+  textarea,
+  select {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-top: 5px;
     font-size: 16px;
-}
-
-textarea {
+  }
+  
+  textarea {
     height: 120px;
-}
-
-/* Submit Button */
-.submit-button {
+  }
+  
+  
+  .submit-button {
     width: 100%;
     padding: 12px;
     background-color: blue;
@@ -58,21 +60,21 @@ textarea {
     cursor: pointer;
     border-radius: 5px;
     font-size: 16px;
-}
-
-.submit-button:hover {
+  }
+  
+  .submit-button:hover {
     background-color: darkblue;
-}
-
-.error-message {
+  }
+  
+  .error-message {
     color: red;
     font-size: 14px;
     margin-top: 5px;
-}
-
-.notification-popup {
+  }
+  
+  .notification-popup {
     position: fixed;
-    top: -100px; 
+    top: -100px;
     left: 50%;
     transform: translateX(-50%);
     background-color: #4caf50;
@@ -101,3 +103,135 @@ textarea {
     border-color: #444;
     background-color: #f7f7f7;
   }
+  
+  
+  @media (max-width: 1024px) {
+    .issue-submission-container {
+      margin-left: 0;
+      padding: 20px;
+    }
+  
+    h1 {
+      font-size: 22px;
+    }
+  
+    h2 {
+      font-size: 16px;
+    }
+  
+    input,
+    textarea,
+    select {
+      font-size: 15px;
+    }
+  }
+  
+  
+  @media (max-width: 600px) {
+    .issue-submission-container {
+      width: 95%;
+      margin: 60px auto 20px auto;
+      padding: 15px;
+    }
+  
+    h1 {
+      font-size: 20px;
+    }
+  
+    h2 {
+      font-size: 15px;
+    }
+  
+    .submit-button {
+      font-size: 15px;
+      padding: 10px;
+    }
+  
+    input,
+    textarea,
+    select {
+      font-size: 14px;
+      padding: 10px;
+    }
+  
+    .file-drop-zone {
+      padding: 15px;
+      font-size: 14px;
+    }
+  
+    .notification-popup {
+      font-size: 14px;
+      padding: 12px;
+    }
+  }
+  
+  
+  @media (max-width: 480px) {
+    .issue-submission-container {
+      padding: 10px;
+      width: 98%;
+    }
+  
+    h1 {
+      font-size: 18px;
+    }
+  
+    h2 {
+      font-size: 14px;
+    }
+  
+    input,
+    textarea,
+    select {
+      font-size: 13px;
+      padding: 8px;
+    }
+  
+    .submit-button {
+      font-size: 14px;
+      padding: 8px;
+    }
+  
+    .file-drop-zone {
+      padding: 12px;
+      font-size: 13px;
+    }
+  }
+  
+  
+  @media (max-width: 360px) {
+    .issue-submission-container {
+      padding: 8px;
+    }
+  
+    h1 {
+      font-size: 16px;
+    }
+  
+    h2 {
+      font-size: 13px;
+    }
+  
+    input,
+    textarea,
+    select {
+      font-size: 12px;
+      padding: 7px;
+    }
+  
+    .submit-button {
+      font-size: 13px;
+      padding: 7px;
+    }
+  
+    .file-drop-zone {
+      padding: 10px;
+      font-size: 12px;
+    }
+  
+    .notification-popup {
+      font-size: 13px;
+      padding: 10px;
+    }
+  }
+  
