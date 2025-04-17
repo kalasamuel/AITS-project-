@@ -1,27 +1,69 @@
-import React, { useState } from 'react';
+import React, {useEffect ,useState } from 'react';
+import axios from 'axios';
 import './Assignment.css';
 
 const AssignmentPage = () => {
-    const [issues, setIssues] = useState([
-        { id: '#1235', studentName: 'Bob', department: 'CEDAT', courseCode: 'CIV101', issueType: 'Exam results', status: 'Open', assignedTo: '', adminNumber: '' },
-        { id: '#1236', studentName: 'Charlie', department: 'CHUSS', courseCode: 'LIT202', issueType: 'Exam results', status: 'In Progress', assignedTo: '', adminNumber: '' },
-        { id: '#1238', studentName: 'Eve', department: 'CEDAT', courseCode: 'MTH300', issueType: 'Open', status: 'Open', assignedTo: '', adminNumber: '' },
-    ]);
-    const handleInputChange = (issueId, field, value) => {
-        setIssues(issues.map(issue =>
-            issue.id === issueId ? { ...issue, [field]: value } : issue
-        ));
-    };
-    const assignIssue = (issueId) => {
-        setIssues(issues.map(issue =>
-            issue.id === issueId ? { ...issue, status: 'Assigned' } : issue
-        ));
-        alert(`Issue ${issueId} has been successfully assigned.`);
+    const [issues, setIssues] = useState([]);
+    const [lecturers, setLecturers] = useState([]);
+    const [assignments, setAssignments] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchIssuesAndLecturers = async () => {
+            try {
+                const token = localStorage.getItem("access_token");
+                const headers = { Authorization: `Bearer ${token}` };
+
+                const [issuesResponse, lecturersResponse] = await Promise.all([
+                    axios.get("http://127.0.1:8000/api/issues/registrar/all-issues/", { headers }),
+                    axios.get("http://127.0.1:8000/api/accounts/lecturers/", { headers }),
+                ]);
+
+                const unassignedIssues = issuesResponse.data.filter(issue => !issue.assigned_to);
+                setIssues(unassignedIssues);
+                setLecturers(lecturersResponse.data);
+            } catch (error) {
+                console.error("Failed to fetch data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchIssuesAndLecturers();
+    }, []);
+
+    const handleAssign = async (issueId) => {
+        const lecturerId = assignments[issueId];
+        if (!lecturerId) return alert("Please select a lecturer to assign issue.");
+
+        try {
+            const token = localStorage.getItem("access_token");
+            const response = await axios.post(
+                "http://127.0.1:8000/api/issues/assign-issue/",
+                { issue_id: issueId, lecturer_id: lecturerId },
+                { headers: { Authorization: `Bearer ${token}`, },}
+            );
+            
+            alert(response.data.message);
+            setIssues(prev => prev.filter(issue => issue.issue_id !== issueId)); // removes from list
+        } catch (error) {
+            console.error("Assignment failed:", error);
+            alert("Failed to assign issue. Please try again.");
+        }
+    };  
+
+    const handleSelectChange = (issueId, lecturerId) => {
+        setAssignments(prev => ({...prev, [issueId] : lecturerId}));
     };
 
     return (
         <div className="container">
             <h1 className="header">Assign Issues to Lecturers</h1>
+            {loading ? (
+                <p>Loading...</p>
+            ) : issues.length === 0 ? (
+                <p>No unassigned issues available.</p>
+            ) : (
             <div className="table-container">
                 <h2 className="table-header">Issues Pending Assignment:</h2>
                 <table className="table">
@@ -34,42 +76,37 @@ const AssignmentPage = () => {
                             <th className="table-header-cell">Issue Type</th>
                             <th className="table-header-cell">Status</th>
                             <th className="table-header-cell">Lecturer Name</th>
-                            <th className="table-header-cell">Admin Number</th>
                             <th className="table-header-cell">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {issues.map(issue => (
-                            <tr key={issue.id} className="table-row">
-                                <td className="table-cell">{issue.id}</td>
-                                <td className="table-cell">{issue.studentName}</td>
-                                <td className="table-cell">{issue.department}</td>
-                                <td className="table-cell">{issue.courseCode}</td>
-                                <td className="table-cell">{issue.issueType}</td>
+                            <tr key={issue.issue_id} className="table-row">
+                                <td className="table-cell">{issue.issue_id}</td>
+                                <td className="table-cell">{issue.student_name}</td>
+                                <td className="table-cell">{issue.department.toUpperCase()}</td>
+                                <td className="table-cell">{issue.course_code}</td>
+                                <td className="table-cell">{issue.issue_type.replace(/_/g, ' ')}</td>
                                 <td className="table-cell">{issue.status}</td>
                                 <td className="table-cell">
-                                    <input
-                                        type="text"
-                                        className="input-field"
-                                        placeholder="Enter Lecturer Name"
-                                        value={issue.assignedTo}
-                                        onChange={(e) => handleInputChange(issue.id, 'assignedTo', e.target.value)}
-                                    />
-                                </td>
-                                <td className="table-cell">
-                                    <input
-                                        type="text"
-                                        className="input-field"
-                                        placeholder="Enter Admin Number"
-                                        value={issue.adminNumber}
-                                        onChange={(e) => handleInputChange(issue.id, 'adminNumber', e.target.value)}
-                                    />
+                                    <select
+                                        value={assignments[issue.issue_id] || ''}
+                                        onChange={e => handleSelectChange(issue.issue_id, e.target.value)}
+                                        className="select-field"
+                                    >
+                                        <option value="">Select Lecturer</option>
+                                        {lecturers.map(lect => (
+                                            <option key={lect.id} value={lect.id}>
+                                                {lect.first_name} {lect.last_name}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </td>
                                 <td className="table-cell">
                                     <button
+                                        onClick={() => handleAssign(issue.issue_id)}
+                                        disabled={!assignments[issue.issue_id]}
                                         className="assign-button"
-                                        onClick={() => assignIssue(issue.id)}
-                                        disabled={!issue.assignedTo || !issue.adminNumber}
                                     >
                                         Assign
                                     </button>
@@ -79,6 +116,7 @@ const AssignmentPage = () => {
                     </tbody>
                 </table>
             </div>
+    )}
         </div>
     );
 };
