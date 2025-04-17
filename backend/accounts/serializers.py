@@ -123,3 +123,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             }
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError({"detail": "User not found."})
+        
+class LecturerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['lecturer_id', 'first_name', 'last_name', 'institutional_email', 'department']    

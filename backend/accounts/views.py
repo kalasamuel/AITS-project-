@@ -6,7 +6,7 @@ from rest_framework import status, generics, viewsets
 from django.utils.timezone import now
 from .models import CustomUser, Department, VerificationCode
 from .utils import send_verification_email
-from .serializers import RegistrationSerializer, DepartmentSerializer, CustomTokenObtainPairSerializer
+from .serializers import RegistrationSerializer, DepartmentSerializer, CustomTokenObtainPairSerializer, LecturerSerializer
 from datetime import timedelta
 from django.utils import timezone
 from .models import VerificationCode 
@@ -191,3 +191,11 @@ class LoginView(APIView):
         if serializer.is_valid():
             return Response(serializer.validated_data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+    
+class LecturerListView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        lecturers= CustomUser.objects.filter(role='lecturer')
+        serializer = LecturerSerializer(lecturers, many=True)
+        return Response(serializer.data, status=200)
