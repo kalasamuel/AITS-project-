@@ -1,55 +1,92 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './RegistrarResolvedIssues.css';
 
 const ResolvedIssues = () => {
+  const [resolvedIssues, setResolvedIssues] = useState([]); 
   const [selectedIssue, setSelectedIssue] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const issues = [
-    { type: 'Missing marks', regNo: '2024/BSCS/3210', name: 'KALA SAMUEL', lecturer: 'Dr. John Doe', courseCode: 'CS101', status: 'Resolved', date: 'Feb 14, 2025, 10:30am' },
-    { type: 'Exam results', regNo: '2024/BSCS/3212', name: 'LUTWAMA KENNETH', lecturer: 'Prof. Mark Lee', courseCode: 'CS303', status: 'Resolved', date: 'Feb 14, 2025, 10:30am' },
-  ];
+  useEffect(() => {
+    const fetchResolvedIssues = async () => {
+      try {
+        const token = localStorage.getItem('access_token');
+        const response = await axios.get('http://127.0.0.1:8000/api/issues/registrar/all-issues/', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const resolved = response.data.filter(issue => issue.status === 'resolved');
+        setResolvedIssues(resolved);
+      } catch (error) {
+        console.error('Failed fetching resolved issues:', error);
+        setError('Failed to load resolved issues. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResolvedIssues();
+  }, []);
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="resolved-container">
       <h1>Resolved Issues</h1>
-      
-      <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
-        <thead>
-          <tr>
-            <th>Issue Type</th>
-            <th>Registration No.</th>
-            <th>Student Name</th>
-            <th>Lecturer</th>
-            <th>Course Code</th>
-            <th>Status</th>
-            <th>Date Resolved</th>
-          </tr>
-        </thead>
-        <tbody>
-          {issues.map((issue, index) => (
-            <tr key={index} onClick={() => setSelectedIssue(issue)} style={{ cursor: 'pointer' }}>
-              <td>{issue.type}</td>
-              <td>{issue.regNo}</td>
-              <td>{issue.name}</td>
-              <td>{issue.lecturer}</td>
-              <td>{issue.courseCode}</td>
-              <td>{issue.status}</td>
-              <td>{issue.date}</td>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p className="error-message">{error}</p>
+      ) : resolvedIssues.length === 0 ? (
+        <p>No resolved issues available.</p>
+      ) : (
+        <table className="resolved-table">
+          <thead>
+            <tr>
+              <th>Issue Type</th>
+              <th>Registration No.</th>
+              <th>Student Name</th>
+              <th>Lecturer</th>
+              <th>Course Code</th>
+              <th>Status</th>
+              <th>Date Resolved</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {resolvedIssues.map((issue) => (
+              <tr
+                key={issue.issue_id}
+                onClick={() => setSelectedIssue(issue)}
+                style={{ cursor: 'pointer' }}
+              >
+                <td>{issue.issue_type.replace(/_/g, ' ')}</td>
+                <td>{issue.student?.registration_number}</td>
+                <td>{`${issue.student?.last_name} ${issue.student?.first_name}`}</td>
+                <td>{`${issue.assigned_to?.last_name} ${issue.assigned_to?.first_name}`}</td>
+                <td>{issue.course?.code}</td>
+                <td>{issue.status}</td>
+                <td>{new Date(issue.updated_at).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
 
       {selectedIssue && (
-        <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'white', padding: '20px', boxShadow: '0px 0px 10px gray' }}>
-          <h2>Issue Details</h2>
-          <p><strong>Type:</strong> {selectedIssue.type}</p>
-          <p><strong>Registration No:</strong> {selectedIssue.regNo}</p>
-          <p><strong>Student Name:</strong> {selectedIssue.name}</p>
-          <p><strong>Lecturer:</strong> {selectedIssue.lecturer}</p>
-          <p><strong>Course Code:</strong> {selectedIssue.courseCode}</p>
-          <p><strong>Status:</strong> {selectedIssue.status}</p>
-          <p><strong>Date Resolved:</strong> {selectedIssue.date}</p>
-          <button onClick={() => setSelectedIssue(null)}>Close</button>
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Issue Details</h2>
+            <p><strong>Type:</strong> {selectedIssue.issue_type}</p>
+            <p><strong>Registration No:</strong> {selectedIssue.student?.registration_number}</p>
+            <p><strong>Student Name:</strong> {`${selectedIssue.student?.last_name} ${selectedIssue.student?.first_name}`}</p>
+            <p><strong>Lecturer:</strong> {`${selectedIssue.assigned_to?.last_name} ${selectedIssue.assigned_to?.first_name}`}</p>
+            <p><strong>Course Code:</strong> {selectedIssue.course?.code}</p>
+            <p><strong>Status:</strong> {selectedIssue.status}</p>
+            <p><strong>Date Resolved:</strong> {new Date(selectedIssue.updated_at).toLocaleString()}</p>
+            <button onClick={() => setSelectedIssue(null)}>Close</button>
+          </div>
+          <div className="modal-backdrop" onClick={() => setSelectedIssue(null)}></div>
         </div>
       )}
     </div>
