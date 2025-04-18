@@ -9,7 +9,7 @@ import random
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['role', 'institutional_email', 'email', 'student_number', 'lecturer_id', 'year_of_study', 'is_verified', 'registrar_id']
+        fields = "__all__"  
 
 class VerificationCodeSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
+from django.contrib.auth.hashers import check_password
 from rest_framework.response import Response
 from rest_framework import status, generics, viewsets
 from django.utils.timezone import now
 from .models import CustomUser, Department, VerificationCode
 from .utils import send_verification_email
-from .serializers import RegistrationSerializer, DepartmentSerializer, CustomTokenObtainPairSerializer, LecturerSerializer
+from .serializers import RegistrationSerializer, DepartmentSerializer, CustomTokenObtainPairSerializer, LecturerSerializer, CustomUserSerializer
 from datetime import timedelta
 from django.utils import timezone
 from .models import VerificationCode 
@@ -15,8 +17,6 @@ import random
 # Registrar Code (to be stored securely in settings)
 REGISTRAR_CODE = "REG123456"
 
-
-### Helper Functions for Role-Based Validation ###
 def validate_student_registration(data):
     """
     Validates Student registration fields.
@@ -98,7 +98,9 @@ class SelfRegisterView(APIView):
 
         if password != confirm_password:
             return Response({"error": "Passwords do not match."}, status=status.HTTP_400_BAD_REQUEST)
-
+        if len(password) < 8:
+            return Response({"error": "Password must be at least 8 characters long."}, status=status.HTTP_400_BAD_REQUEST)
+        
         if CustomUser.objects.filter(institutional_email=institutional_email).exists():
             return Response({"error": "Webmail is already registered."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -171,18 +173,15 @@ class VerifyAccountView(APIView):
 
         return Response({"error": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
 
-### Department Management API ###
 class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
 
-### Alternative User Registration API ###
 class RegisterUserView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = RegistrationSerializer
     permission_classes = [AllowAny]
 
-### Login View using JWT ###
 class LoginView(APIView):
     permission_classes = [AllowAny]
 
@@ -199,3 +198,69 @@ class LecturerListView(APIView):
         lecturers= CustomUser.objects.filter(role='lecturer')
         serializer = LecturerSerializer(lecturers, many=True)
         return Response(serializer.data, status=200)
+    
+#User profile view
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = CustomUserSerializer(request.user)
+        return Response(serializer.data)
+    
+class ProfilePictureUploadView(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request):
+        user = request.user
+        file = request.FILES.get('profile_picture')
+
+        if not file:
+            return Response({"error": "No file uploaded."}, status=400)
+
+        if not file.content_type.startswith("image/"):
+            return Response({"error": "Invalid file type. Please upload an image."}, status=400)
+
+        if file.size > 5 * 1024 * 1024:  # 5MB limit
+            return Response({"error": "File size exceeds the 5MB limit."}, status=400)
+
+        user.profile_picture = file
+        user.save()
+        return Response({"message": "Profile picture uploaded successfully."})
+    
+class UpdateProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+        user = request.user
+        data = request.data
+        user.first_name = data.get("first_name", user.first_name)
+        user.last_name = data.get("last_name", user.last_name)
+        user.institutional_email = data.get("institutional_email", user.institutional_email)
+        if user.role != "registrar":
+            user.registration_number = data.get("registration_number", user.registration_number)
+            user.program = data.get("program", user.program)
+
+        user.save()
+        return Response({"message": "Profile updated successfully."})
+    
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+def post(self, request):
+    user = request.user
+    current = request.data.get("currentPassword")
+    new = request.data.get("newPassword")
+
+    if not current or not new:
+        return Response({"error": "Both current and new passwords are required."}, status=400)
+
+    if not user.check_password(current):
+        return Response({"error": "Current password is incorrect."}, status=400)
+
+    if len(new) < 8:
+        return Response({"error": "New password must be at least 8 characters long."}, status=400)
+
+    user.set_password(new)
+    user.save()
+    return Response({"message": "Password changed successfully."})
