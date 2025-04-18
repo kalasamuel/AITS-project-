@@ -1,88 +1,74 @@
-.container {
-    display: flex;
-    min-height: 100vh;
+.resolved-container {
+    padding: 20px;
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
 }
 
-.main-content {
-    width: 80%;
-    padding: 20px;
-    background-color: #fff;
-    border-left: 1px solid #ddd;
-}
-
-.main-content h1 {
+h1 {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
     color: #333;
 }
 
-.main-content h2 {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    color: #555;
-}
-
-.table, .issues-table {
+table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
-.table th, .table td, .issues-table th, .issues-table td {
+th, td {
     border: 1px solid #ddd;
     padding: 10px;
     text-align: left;
 }
 
-.table th, .issues-table th {
+th {
     background-color: #f2f2f2;
     font-weight: bold;
     color: #333;
 }
 
-.table tbody tr:nth-child(even), .issues-table tbody tr:nth-child(even) {
+tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-.table tbody tr:hover, .issues-table tbody tr:hover {
+tbody tr:hover {
     background-color: #f1f1f1;
+    cursor: pointer;
 }
 
-.table td, .issues-table td {
-    color: #555;
+button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.assigned-container {
-    padding: 20px;
+button:hover {
+    background-color: #0056b3;
 }
 
-.error-message {
-    color: red;
-    margin-bottom: 10px;
+.resolved-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
 }
 
 .modal {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.modal-content {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: white;
     padding: 20px;
-    border-radius: 5px;
     box-shadow: 0px 0px 10px gray;
-    z-index: 1001;
+    border-radius: 8px;
+    z-index: 1000;
 }
 
 .modal-backdrop {
@@ -92,21 +78,24 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+    z-index: 999;
 }
 
 @media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-    }
-
-    .main-content {
-        width: 100%;
+    .resolved-container {
         padding: 15px;
     }
 
-    .table th, .table td, .issues-table th, .issues-table td {
+    table {
         font-size: 12px;
+    }
+
+    th, td {
         padding: 8px;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 12px;
     }
 }
