@@ -57,7 +57,7 @@ const AssignmentPage = () => {
     };
 
     return (
-        <div className="container">
+        <div className="assignment-container">
             <h1 className="header">Assign Issues to Lecturers</h1>
             {loading ? (
                 <p>Loading...</p>
