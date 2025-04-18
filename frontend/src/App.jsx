@@ -11,6 +11,8 @@ import './styles.css';
 import useIsAuthenticated from '../hooks/useIsAuthenticated.js';
 import axios from 'axios';
 
+console.log("✅ App is rendering");
+
 const token = localStorage.getItem('access_token');
 if (token) {
   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -19,6 +21,9 @@ if (token) {
 
 function App() {
     const { isAuthenticated, userRole } = useIsAuthenticated();
+
+    console.log("Auth Check:", {isAuthenticated, userRole});
+
     const [profilePic, setProfilePic] = useState(null);
     const location = useLocation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -39,6 +44,9 @@ function App() {
                 <div className="main-content">
                     <div className="content">
                         <Routes>
+
+                            <Route path="/test" element={<h1>Hello from test route</h1>}/>
+
                             <Route path="/welcome" element={<Welcome />} />
                             <Route path="/otp-verification" element={<OtpVerification />} />
                             <Route
@@ -83,7 +91,7 @@ function App() {
                                 path="/registrar/*"
                                 element={
                                     <RegistrarRoutes
-                                        isAuthenticated={isAuthenticated}
+                                        isAuthenticated={true}
                                         profilePic={profilePic}
                                         setProfilePic={setProfilePic}
                                     />
