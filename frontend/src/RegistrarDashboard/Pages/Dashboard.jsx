@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Dashboard.css';
 
+console.log("✅ Registrar's Dashboard loaded");
+
 const RegistrarsDashboard = () => {
     const [issues, setIssues] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -39,9 +41,11 @@ const RegistrarsDashboard = () => {
   const resolvedCount = issues.filter(issue => issue.status === 'resolved').length;
 
     return (
-        <div className="container">
+        <div className="dashboard-container">
             <h1 className="header">Registrar's Dashboard</h1>
-
+            <p style={{background: "yellow", padding: "1rem"}}>
+              This is visible text directly rendered!
+            </p>
             <div className="summary-container">
                 <SummaryCard title="Total Issues" value={totalIssues} className="card-total" />
                 <SummaryCard title="Open Issues" value={openCount} className="card-open" />
