@@ -7,27 +7,39 @@ import ResolvedIssues from '../RegistrarDashboard/Pages/RegistrarResolvedIssues.
 import RegistrarProfileAndSettings from '../RegistrarDashboard/Pages/RegistrarProfileAndSettings.jsx';
 
 function RegistrarRoutes({ isAuthenticated, profilePic, setProfilePic }) {
-  // Redirect to the welcome page if the user is not authenticated
-  if (!isAuthenticated) {
-    return <Navigate to="/welcome" />;
-  }
-
   return (
     <Routes>
-      <Route path="/registrar/home" element={<RegistrarDashboard />} />
-
-      <Route path="/registrar/assignment" element={<Assignment />} />
-
-      <Route path="/registrar/assigned" element={<Assigned />} />
-
-      <Route path="/registrar/resolved-issues" element={<ResolvedIssues />} />
-
       <Route
-        path="/registrar/profile-and-settings"
-        element={<RegistrarProfileAndSettings profilePic={profilePic} setProfilePic={setProfilePic} />}
+        path="home"
+        element={isAuthenticated ? <RegistrarDashboard /> : <Navigate to="/welcome" />}
       />
 
-      <Route path="*" element={<Navigate to="/registrar/home" />} />
+      <Route
+        path="assignment"
+        element={isAuthenticated ? <Assignment /> : <Navigate to="/welcome" />}
+      />
+
+      <Route
+        path="assigned"
+        element={isAuthenticated ? <Assigned /> : <Navigate to="/welcome" />}
+      />
+
+      <Route
+        path="resolved-issues"
+        element={isAuthenticated ? <ResolvedIssues /> : <Navigate to="/welcome" />}
+      />
+
+      <Route
+        path="profile-and-settings"
+        element={
+          isAuthenticated ? (
+            <RegistrarProfileAndSettings profilePic={profilePic} setProfilePic={setProfilePic} />
+          ) : (
+            <Navigate to="/welcome" />
+          )
+        }
+      />
+
     </Routes>
   );
 }
