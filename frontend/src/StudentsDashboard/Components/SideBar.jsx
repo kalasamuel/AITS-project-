@@ -3,14 +3,16 @@ import { NavLink } from "react-router-dom";
 import "./SideBar.css";
 import { MdHome, MdAssignment, MdDetails, MdNotifications, MdSettings, MdDashboard, MdTaskAlt, MdCheckCircleOutline } from "react-icons/md";
 
-function SideBar({ userType, isOpen, toggleSidebar }) {
+function SideBar({ isOpen, toggleSidebar }) {
+  const userRole = localStorage.getItem("user_role");
+
   return (
     <nav className={`sidebar ${isOpen ? 'open' : ''}`}>
       <button className="menu-button" onClick={toggleSidebar}>
         ☰
       </button>
       <div className="sidebar-links">
-        {userType === "student" && (
+        {userRole === "student" && (
           <>
             <NavLink to="/student/home" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
               <MdHome className="nav-icon" /> HOME
@@ -29,7 +31,7 @@ function SideBar({ userType, isOpen, toggleSidebar }) {
             </NavLink>
           </>
         )}
-        {userType === "lecturer" && (
+        {userRole === "lecturer" && (
           <>
             <NavLink to="/lecturer/home" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
               <MdDashboard className="nav-icon" /> DASHBOARD
@@ -48,7 +50,7 @@ function SideBar({ userType, isOpen, toggleSidebar }) {
             </NavLink>
           </>
         )}
-        {userType === "registrar" && (
+        {userRole === "registrar" && (
           <>
             <NavLink to="/registrar/home" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
               <MdDashboard className="nav-icon" /> DASHBOARD

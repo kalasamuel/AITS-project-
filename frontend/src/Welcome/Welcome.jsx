@@ -15,7 +15,7 @@ const Welcome = () => {
     lecturer_id: '',
     password: '',
     confirm_password: '',
-    role: 'student',
+    role: '',
     registrar_code: '',
   });
   const [error, setError] = useState('');
