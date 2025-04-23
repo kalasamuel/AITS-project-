@@ -4,7 +4,7 @@
     align-items: center;
     padding: 1.5rem;
     margin: 0; 
-    margin-left: 290px; 
+    margin-left: 120px; 
     width: calc(100% - 200px); 
     min-height: calc(100vh - 140px); 
     font-family: 'Arial', sans-serif;
@@ -15,6 +15,8 @@
     position: relative;
     overflow-y: auto;
     top: 90px;
+    border: 2px solid #b45924;
+    border-radius: 12px;
   }
   
   .i-container h1 {
