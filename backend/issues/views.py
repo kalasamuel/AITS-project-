@@ -142,3 +142,16 @@ class RegistrarAllIssuesView(APIView):
         issues = Issue.objects.all().order_by('-created_at')
         serializer = IssueSerializer(issues, many=True)
         return Response(serializer.data, status=200)
+
+class StudentNotificationsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        if user.role != 'student':
+            return Response({"error": "Only students can access this endpoint."}, status=403)
+
+        notifications = Notification.objects.filter(recipient=user).order_by('-created_at')[:20]
+        serializer = NotificationSerializer(notifications, many=True)
+        return Response(serializer.data)

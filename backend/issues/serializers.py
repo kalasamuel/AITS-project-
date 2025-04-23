@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Issue, Enrollment, Course, Assignment
+from .models import Issue, Enrollment, Course, Assignment, Notification
 from rest_framework.response import Response
 
 class IssueSerializer(serializers.ModelSerializer):
@@ -64,3 +64,8 @@ class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
         fields = '__all__'   
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = '__all__'

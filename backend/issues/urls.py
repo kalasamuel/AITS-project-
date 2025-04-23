@@ -22,4 +22,5 @@ urlpatterns = [
     path("assignments/", AssignmentListAPIView.as_view(), name="assignment-list"),
     path('issue/', IssueSubmissionView.as_view(), name='submit-issue'),
     path("registrar/all-issues/", RegistrarAllIssuesView.as_view(), name="registrar-all-issues"),
+    path('notifications/student/', StudentNotificationsView.as_view(), name='student-notifications'),
 ]
