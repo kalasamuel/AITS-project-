@@ -1,7 +1,10 @@
 .profile-container {
   max-width: 800px;
   margin-left: auto;
-  margin-right: 20px; 
+  margin-right: 20px;
+  margin-top: 70px; 
+  border: 2px solid #b45924;
+  border-radius: 12px;
   padding: 20px;
   font-family: 'Arial', sans-serif;
 }
