@@ -1,7 +1,9 @@
 .resolved-container {
-    padding: 20px;
+    padding: 100px 20px;
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
+    min-height: 100vh;
+    overflow-x: auto;
 }
 
 h1 {
@@ -15,6 +17,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
+    font-size: 14px;
 }
 
 th, td {
@@ -36,6 +39,8 @@ tbody tr:nth-child(even) {
 tbody tr:hover {
     background-color: #f1f1f1;
     cursor: pointer;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 button {
@@ -46,17 +51,16 @@ button {
     background-color: #007bff;
     color: white;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
     background-color: #0056b3;
+    transform: translateY(-2px);
 }
 
-.resolved-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
+button:active {
+    transform: translateY(1px);
 }
 
 .modal {
@@ -66,9 +70,15 @@ button:hover {
     transform: translate(-50%, -50%);
     background-color: white;
     padding: 20px;
-    box-shadow: 0px 0px 10px gray;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     z-index: 1000;
+    max-width: 90%;
+    width: 400px;
+}
+
+.modal.hidden {
+    display: none; 
 }
 
 .modal-backdrop {
@@ -80,6 +90,18 @@ button:hover {
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
 }
+.no-data-message {
+    text-align: center;
+    color: #555;
+    font-style: italic;
+    padding: 10px;
+  }
+  .error-message {
+    color: red;
+    font-weight: bold;
+    margin: 10px 0;
+    text-align: center;
+  }
 
 @media (max-width: 768px) {
     .resolved-container {
@@ -97,5 +119,10 @@ button:hover {
     button {
         padding: 8px 16px;
         font-size: 12px;
+    }
+
+    .modal {
+        width: 90%;
+        max-width: 300px;
     }
 }
