@@ -23,6 +23,7 @@ class CustomUser(AbstractUser):
     verification_code = models.CharField(max_length=6, blank=True, null=True)
     verification_expiry = models.DateTimeField(blank=True, null=True)
     is_verified = models.BooleanField(default=False)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     try:
         def validate_student_year(self):
             if self.role == 'student' and self.student_number:
