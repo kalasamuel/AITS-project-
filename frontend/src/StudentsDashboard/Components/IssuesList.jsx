@@ -39,7 +39,7 @@ const IssuesList = ({ issues }) => {
         {filteredIssues.length > 0 ? (
           filteredIssues.map((issue) => (
             <div
-              key={issue.id}
+              key={issue.issue_id}
               className={`issue-item ${expandedIssue === issue.id ? "expanded" : ""}`}
               onClick={() => handleIssueClick(issue.id)}
             >
