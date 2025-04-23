@@ -9,33 +9,24 @@ import ProfileAndSettings from "../StudentsDashboard/Pages/ProfileAndsettings.js
 function StudentRoutes({ isAuthenticated, profilePic, setProfilePic }) {
     return (
         <Routes>
-            
             <Route
-                path="/student/home"
+                path="home"
                 element={isAuthenticated ? <Home /> : <Navigate to="/welcome" />}
             />
-
-            
             <Route
-                path="/student/issuesubmission"
+                path="issuesubmission"
                 element={isAuthenticated ? <IssueSubmission /> : <Navigate to="/welcome" />}
             />
-
-            
             <Route
-                path="/student/issuedetails"
+                path="issuedetails"
                 element={isAuthenticated ? <IssueDetails /> : <Navigate to="/welcome" />}
             />
-
-            
             <Route
-                path="/student/notifications"
+                path="notifications"
                 element={isAuthenticated ? <Notifications /> : <Navigate to="/welcome" />}
             />
-
-            
             <Route
-                path="/student/profileandsettings"
+                path="profileandsettings"
                 element={isAuthenticated ? <ProfileAndSettings profilePic={profilePic} setProfilePic={setProfilePic} /> : <Navigate to="/welcome" />}
             />
         </Routes>

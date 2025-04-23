@@ -3,6 +3,7 @@ from rest_framework import viewsets, permissions, status, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from accounts.permissions import IsStudent, IsLecturer, IsRegistrar
 from .serializers import *
@@ -18,7 +19,6 @@ class IssueViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(student=self.request.user)  #shows the student who raised the issue
 
-#applying permissions to different API views. Restricting access to required user
 
 #STUDENT: Logs an issue   Students can log issues but cannot assign them.
 class LogIssueView(APIView):
@@ -119,3 +119,39 @@ class CourseListAPIView(generics.ListAPIView):
 class AssignmentListAPIView(generics.ListAPIView):
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
+    
+class IssueSubmissionView(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request, format=None):
+        serializer = IssueSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            issue = serializer.save()
+            return Response({
+                "message": "Issue submitted successfully.",
+                "issue_id": issue.issue_id,
+                "status": issue.status
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class RegistrarAllIssuesView(APIView):
+    permission_classes = [IsAuthenticated, IsRegistrar]
+
+    def get(self, request):
+        issues = Issue.objects.all().order_by('-created_at')
+        serializer = IssueSerializer(issues, many=True)
+        return Response(serializer.data, status=200)
+
+class StudentNotificationsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        if user.role != 'student':
+            return Response({"error": "Only students can access this endpoint."}, status=403)
+
+        notifications = Notification.objects.filter(recipient=user).order_by('-created_at')[:20]
+        serializer = NotificationSerializer(notifications, many=True)
+        return Response(serializer.data)

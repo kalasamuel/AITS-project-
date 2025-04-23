@@ -19,10 +19,8 @@ const IssuesList = ({ issues }) => {
   );
 
   return (
-    <div className="container">
+    <div className="i-container">
       <h1>Students Dashboard</h1>
-
-      
       <div className="search-sort">
         <input
           type="text"
@@ -37,26 +35,20 @@ const IssuesList = ({ issues }) => {
           <option value="Pending">Pending</option>
         </select>
       </div>
-
-      
       <div className="issues-list">
         {filteredIssues.length > 0 ? (
           filteredIssues.map((issue) => (
             <div
-              key={issue.id}
-              className={`issue-item ${
-                expandedIssue === issue.id ? "expanded" : ""
-              }`}
+              key={issue.issue_id}
+              className={`issue-item ${expandedIssue === issue.id ? "expanded" : ""}`}
               onClick={() => handleIssueClick(issue.id)}
             >
               <div className="issue-summary">
                 <span>{issue.title}</span>
-                <span className={`status ${issue.status.toLowerCase()}`}>
+                <span className={`status ${issue.status.toLowerCase().replace(/\s+/g, '-')}`}>
                   {issue.status}
                 </span>
               </div>
-
-              
               {expandedIssue === issue.id && (
                 <div className="issue-details">
                   <p>
@@ -85,8 +77,6 @@ const IssuesList = ({ issues }) => {
           <p className="no-issues">No issues found.</p>
         )}
       </div>
-
-      
       <button
         className="new-issue-button"
         onClick={() => navigate("/student/issuesubmission")}

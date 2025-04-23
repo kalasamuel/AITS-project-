@@ -1,16 +1,15 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import *
+from .models import CustomUser, Department, VerificationCode
 from .utils import send_verification_email
 from django.utils.timezone import now
-from django.contrib.auth import authenticate
 from datetime import timedelta
 import random
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['role', 'institutional_email', 'email', 'student_number', 'lecturer_id', 'year_of_study', 'is_verified', 'registrar_id']
+        fields = "__all__"  
 
 class VerificationCodeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -83,23 +82,6 @@ class VerifyAccountSerializer(serializers.Serializer):
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError("Invalid verification code.")
         return data
-
-class LoginSerializer(serializers.Serializer):
-    institutional_email = serializers.EmailField()
-    password = serializers.CharField(write_only=True)
-
-    def validate(self, data):
-        institutional_email = data.get('institutional_email')
-        password = data.get('password')
-        if institutional_email and password:
-            user = authenticate(institutional_email=institutional_email, password=password)
-            if user:
-                data['user'] = user
-            else:
-                raise serializers.ValidationError("Invalid credentials")
-        else:
-            raise serializers.ValidationError("Both institutional_email and password are required.")
-        return data
     
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -109,19 +91,41 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['role'] = user.role
         return token
 
+    username_field='institutional_email'
     def validate(self, attrs):
         institutional_email = attrs.get("institutional_email")
         password = attrs.get("password")
+
+        print(f"Login attempt: email={institutional_email}")
+        
         if not institutional_email or not password:
             raise serializers.ValidationError({"detail": "Both institutional_email and password are required."})
+
         try:
             user = CustomUser.objects.get(institutional_email=institutional_email)
-        except CustomUser.DoesNotExist:
-            raise serializers.ValidationError({"detail": "No active account found with the given credentials."})
+            if not user.check_password(password):
+                raise serializers.ValidationError({"detail": "Invalid password."})
+            if not user.is_active:
+                raise serializers.ValidationError({"detail": "This account is inactive."})
+            if not user.is_verified:
+                raise serializers.ValidationError({"detail": "Your account is not verified. Please check your email."})
 
-        if not user.check_password(password):
-            raise serializers.ValidationError({"detail": "Invalid password."})
-        if not user.is_active:
-            raise serializers.ValidationError({"detail": "This account is inactive. Please contact support."})
-        attrs["user"] = user
-        return super().validate(attrs)
+            refresh = self.get_token(user)
+            return {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+                'user': {
+                    "institutional_email": user.institutional_email,
+                    "role": user.role,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                }
+            }
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError({"detail": "User not found."})
+        
+class LecturerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['lecturer_id', 'first_name', 'last_name', 'institutional_email', 'department'] 
+        

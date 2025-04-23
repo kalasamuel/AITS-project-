@@ -34,7 +34,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CORS_ALLOWED_ORIGINS = [ #specifies which origins are allowed to make requests to django API
+CORS_ALLOWED_ORIGINS = [ 
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:5174",
@@ -91,7 +91,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'aits_project.wsgi.application'
 
 
-# Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
     'default': {
@@ -105,7 +104,6 @@ DATABASES = {
 }
 
 
-# Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -124,7 +122,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
@@ -154,6 +151,7 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
+        'django.contrib.auth.backends.ModelBackend',
     ),
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",  #default to authenticated access
@@ -167,9 +165,9 @@ EMAIL_USE_TLS = True #using TLS for secure connection
 EMAIL_HOST_USER = 'aits.mak.ac@gmail.com'
 EMAIL_HOST_PASSWORD = 'trkr wapc czpn nolw'
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',  # Ensures default authentication works
-]
+#AUTHENTICATION_BACKENDS = [
+   # 'django.contrib.auth.backends.ModelBackend',  # Ensures default authentication works
+#]
 
 
 # these are the JWT Settings
@@ -178,3 +176,7 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
+# Media files settings
+MEDIA_URL = '/media/' #this is the URL prefix for media files
+MEDIA_ROOT = BASE_DIR / 'media' #this is the file system path to the media files directory

@@ -4,10 +4,75 @@ from django.core.mail import send_mail
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from accounts.models import CustomUser
+from django.conf import settings
+COURSES = (
+    ("BSCS", "Bachelor of Science in Computer Science"), ("BIT", "Bachelor of Information Technology"),
+    ("BSE", "Bachelor of Software Engineering"),
+    ("BBA", "Bachelor of Business Administration"),
+    ("LLB", "Bachelor of Laws"),
+    ("BME", "Bachelor of Mechanical Engineering"),
+    ("BEE", "Bachelor of Electrical Engineering"),
+    ("BCE", "Bachelor of Civil Engineering"),
+    ("BFA", "Bachelor of Fine Arts"),
+    ("BEd", "Bachelor of Education"),
+    ("BSc", "Bachelor of Science"),
+    ("BPH", "Bachelor of Public Health"),
+    ("BVM", "Bachelor of Veterinary Medicine"),
+    ("BAG", "Bachelor of Agricultural Sciences"),
+    ("BNS", "Bachelor of Nursing Sciences"),
+    ("BPHARM", "Bachelor of Pharmacy"),
+    ("BDS", "Bachelor of Dental Surgery"),
+    ("BSTAT", "Bachelor of Statistics"),
+    ("BPS", "Bachelor of Procurement and Supply Chain Management"),
+    ("BHRM", "Bachelor of Human Resource Management"),
+    ("BPA", "Bachelor of Public Administration"),
+    ("BDEV", "Bachelor of Development Studies"),
+    ("BPSY", "Bachelor of Psychology"),
+    ("BAS", "Bachelor of Arts in Social Sciences"),
+    ("BAE", "Bachelor of Arts in Economics"),
+    ("BMC", "Bachelor of Mass Communication"),
+    ("BIS", "Bachelor of Information Systems"),
+    ("BENV", "Bachelor of Environmental Science"),
+    ("BLS", "Bachelor of Library and Information Science"),
+    ("BAGRIC", "Bachelor of Agricultural Engineering"),
+    ("BFOOD", "Bachelor of Food Science and Technology"),
+    ("BFORE", "Bachelor of Forestry"),
+    ("BTOUR", "Bachelor of Tourism"),
+    ("BHM", "Bachelor of Hospitality Management"),
+    ("BARCH", "Bachelor of Architecture"),
+    ("BPLAN", "Bachelor of Urban and Regional Planning"),
+)
+COURSE_CODES = (
+    ("BSCS", "BSCS"), ("BIT", "BIT"), ("BSE", "BSE"),
+    ("BBA", "BBA"), ("LLB", "LLB"), ("BME", "BME"),
+    ("BEE", "BEE"), ("BCE", "BCE"), ("BFA", "BFA"),
+    ("BEd", "BEd"), ("BSc", "BSc"), ("BPH", "BPH"),
+    ("BVM", "BVM"), ("BAG", "BAG"), ("BNS", "BNS"),
+    ("BPHARM", "BPHARM"), ("BDS", "BDS"), ("BSTAT", "BSTAT"),
+    ("BPS", "BPS"), ("BHRM", "BHRM"), ("BPA", "BPA"),
+    ("BDEV", "BDEV"), ("BPSY", "BPSY"), ("BAS", "BAS"),
+    ("BAE", "BAE"), ("BMC", "BMC"), ("BIS", "BIS"),
+    ("BENV", "BENV"), ("BLS", "BLS"), ("BAGRIC", "BAGRIC"),
+    ("BFOOD", "BFOOD"), ("BFORE", "BFORE"), ("BTOUR", "BTOUR"),
+    ("BHM", "BHM"), ("BARCH", "BARCH"), ("BPLAN", "BPLAN"),
+)
+
+DEPARTMENT_COURSECODE={
+    "cocis": ["BSCS", "BIT", "BSE", "BIS"],
+    "cedat": ["BME", "BEE", "BCE", "BARCH", "BPLAN", "BAGRIC"],
+    "chuss": ["BAS", "BAE", "BMC", "BLS"],
+    "conas": ["BSc", "BSTAT", "BENV"],
+    "law": ["LLB"],
+    "cobams": ["BBA", "BPS", "BHRM", "BPA", "BDEV"],
+    "cees": ["BEd"],
+    "cahs": ["BAG", "BFOOD", "BFORE", "BTOUR"],
+    "chs": ["BPH", "BNS", "BPHARM", "BDS"],
+    "vet": ["BVM"]
+}
 
 class Course(models.Model):
-    name = models.CharField(max_length=255)
-    code = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=255, choices=COURSES)
+    code = models.CharField(max_length=20, choices=COURSE_CODES, unique=True)
     assigned_lecturer = models.ForeignKey(
         CustomUser, on_delete=models.SET_NULL, limit_choices_to={'role': 'lecturer'},
         null=True, blank=True, related_name='assigned_courses'
@@ -22,9 +87,21 @@ class Issue(models.Model):
     """
     CATEGORY_CHOICES = (
         ('missing_marks', 'Missing Marks'),
-        ('course_registration', 'Course Registration'),
-        ('timetable_conflict', 'Timetable Conflict'),
-        ('general_complaint', 'General Complaint'),
+        ("wrong_registration_number", "Wrong Registration Number"),
+        ("wrong_marks", "Wrong Marks"),
+        ("other", "Other"),
+    )
+    DEPARTMENTS = (
+        ("cocis", "College of Computing and Information Sciences (COCIS)"),
+        ("cedat", "College of Engineering, Design, Art and Technology (CEDAT)"),
+        ("chuss", "College of Humanities and Social Sciences (CHUSS)"),
+        ("conas", "College of Natural Sciences (CONAS)"),
+        ("law", "School of Law"),
+        ("cobams", "College of Business and Management Sciences (COBAMS)"),
+        ("cees", "College of Education and External Studies (CEES)"),
+        ("cahs", "College of Agricultural and Environmental Sciences (CAES)"),
+        ("chs", "College of Health Sciences (CHS)"),
+        ("vet", "College of Veterinary Medicine, Animal Resources and Biosecurity (COVAB)"),
     )
     STATUS_CHOICES = [
     ('open', 'Open'),
@@ -40,6 +117,7 @@ class Issue(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True, related_name="course_issues")
+    department = models.CharField(max_length=100, choices=DEPARTMENTS, default=None)
     student = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'student'},
         null=True, blank=True, related_name="student_issues"
@@ -50,7 +128,7 @@ class Issue(models.Model):
     )
 
     def __str__(self):
-        return f"Issue {self.Issue_ID}: {self.Issue_Type}"
+        return f"Issue {self.issue_id}: {self.issue_type}"
 
     class Meta:
         verbose_name = "Issue"
@@ -134,7 +212,7 @@ def notify_on_issue_creation(sender, instance, created, **kwargs):
                 f"Status: {instance.status}\n\n"
                 "We will notify you once it is resolved.\n\n"
                 "Best Regards,\nAITS Support Team",
-                'admin@aits.com',
+                settings.EMAIL_HOST_USER,
                 [student_email],
                 fail_silently=True,
             )
@@ -156,7 +234,7 @@ def notify_student_on_resolution(sender, instance, **kwargs):
                 f"Final Status: {instance.status}\n\n"
                 "If you need further assistance, please contact the registrar.\n\n"
                 "Best Regards,\nAITS Support Team",
-                'admin@aits.com',
+                settings.EMAIL_HOST_USER,
                 [student_email],
                 fail_silently=True,
             )

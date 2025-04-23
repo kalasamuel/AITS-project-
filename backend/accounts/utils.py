@@ -6,7 +6,7 @@ def send_verification_email(institutional_email, code):
     Sends verification code to the user's institutional email.
     """
     subject = "AITS Verification Code"
-    message = f"Your verification code is: {code}. Enter this code to activate your account."
+    message = f"Your verification code is:  {code}. Enter this code to activate your account."
     sender = settings.EMAIL_HOST_USER
 
     send_mail(subject, message, sender, [institutional_email], fail_silently=False)
@@ -17,8 +17,8 @@ def send_gmail_notification(user, subject, message):
         send_mail(
             subject,
             message,
-            settings.EMAIL_HOST_USER,  # Temporary sender email for development
-            [user.email],  # sends to gmail for password resets and forgot password
+            settings.EMAIL_HOST_USER,  
+            [user.email],
             fail_silently=False,
         )
         return True

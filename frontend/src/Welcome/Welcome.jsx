@@ -2,37 +2,38 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Welcome.css';
 
-const Welcome = ({ setIsAuthenticated }) => {
+const Welcome = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
     institutional_email: '',
+    email: '',
     student_number: '',
     year_of_study: '',
     lecturer_id: '',
     password: '',
     confirm_password: '',
-    role: 'student',
+    role: '',
     registrar_code: '',
   });
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
     const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   
     if (name === "year_of_study") {
       let newValue = parseInt(value, 10);
       if (isNaN(newValue) || newValue < 1 || newValue > 5) return;
     }
-  
-    setFormData({ ...formData, [name]: value });
   };
   
-
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
@@ -44,10 +45,19 @@ const Welcome = ({ setIsAuthenticated }) => {
 
       const data = await response.json();
       if (response.status === 200) {
-        localStorage.setItem('access_token', data.access_token);
-        localStorage.setItem('refresh_token', data.refresh_token);
+        localStorage.setItem('access_token', data.access);
+        localStorage.setItem('refresh_token', data.refresh);
         localStorage.setItem('user_role', data.user.role);
-        navigate("/");
+
+        if (data.user.role === 'student') {
+          navigate('/student/home');
+        } else if (data.user.role === 'lecturer') {
+          navigate('/lecturer/home');
+        } else if (data.user.role === 'registrar') {
+          navigate('/registrar/home');
+        } else {
+          navigate('/welcome');
+        }
       } else {
         setError(data.error || 'Login failed.');
       }
@@ -57,9 +67,18 @@ const Welcome = ({ setIsAuthenticated }) => {
   };
 
   const handleSignUp = async (e) => {
+    e.preventDefault();
     setMessage('');
+    setError('');
 
-    if (!formData.first_name || !formData.last_name || !formData.institutional_email || !formData.email || !formData.password || !formData.confirm_password) {
+    if (
+      !formData.first_name ||
+      !formData.last_name ||
+      !formData.institutional_email ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirm_password
+    ) {
       setError('All fields are required.');
       return;
     }
@@ -89,8 +108,10 @@ const Welcome = ({ setIsAuthenticated }) => {
 
       const data = await response.json();
       if (response.status === 201) {
-        setMessage('Registration successful! Check your email for verification.');
-        setTimeout(() => navigate(`/otp-verification?institutional_email=${formData.institutional_email}`), 3000); // add a timeout to allow for sending of mail
+        setMessage('Registration successful! Please verify your email.');
+        // Navigate to the verification page
+        navigate(`/otp-verification?institutional_email=${formData.institutional_email}`);
+
       } else {
         setError(data.error || 'Registration failed.');
       }
@@ -100,8 +121,9 @@ const Welcome = ({ setIsAuthenticated }) => {
   };
 
   return (
+    <div className="welcome-page">
     <div className="welcome-container">
-      <h1>Welcome to AITS</h1>
+      <h1 className='welcome-to'>Welcome to AITS</h1>
       <div className="toggle-container">
         <button className={`toggle-button ${isLogin ? 'active' : ''}`} onClick={() => setIsLogin(true)}>Log In</button>
         <button className={`toggle-button ${!isLogin ? 'active' : ''}`} onClick={() => setIsLogin(false)}>Sign Up</button>
@@ -111,7 +133,7 @@ const Welcome = ({ setIsAuthenticated }) => {
           <form onSubmit={handleLogin}>
             <h2>Log In</h2>
             <div className="form-group">
-              <label>Email</label>
+              <label>Webmail</label>
               <input type="email" name="institutional_email" value={formData.institutional_email} onChange={handleChange} required />
             </div>
             <div className="form-group">
@@ -207,6 +229,7 @@ const Welcome = ({ setIsAuthenticated }) => {
       </div>
       {error && <p className="error-message">{error}</p>}
       {message && <p className="success-message">{message}</p>}
+    </div>
     </div>
   );
 };
