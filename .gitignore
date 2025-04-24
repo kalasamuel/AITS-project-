@@ -1,5 +1,6 @@
 # ignore virtual environment
 .venv/
+renderenv/
 
 # ignore system files
 __pycache__/
