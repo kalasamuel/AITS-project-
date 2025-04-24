@@ -33,7 +33,6 @@ const Home = () => {
         setLoading(false);
       }
     };
-
         fetchIssues();
         }, []);
 
