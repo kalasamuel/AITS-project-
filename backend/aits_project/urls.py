@@ -25,8 +25,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/register/', SelfRegisterView.as_view()),
     path('auth/login/', LoginView.as_view(), name="login"),
-    path('api/', include('accounts.urls')),
-    path('api/', include('issues.urls')),
+    path('api/accounts/', include('accounts.urls')),
+    path('api/issues/', include('issues.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
