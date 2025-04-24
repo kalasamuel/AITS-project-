@@ -1,7 +1,7 @@
 .sidebar {
   width: 250px;
   height: calc(100vh - 70px);
-  background-color: #222;
+  background-color: #2D3748;
   padding: 1.5rem;
   position: fixed;
   top: 79px;
@@ -27,7 +27,7 @@
 
 .nav-link {
   text-decoration: none;
-  color: #eee;
+  color: #E2E8F0;
   padding: 0.75rem 1.2rem;
   border-radius: 6px;
   transition: background-color 0.3s ease, color 0.3s ease, padding-left 0.2s ease;
@@ -40,13 +40,13 @@
 }
 
 .nav-link:hover {
-  background-color: #333;
+  background-color: #2E7D32;
   color: #fff;
   padding-left: 1.5rem;
 }
 
 .nav-link.active {
-  background-color: #03b045;
+  background-color: #4ADE80;
   color: white;
   font-weight: bold;
 }
