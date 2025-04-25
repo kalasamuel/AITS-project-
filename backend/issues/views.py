@@ -38,7 +38,7 @@ class LecturerIssuesView(APIView):
 
     def get(self, request):
         """Lecturers can only view issues assigned to them."""
-        issues = Issue.objects.filter(Assigned_to=request.user)
+        issues = Issue.objects.filter(assigned_to=request.user)
         serializer = IssueSerializer(issues, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
