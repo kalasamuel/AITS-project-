@@ -35,7 +35,6 @@ function App() {
             {isAuthenticated && location.pathname !== '/welcome' ? (
                 <DashboardLayout profilePic={profilePic} toggleSidebar={toggleSidebar}>
                     <Routes>
-                        <Route path="/test" element={<h1>Hello from test route</h1>} />
                         <Route path="/welcome" element={<Welcome />} />
                         <Route path="/otp-verification" element={<OtpVerification />} />
                         <Route
