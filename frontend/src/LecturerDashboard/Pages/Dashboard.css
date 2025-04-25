@@ -20,7 +20,8 @@
   
   .stat-box {
     color: white;
-    background-color: #2d6a4f;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
     border-radius: 10px;
     text-align: center;
