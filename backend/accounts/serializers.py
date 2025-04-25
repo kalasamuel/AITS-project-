@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import CustomUser, Department, VerificationCode
+from issues.models import Course
 from .utils import send_verification_email
 from django.utils.timezone import now
 from datetime import timedelta
@@ -19,7 +20,7 @@ class VerificationCodeSerializer(serializers.ModelSerializer):
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
-        fields = '__all__'  # Includes all fields
+        fields = '__all__' 
               
 #serializer for handling user registration and verification
 
@@ -29,7 +30,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'first_name', 'last_name', 'password', 'confirm_password', 'role', 'institutional_email', 'student_number', "email", 'lecturer_id', 'year_of_study', 'registrar_id']
+        fields = '__all__'  
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate(self, data):
@@ -125,7 +126,13 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             raise serializers.ValidationError({"detail": "User not found."})
         
 class LecturerSerializer(serializers.ModelSerializer):
+    department=serializers.CharField(source='department.name', read_only=True)
+    courses=serializers.SerializerMethodField()
     class Meta:
         model = CustomUser
-        fields = ['lecturer_id', 'first_name', 'last_name', 'institutional_email', 'department'] 
+        fields = ['courses','lecturer_id', 'first_name', 'last_name', 'institutional_email', 'department'] 
         
+    def get_courses(self, obj):
+        #return [course.code for course in obj.assigned_courses.all()]
+        unassigned_courses = Course.objects.filter(assigned_lecturer__isnull=True)
+        return [course.code for course in unassigned_courses]

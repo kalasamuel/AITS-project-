@@ -13,20 +13,15 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import environ # from the django-environ package installed
 from datetime import timedelta
-import os
 
 env = environ.Env(DEBUG=(bool,False))
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 environ.Env.read_env(BASE_DIR/".env")
-
 SECRET_KEY =env("SECRET_KEY")
 DEBUG=env("DEBUG")
-ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -37,19 +32,14 @@ SECRET_KEY = 'django-insecure-7x3u^tnu7__g@i51q$t%kvi-11245!*w3&j+e-z_-_@i2q0n)s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
+ALLOWED_HOSTS = []
 
 CORS_ALLOWED_ORIGINS = [ 
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:5174",
-    "https://group-t-aits.netlify.app", #our frontend deployment using netlify
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://group-t-aits.netlify.app",
-    "https://*.onrender.com",
-]
 
 # Application definition
 
@@ -70,8 +60,6 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware', #adds CorsMiddleware to the middleware stack
@@ -104,16 +92,14 @@ WSGI_APPLICATION = 'aits_project.wsgi.application'
 
 
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-#set this database using Render environment variables
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env('DB_PORT', default='5432'),
+        'NAME': 'aits',
+        'USER' : 'postgres',
+        'PASSWORD' : 'password',
+        'HOST' : 'localhost',
+        'PORT' : '5432',
     }
 }
 
@@ -121,10 +107,18 @@ DATABASES = {
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
 ]
 
 
@@ -143,10 +137,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-# directory where collectstatic will store files
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-# to enable WhiteNoise compression and caching
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -172,10 +162,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com' #this is the google mail smtp host
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True #using TLS for secure connection
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')  # Use env vars for security
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField' 
+EMAIL_HOST_USER = 'aits.mak.ac@gmail.com'
+EMAIL_HOST_PASSWORD = 'trkr wapc czpn nolw'
 
 #AUTHENTICATION_BACKENDS = [
    # 'django.contrib.auth.backends.ModelBackend',  # Ensures default authentication works
