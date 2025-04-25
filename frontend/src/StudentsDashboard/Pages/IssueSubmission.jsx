@@ -92,7 +92,7 @@ const IssueSubmission = () => {
     console.log([...formData.entries()]);
 
     try {
-      await axios.post('http://127.0.0.1:8000/api/issues/', formData, {
+      await axios.post('https://aits-project-backend-group-t.onrender.com/api/issues/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('access_token')}`, // Resolved conflict by keeping 'access_token'

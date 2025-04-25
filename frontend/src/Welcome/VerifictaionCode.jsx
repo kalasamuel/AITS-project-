@@ -15,7 +15,7 @@ const VerifyAccount = ({ setIsAuthenticated }) => {
       const queryParams = queryString.split("=");
       const institutional_email = queryParams[1];
 
-      const response = await axios.post("http://127.0.0.1:8000/api/verify/", { code, institutional_email });
+      const response = await axios.post("http://127.0.0.1:8000/apihttps://aits-project-backend-group-t.onrender.com/api/verify/", { code, institutional_email });
       if (response.status === 200) {
         navigate("/");
         setIsAuthenticated(true)

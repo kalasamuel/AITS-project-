@@ -11,7 +11,7 @@ function NavBar({ toggleSidebar }) {
 
   const fetchProfilePicture = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/accounts/profile-picture/', {
+      const response = await axios.get('https://aits-project-backend-group-t.onrender.com/api/accounts/profile-picture/', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
@@ -31,7 +31,7 @@ function NavBar({ toggleSidebar }) {
     formData.append('profile_picture', file);
 
     try {
-      await axios.post('http://127.0.0.1:8000/api/accounts/profile/upload-picture/', formData, {
+      await axios.post('https://aits-project-backend-group-t.onrender.com/api/accounts/profile/upload-picture/', formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'multipart/form-data',

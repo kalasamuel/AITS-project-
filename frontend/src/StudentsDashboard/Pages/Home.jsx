@@ -12,7 +12,7 @@ const Home = () => {
         const fetchIssues = async () => {
             try{
                 const token = localStorage.getItem("token");
-                const response = await axios.get("http://127.0.0.1:8000/api/issues/student/", {
+                const response = await axios.get("https://aits-project-backend-group-t.onrender.com/api/issues/student/", {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setIssues(response.data);
