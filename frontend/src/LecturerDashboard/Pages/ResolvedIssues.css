@@ -1,28 +1,71 @@
-.resolved-issues{
+.resolved-issues {
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 8px;
 }
-.controls{
+
+.controls {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
 }
-inpiut,select{
-    padding:8px;
-    font-size:14px;
+
+input, select {
+    padding: 8px;
+    font-size: 14px;
 }
-table{
+
+table {
     width: 100%;
     border-collapse: collapse;
     background-color: white;
 }
-th,td
-{padding:10px;
+
+th, td {
+    padding: 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
-th{
+
+th {
     background: #4caf50;
     color: white;
+}
+
+
+@media (max-width: 768px) {
+    .controls {
+        flex-direction: column; 
+        gap: 10px; 
+    }
+
+    input, select {
+        width: 100%; 
+        font-size: 13px; 
+    }
+
+    table {
+        font-size: 14px; 
+    }
+
+    th, td {
+        padding: 8px; 
+    }
+}
+
+@media (max-width: 480px) {
+    .resolved-issues {
+        padding: 15px;     }
+
+    input, select {
+        font-size: 12px;
+    }
+
+    table {
+        font-size: 12px; 
+    }
+
+    th, td {
+        padding: 6px; 
+        }
 }
