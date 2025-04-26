@@ -36,12 +36,12 @@ th {
 @media (max-width: 768px) {
     .controls {
         flex-direction: column; 
-        gap: 10px; 
+        gap: 10px;
     }
 
     input, select {
         width: 100%; 
-        font-size: 13px; 
+        font-size: 13px;
     }
 
     table {
@@ -55,10 +55,11 @@ th {
 
 @media (max-width: 480px) {
     .resolved-issues {
-        padding: 15px;     }
+        padding: 15px; 
+    }
 
     input, select {
-        font-size: 12px;
+        font-size: 12px; 
     }
 
     table {
@@ -66,6 +67,6 @@ th {
     }
 
     th, td {
-        padding: 6px; 
-        }
+        padding: 6px;
+    }
 }
