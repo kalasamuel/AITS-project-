@@ -1,14 +1,13 @@
 .notifications-container {
-    background-color: g;
+    background-color: #f4f4f4;
     padding: 20px;
-    margin-left: 220px; 
+    margin-left: 220px;
 }
 
 .notifications-container h1 {
     font-size: 24px;
     margin-bottom: 15px;
 }
-
 
 .notifications-list {
     border: 1px solid #ccc;
@@ -23,9 +22,8 @@
     cursor: pointer;
 }
 
-
 .notification-item:hover {
-    background-color: #f9f9f9; 
+    background-color: #f9f9f9;
 }
 
 .notification-item.read {
@@ -37,7 +35,7 @@
 }
 
 .notification-item.selected {
-    background-color: #d0d0d0; 
+    background-color: #d0d0d0;
 }
 
 .notification-title {
@@ -58,7 +56,6 @@
     margin: 5px 0;
 }
 
-
 .new-issue-button {
     margin-top: 20px;
     padding: 10px;
@@ -72,4 +69,52 @@
 
 .new-issue-button:hover {
     background-color: darkblue;
+}
+
+
+@media (max-width: 768px) {
+    .notifications-container {
+        margin-left: 0;
+        padding: 15px;
+    }
+
+    .notifications-container h1 {
+        font-size: 20px;
+    }
+
+    .notifications-list {
+        max-height: 200px; 
+    }
+
+    .notification-details {
+        padding: 10px;
+    }
+
+    .new-issue-button {
+        padding: 8px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .notifications-container {
+        padding: 10px;
+    }
+
+    .notifications-container h1 {
+        font-size: 18px;
+    }
+
+    .notifications-list {
+        max-height: 150px;
+    }
+
+    .notification-details {
+        padding: 8px;
+    }
+
+    .new-issue-button {
+        padding: 6px;
+        font-size: 12px;
+    }
 }

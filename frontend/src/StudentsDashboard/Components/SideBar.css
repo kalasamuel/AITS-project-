@@ -79,6 +79,7 @@
   color: #ddd;
 }
 
+
 @media (max-width: 1024px) {
   .sidebar {
     width: 200px;

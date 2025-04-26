@@ -14,7 +14,7 @@ import axios from 'axios';
 
 const token = localStorage.getItem('access_token');
 if (token) {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 }
 
 function App() {
@@ -40,16 +40,12 @@ function App() {
                         <Route
                             path="/"
                             element={
-                                isAuthenticated ? (
-                                    userRole === "student" ? (
-                                        <Navigate to="/student/home" />
-                                    ) : userRole === "lecturer" ? (
-                                        <Navigate to="/lecturer/home" />
-                                    ) : userRole === "registrar" ? (
-                                        <Navigate to="/registrar/home" />
-                                    ) : (
-                                        <Navigate to="/welcome" />
-                                    )
+                                userRole === "student" ? (
+                                    <Navigate to="/student/home" />
+                                ) : userRole === "lecturer" ? (
+                                    <Navigate to="/lecturer/home" />
+                                ) : userRole === "registrar" ? (
+                                    <Navigate to="/registrar/home" />
                                 ) : (
                                     <Navigate to="/welcome" />
                                 )

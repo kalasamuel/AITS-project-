@@ -31,15 +31,15 @@ class IssueSerializer(serializers.ModelSerializer):
 
     def validate_course_code(self, value):
         try:
-            self.course_obj = Course.objects.get(code=value)
-            return value
+            course = Course.objects.get(code=value)
+            return course
         except Course.DoesNotExist:
             raise serializers.ValidationError("Course with the given code does not exist.")
 
     def create(self, validated_data):
-        validated_data['course'] = self.course_obj
+        course = validated_data.pop('course_code')
+        validated_data['course'] = course
         validated_data['student'] = self.context['request'].user
-        validated_data.pop('course_code', None)
         return super().create(validated_data)
 
         

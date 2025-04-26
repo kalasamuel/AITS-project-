@@ -6,33 +6,32 @@ import LecturerNotifications from '../LecturerDashboard/Pages/LecturerNotificati
 import ResolvedIssues from '../LecturerDashboard/Pages/ResolvedIssues.jsx';
 import LecturerProfileAndSettings from '../LecturerDashboard/Pages/LecturerProfileAndSettings.jsx';
 
-function LecturerRoutes({ isAuthenticated, profilePic, setProfilePic }) {
+function LecturerRoutes({ isAuthenticated,profilePic, setProfilePic }) {
     return (
         <Routes>
+        
             <Route
-                path="home"
+                path="/lecturer/home"
                 element={isAuthenticated ? <LecturerDashboard /> : <Navigate to="/welcome" />}
             />
+
             <Route
-                path="assigned-issues"
+                path="/lecturer/assigned-issues"
                 element={isAuthenticated ? <AssignedIssues /> : <Navigate to="/welcome" />}
             />
+
             <Route
-                path="resolved-issues"
+                path="/lecturer/resolved-issues"
                 element={isAuthenticated ? <ResolvedIssues /> : <Navigate to="/welcome" />}
             />
             <Route
-                path="notifications"
+                path="/lecturer/notifications"
                 element={isAuthenticated ? <LecturerNotifications /> : <Navigate to="/welcome" />}
             />
-            <Route
-                path="profile-and-settings"
-                element={isAuthenticated ? (
-                    <LecturerProfileAndSettings profilePic={profilePic} setProfilePic={setProfilePic} />
-                ) : (
-                    <Navigate to="/welcome" />
-                )}
-            />
+             <Route
+                path="/lecturer/profile-and-settings"
+                element={isAuthenticated ? <LecturerProfileAndSettings profilePic={profilePic} setProfilePic={setProfilePic} /> : <Navigate to="/welcome" />}
+                            />
         </Routes>
     );
 }

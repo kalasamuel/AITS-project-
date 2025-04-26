@@ -38,7 +38,7 @@ class LecturerIssuesView(APIView):
 
     def get(self, request):
         """Lecturers can only view issues assigned to them."""
-        issues = Issue.objects.filter(assigned_to=request.user)
+        issues = Issue.objects.filter(Assigned_to=request.user)
         serializer = IssueSerializer(issues, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -155,14 +155,3 @@ class StudentNotificationsView(APIView):
         notifications = Notification.objects.filter(recipient=user).order_by('-created_at')[:20]
         serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data)
-
-class StudentIssuesView(APIView):
-    permission_classes = [IsAuthenticated, IsStudent]
-
-    def get(self, request):
-        student = request.user
-        print("Authenticated user:", request.user)
-        print("User role:", request.user.role)
-        issues = Issue.objects.filter(student=student).order_by('-created_at')
-        serializer = IssueSerializer(issues, many=True)
-        return Response(serializer.data, status=200)

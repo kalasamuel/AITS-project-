@@ -5,11 +5,6 @@ import './Dashboard.css';
 const RegistrarsDashboard = () => {
   const [issues, setIssues] = useState([]);
   const [loading, setLoading] = useState(true);
-  const[searchTerm, setSearchTerm] = useState('');
-  const[statusFilter, setStatusFilter] = useState('');
-  const[issueTypeFilter, setIssueTypeFilter] = useState('');
-  const[departmentFilter, setDepartmentFilter] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -19,13 +14,6 @@ const RegistrarsDashboard = () => {
       default: return '';
     }
   };
-  const ISSUE_TYPE_LABELS = {
-    missing_marks: "Missing Marks",
-    wrong_registration_number: "Wrong Registration Number",
-    wrong_marks: "Wrong Marks",
-    other: "Other"
-  };
-  
 
   useEffect(() => {
     const fetchIssues = async () => {
@@ -60,43 +48,6 @@ const RegistrarsDashboard = () => {
         <SummaryCard title="Resolved Issues" value={resolvedCount} className="card-resolved" />
       </div>
 
-      <div className='search-filter-wrapper'>
-        <input
-        type='text'
-        placeholder='Search by Student Webmail...'
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className='search-bar'
-        />
-        <div className='filter-toggle' onClick={() => setShowFilters(!showFilters)} title ="Show filters">
-            ▼
-          </div>
-          {showFilters && (
-            <div className="filter-dropdown">
-              <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-                <option value="">All Statuses</option>
-                <option value="open">Open</option>
-                <option value="in_progress">In Progress</option>
-                <option value="resolved">Resolved</option>
-              </select>
-
-              <select value={issueTypeFilter} onChange={(e) => setIssueTypeFilter(e.target.value)}>
-                <option value="">All Issue Types</option>
-                {Object.entries(ISSUE_TYPE_LABELS).map(([key, label]) => (
-                  <option key={key} value={key}>{label}</option>
-                ))}
-              </select>
-
-              <select value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
-                <option value="">All Departments</option>
-                {Array.from(new Set(issues.map(i => i.department))).map(dep => (
-                  <option key={dep} value={dep}>{dep.toUpperCase()}</option>
-                ))}
-              </select>
-            </div>
-              )}
-        </div>
-
       <div className="table-container">
         <h2 className="table-header">Recent Issues Table:</h2>
         {loading ? (
@@ -109,7 +60,7 @@ const RegistrarsDashboard = () => {
               <thead>
                 <tr>
                   <th className="table-header-cell">Issue ID</th>
-                  <th className="table-header-cell">Student Webmail</th>
+                  <th className="table-header-cell">Student Email</th>
                   <th className="table-header-cell">Department</th>
                   <th className="table-header-cell">Issue Type</th>
                   <th className="table-header-cell">Date Submitted</th>
@@ -117,19 +68,12 @@ const RegistrarsDashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {issues
-                  .filter(issue =>
-                    (!searchTerm || issue.student_name.toLowerCase().includes(searchTerm.toLowerCase())) &&
-                    (!statusFilter || issue.status === statusFilter) &&
-                    (!issueTypeFilter || issue.issue_type === issueTypeFilter) &&
-                    (!departmentFilter || issue.department === departmentFilter)
-                  )
-                  .map(issue => (
+                {issues.map(issue => (
                   <tr key={issue.issue_id} className="table-row">
                     <td className="table-cell">{issue.issue_id}</td>
                     <td className="table-cell">{issue.student_name}</td>
                     <td className="table-cell">{issue.department.toUpperCase()}</td>
-                    <td className="table-cell">{ISSUE_TYPE_LABELS[issue.issue_type]}</td>
+                    <td className="table-cell">{issue.issue_type.replace(/_/g, ' ')}</td>
                     <td className="table-cell">{new Date(issue.created_at).toLocaleString()}</td>
                     <td className="table-cell">
                       <span className={`status ${getStatusClass(issue.status)}`}>

@@ -1,59 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import IssuesList from "../Components/IssuesList";
-import './Home.css';
+
+
 
 const Home = () => {
-  const [issues, setIssues] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+    const [issues, setIssues] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchIssues = async () => {
-      try {
-        const token = localStorage.getItem("access_token")
-        const response = await axios.get("http://127.0.0.1:8000/api/issues/student/", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        const filteredIssues = response.data.filter(issue => {
-          const isPending = issue.status === "pending";
-          const isRecentResolved =
-            issue.status === "resolved" &&
-            new Date(issue.created_at) >= new Date(Date.now() - 5 * 24 * 60 * 60 * 1000); // clears the content it shows within 5 days
-
-          return isPending || isRecentResolved;
-        });
-
-        setIssues(filteredIssues);
-      } catch (error) {
-        console.error("Failed to fetch student issues:", error);
-        setError("Failed to load issues. Please try again later.")
-      } finally {
-        setLoading(false);
-      }
-    };
+    useEffect(() =>{
+        const fetchIssues = async () => {
+            try{
+                const token = localStorage.getItem("token");
+                const response = await axios.get("http://127.0.0.1:8000/api/issues/student/", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setIssues(response.data);
+            } catch (error) {
+                console.error("Failed to fetch student issues:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchIssues();
-        }, []);
+    }, []);
+ /*   
+    const sampleIssues = [
+        { id: 1, title: "Issue", description: "Unable to login to the portal", status: "Pending", department: "COCIS" },
+        { id: 2, title: "Math marks", description: "Internet is not working", status: "In Progress", department: "COCIS" },
+        { id: 3, title: "Course Material Missing", description: "Course material for Math 101 is missing", status: "Resolved", department: "COCIS" },
+    ];
 
-        return (
-        <div className="student-home-container">
-            <div className="header-row">
-            <h1>Student Dashboard</h1>
-            <span className="recent-updates">Recent issues updates</span>
-            </div>
-
-            {error && <p className="error-message">{error}</p>}
-
-            {loading ? (
-            <div className="loading-container" aria-live="polite">
-                <p className="loading-message">Loading issues...</p>
-            </div>
-            ) : (
-            <IssuesList issues={issues} />
-            )}
+    return (
+        <div>
+            <IssuesList issues={sampleIssues} />
         </div>
-        );
-    };
+    );
+}; */
+    return (
+        <div>
+            {loading ? <p>Loading issues...</p> : <IssuesList issues={issues}/>}
+        </div>
+    );
+};
+              
 
 export default Home;

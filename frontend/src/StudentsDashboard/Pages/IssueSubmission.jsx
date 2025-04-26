@@ -14,7 +14,7 @@ const IssueSubmission = () => {
   const [showIssueTypeDropdown, setShowIssueTypeDropdown] = useState(false);
   const [courseCodeFilter, setCourseCodeFilter] = useState('');
   const [showCourseCodeDropdown, setShowCourseCodeDropdown] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState({});
+  const [validationError, setValidationError] = useState('');
   const [backendError, setBackendError] = useState('');
   const [showPopup, setShowPopup] = useState(false);
 
@@ -38,14 +38,14 @@ const IssueSubmission = () => {
   };
 
   const issueTypes = [
-    {value: "missing_marks", label: "Missing Marks"},
-    {value: "wrong_registration_number", label: "Wrong Registration Number"},
-    {value: "wrong_marks", label: "Wrong Marks"},
-    {value: "other", label: "Other"},
+    "Missing Marks",
+    "Wrong Registration Number",
+    "Wrong Marks",
+    "Other",
   ];
 
   const filteredIssueTypes = issueTypes.filter((type) =>
-    type.label.toLowerCase().includes(issueTypeFilter.toLowerCase())
+    type.toLowerCase().includes(issueTypeFilter.toLowerCase())
   );
 
   const filteredCourseCodes = courseCodes.filter((code) =>
@@ -55,40 +55,27 @@ const IssueSubmission = () => {
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile && selectedFile.size > 5 * 1024 * 1024) { // 5MB limit
-      setFieldErrors((prev) => ({ ...prev, file: 'File size must be less than 5MB.' }));
+      setValidationError('File size must be less than 5MB.');
       return;
     }
     setFile(selectedFile || null);
-    setFieldErrors((prev) => ({ ...prev, file: '' })); // Clear file error
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setFieldErrors({});
+    setValidationError('');
     setBackendError('');
     setMessage('');
 
-    const errors = {};
-
-    if (!issueType) {
-      errors.issueType = 'Please select an issue type.';
-    }
-    if (!courseCode) {
-      errors.courseCode = 'Please enter a valid course code.';
-    }
-    if (!description) {
-      errors.description = 'Please provide a description of the issue.';
-    }
-    if (!department) {
-      errors.department = 'Please select a department.';
-    }
     if (department && !DEPARTMENT_COURSECODE[department].includes(courseCode)) {
-      errors.department = `Invalid! Course code ${courseCode} does not belong to ${department.toUpperCase()}`;
+      setValidationError(`Invalid! Course code ${courseCode} does not belong to ${department.toUpperCase()}`);
+      setLoading(false);
+      return;
     }
 
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
+    if (!issueType || !courseCode || !description || !department) {
+      setValidationError('Please fill in all required fields.');
       setLoading(false);
       return;
     }
@@ -101,12 +88,14 @@ const IssueSubmission = () => {
     if (file) {
       formData.append('support_file', file);
     }
+    
+    console.log([...formData.entries()]);
 
     try {
-      await axios.post('http://127.0.0.1:8000/api/issues/submit-issue/', formData, {
+      await axios.post('http://127.0.0.1:8000/api/issues/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`, // Resolved conflict by keeping 'access_token'
         },
       });
 
@@ -123,19 +112,15 @@ const IssueSubmission = () => {
       setTimeout(() => setShowPopup(false), 3000);
     } catch (error) {
       console.error('Error submitting issue:', error);
-      if (error.response && error.response.data) {
-        setBackendError(error.response.data.error || 'Error submitting issue. Please try again.');
-      } else {
-        setBackendError('Error submitting issue. Please try again.');
-      }
+      setBackendError('Error submitting issue. Please try again.');
     }
 
     setLoading(false);
   };
 
   const handleIssueTypeOptionClick = (type) => {
-    setIssueType(type.value);
-    setIssueTypeFilter(type.label);
+    setIssueType(type);
+    setIssueTypeFilter(type);
     setShowIssueTypeDropdown(false);
   };
 
@@ -149,6 +134,7 @@ const IssueSubmission = () => {
     <div className="issue-submission-container">
       <h1>Issue Submission Form</h1>
       {showPopup && <div className="notification-popup">{message}</div>}
+      {validationError && <p className="error-message">{validationError}</p>}
       {backendError && <p className="error-message">{backendError}</p>}
 
       <div className="form-group">
@@ -161,7 +147,6 @@ const IssueSubmission = () => {
           placeholder="Type or choose an issue type"
           onClick={() => setShowIssueTypeDropdown(true)}
         />
-        {fieldErrors.issueType && <p className="field-error">{fieldErrors.issueType}</p>}
         {showIssueTypeDropdown && (
           <select
             id="issueType"
@@ -171,8 +156,8 @@ const IssueSubmission = () => {
             required
           >
             {filteredIssueTypes.map((type) => (
-              <option key={type.value} value={type.value} onClick={() => handleIssueTypeOptionClick(type)}>
-                {type.label}
+              <option key={type} value={type} onClick={() => handleIssueTypeOptionClick(type)}>
+                {type}
               </option>
             ))}
           </select>
@@ -189,7 +174,6 @@ const IssueSubmission = () => {
           placeholder="Enter course code (e.g., BSCS)"
           onClick={() => setShowCourseCodeDropdown(true)}
         />
-        {fieldErrors.courseCode && <p className="field-error">{fieldErrors.courseCode}</p>}
         {showCourseCodeDropdown && (
           <select
             id="courseCode"
@@ -216,7 +200,6 @@ const IssueSubmission = () => {
           placeholder="Describe the issue"
           required
         />
-        {fieldErrors.description && <p className="field-error">{fieldErrors.description}</p>}
       </div>
 
       <div className="form-group">
@@ -239,7 +222,6 @@ const IssueSubmission = () => {
           <option value="chs">College of Health Sciences (CHS)</option>
           <option value="vet">College of Veterinary Medicine, Animal Resources and Biosecurity (COVAB)</option>
         </select>
-        {fieldErrors.department && <p className="field-error">{fieldErrors.department}</p>}
       </div>
 
       <div className="form-group">
@@ -250,12 +232,9 @@ const IssueSubmission = () => {
           onDrop={(e) => {
             e.preventDefault();
             const droppedFile = e.dataTransfer.files[0];
-            if (droppedFile && droppedFile.size > 5 * 1024 * 1024) {
-              setFieldErrors((prev) => ({ ...prev, file: 'File size must be less than 5MB.' }));
-              return;
+            if (droppedFile) {
+              setFile(droppedFile);
             }
-            setFile(droppedFile);
-            setFieldErrors((prev) => ({ ...prev, file: '' })); // Clear file error
           }}
           onClick={() => document.getElementById('file').click()}
         >
@@ -269,16 +248,15 @@ const IssueSubmission = () => {
             id="file"
             style={{ display: 'none' }}
             onChange={handleFileChange}
-            />
-            </div>
-            {fieldErrors.file && <p className="field-error">{fieldErrors.file}</p>}
-          </div>
-    
-          <button type="submit" className="submit-button" disabled={loading} onClick={handleSubmit}>
-            {loading ? 'Submitting...' : 'Submit'}
-          </button>
+          />
         </div>
-      );
-    };
-    
-    export default IssueSubmission;
+      </div>
+
+      <button type="submit" className="submit-button" disabled={loading} onClick={handleSubmit}>
+        {loading ? 'Submitting...' : 'Submit'}
+      </button>
+    </div>
+  );
+};
+
+export default IssueSubmission;
