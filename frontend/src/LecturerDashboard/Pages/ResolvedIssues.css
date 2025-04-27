@@ -1,28 +1,105 @@
-.resolved-issues{
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
+.resolved-issues {
+    padding: 90px 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    max-width: 1200px;
+    margin: 20px auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    min-height: 100vh;
 }
-.controls{
+
+.resolved-issues h2 {
+    text-align: center;
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.controls {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px;
+    flex-wrap: wrap;
 }
-inpiut,select{
-    padding:8px;
-    font-size:14px;
+
+.controls input,
+.controls select {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    flex: 1;
+    min-width: 200px;
 }
-table{
+
+.controls input {
+    flex-grow: 2;
+}
+
+table {
     width: 100%;
     border-collapse: collapse;
     background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
 }
-th,td
-{padding:10px;
+
+thead {
+    background-color: #4caf50;
+    color: white;
+}
+
+thead th {
+    padding: 12px;
+    font-size: 15px;
     text-align: left;
+}
+
+tbody td {
+    padding: 12px;
+    font-size: 14px;
+    color: #555;
     border-bottom: 1px solid #ddd;
 }
-th{
-    background: #4caf50;
-    color: white;
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tbody tr:hover {
+    background-color: #eef6ee;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .controls {
+        flex-direction: column;
+    }
+
+    .controls input,
+    .controls select {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .resolved-issues {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    thead th, tbody td {
+        font-size: 13px;
+        padding: 10px;
+    }
 }

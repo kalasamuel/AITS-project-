@@ -10,7 +10,7 @@ const LecturerDashboard = () => {
     const fetchIssues = async () => {
       try {
         const token = localStorage.getItem("access_token");
-        const response = await axios.get("http://127.0.0.1:8000/api/lecturer/issues/", {
+        const response = await axios.get("http://127.0.0.1:8000/api/issues/lecturer/issues/", {
           headers: {
             Authorization: `Bearer ${token}`
           }
