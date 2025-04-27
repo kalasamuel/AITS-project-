@@ -5,9 +5,23 @@ from rest_framework.response import Response
 class IssueSerializer(serializers.ModelSerializer):
     course_code = serializers.CharField(write_only=True)
     student_name = serializers.CharField(source='student.institutional_email', read_only=True)
+    registration_number = serializers.SerializerMethodField()
+    resolution_time = serializers.SerializerMethodField()
     class Meta:
         model = Issue
         fields = '__all__'
+    
+    def get_student_name(self, obj):
+        return f"{obj.student.last_name} {obj.student.first_name}"
+    
+    def get_registration_number(self, obj):
+        return obj.student.student_number
+    
+    def get_resolution_time(self, obj):
+        if hasattr(obj, 'deadline') and obj.deadline:
+            days= (obj.deadline - obj.created_at.date()).days
+            return f"{days} days"
+        return "N/A"
 
     def validate_department(self, value):
         allowed_departments = dict(Issue.DEPARTMENTS).keys()
@@ -17,15 +31,15 @@ class IssueSerializer(serializers.ModelSerializer):
 
     def validate_course_code(self, value):
         try:
-            self.course_obj = Course.objects.get(code=value)
-            return value
+            course = Course.objects.get(code=value)
+            return course
         except Course.DoesNotExist:
             raise serializers.ValidationError("Course with the given code does not exist.")
 
     def create(self, validated_data):
-        validated_data['course'] = self.course_obj
+        course = validated_data.pop('course_code')
+        validated_data['course'] = course
         validated_data['student'] = self.context['request'].user
-        validated_data.pop('course_code', None)
         return super().create(validated_data)
 
         
