@@ -16,10 +16,7 @@ const OtpVerification = () => {
     if (emailParam) {
       setEmail(emailParam);
     } else {
-      // Redirect or show an error if email is not provided
-      setError('Email not found in the URL.');
-      // Optionally, you can redirect the user back to the signup page
-      // navigate('/signup');
+      setError('Webmail is missing. Please register again.');
     }
   }, [location]);
 
@@ -29,7 +26,7 @@ const OtpVerification = () => {
     setMessage("");
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/verify/", {
+      const response = await fetch("http://127.0.0.1:8000/api/accounts/verify/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email, otp: otp }),
@@ -39,7 +36,7 @@ const OtpVerification = () => {
 
       if (response.status === 200) {
         setMessage(data.message || "OTP Verified Successfully! Redirecting...");
-        setTimeout(() => navigate('/'), 3000);
+        setTimeout(() => navigate('/welcome?verified=true'), 3000);
       } else {
         setError(data.error || "Invalid Verification Code. Please try again.");
       }

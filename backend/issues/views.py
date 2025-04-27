@@ -155,3 +155,14 @@ class StudentNotificationsView(APIView):
         notifications = Notification.objects.filter(recipient=user).order_by('-created_at')[:20]
         serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data)
+
+class StudentIssuesView(APIView):
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    def get(self, request):
+        student = request.user
+        print("Authenticated user:", request.user)
+        print("User role:", request.user.role)
+        issues = Issue.objects.filter(student=student).order_by('-created_at')
+        serializer = IssueSerializer(issues, many=True)
+        return Response(serializer.data, status=200)

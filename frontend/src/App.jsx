@@ -14,7 +14,7 @@ import axios from 'axios';
 
 const token = localStorage.getItem('access_token');
 if (token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 }
 
 function App() {
@@ -35,17 +35,22 @@ function App() {
             {isAuthenticated && location.pathname !== '/welcome' ? (
                 <DashboardLayout profilePic={profilePic} toggleSidebar={toggleSidebar}>
                     <Routes>
+                        <Route path="/test" element={<h1>Hello from test route</h1>} />
                         <Route path="/welcome" element={<Welcome />} />
                         <Route path="/otp-verification" element={<OtpVerification />} />
                         <Route
                             path="/"
                             element={
-                                userRole === "student" ? (
-                                    <Navigate to="/student/home" />
-                                ) : userRole === "lecturer" ? (
-                                    <Navigate to="/lecturer/home" />
-                                ) : userRole === "registrar" ? (
-                                    <Navigate to="/registrar/home" />
+                                isAuthenticated ? (
+                                    userRole === "student" ? (
+                                        <Navigate to="/student/home" />
+                                    ) : userRole === "lecturer" ? (
+                                        <Navigate to="/lecturer/home" />
+                                    ) : userRole === "registrar" ? (
+                                        <Navigate to="/registrar/home" />
+                                    ) : (
+                                        <Navigate to="/welcome" />
+                                    )
                                 ) : (
                                     <Navigate to="/welcome" />
                                 )

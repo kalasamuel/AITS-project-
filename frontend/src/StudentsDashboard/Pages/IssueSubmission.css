@@ -1,55 +1,61 @@
 .issue-submission-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 20px;
-    margin: 80px auto 20px auto; 
-    width: 90%; 
-    max-width: 800px;
-    font-family: Arial, sans-serif;
-    color: #000000;
-    border: 2px solid #b45924;
-    background-color: #fff;
-    transition: all 0.3s ease;
-}
-
-h1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  margin: 0; 
+  margin-left: 120px; 
+  width: calc(100% - 200px); 
+  min-height: calc(100vh - 140px); 
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  background-color: #fff;
+  box-shadow: none;
+  border-radius: 0;
+  position: relative;
+  overflow-y: auto;
+  top: 90px;
+  border: 2px solid #b45924;
+  border-radius: 12px;
+  }
+  
+  h1 {
     font-size: 24px;
     margin-bottom: 15px;
     text-align: center;
-}
-
-h2 {
+  }
+  
+  h2 {
     font-size: 18px;
     margin-bottom: 5px;
-}
-
-.form-group {
+  }
+  
+  .form-group {
     width: 100%;
     margin-bottom: 20px;
-}
-
-label {
+  }
+  
+  label {
     font-weight: bold;
-}
-
-input,
-textarea,
-select {
+  }
+  
+  input,
+  textarea,
+  select {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-top: 5px;
     font-size: 16px;
-}
-
-textarea {
+  }
+  
+  textarea {
     height: 120px;
-}
-
-.submit-button {
+  }
+  
+  
+  .submit-button {
     width: 100%;
     padding: 12px;
     background-color: blue;
@@ -58,27 +64,25 @@ textarea {
     cursor: pointer;
     border-radius: 5px;
     font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-
-.submit-button:hover {
+  }
+  
+  .submit-button:hover {
     background-color: darkblue;
-}
-
-.error-message {
+  }
+  
+  .error-message {
     color: red;
     font-size: 14px;
     margin-top: 5px;
-}
-
-.field-error {
+  }
+  .field-error {
     color: red;
     font-size: 12px;
     margin-top: 5px;
     margin-bottom: 10px;
-}
-
-.notification-popup {
+  }
+  
+  .notification-popup {
     position: fixed;
     top: -100px;
     left: 50%;
@@ -91,9 +95,9 @@ textarea {
     font-size: 16px;
     z-index: 1000;
     animation: slideInOut 4s ease-in-out;
-}
-
-.file-drop-zone {
+  }
+  
+  .file-drop-zone {
     border: 2px dashed #aaa;
     border-radius: 10px;
     padding: 20px;
@@ -103,131 +107,176 @@ textarea {
     transition: border-color 0.3s ease;
     background-color: #fdfdfd;
     margin-top: 10px;
-}
-
-.file-drop-zone:hover {
+  }
+  
+  .file-drop-zone:hover {
     border-color: #444;
     background-color: #f7f7f7;
-}
-
-@media (max-width: 1024px) {
+  }
+  
+  
+  @media (max-width: 1024px) {
     .issue-submission-container {
-        margin-left: 0;
-        padding: 20px;
+      margin-left: 0;
+      padding: 20px;
     }
-
+  
     h1 {
-        font-size: 22px;
+      font-size: 22px;
     }
-
+  
     h2 {
-        font-size: 16px;
+      font-size: 16px;
     }
-
+  
     input,
     textarea,
     select {
-        font-size: 15px;
+      font-size: 15px;
     }
-}
-
-@media (max-width: 600px) {
+  }
+  
+  
+  @media (max-width: 600px) {
     .issue-submission-container {
-        width: 95%;
-        margin: 60px auto 20px auto;
-        padding: 15px;
+      width: 95%;
+      margin: 60px auto 20px auto;
+      padding: 15px;
     }
-
+  
     h1 {
-        font-size: 20px;
+      font-size: 20px;
     }
-
+  
     h2 {
-        font-size: 15px;
+      font-size: 15px;
     }
-
+  
     .submit-button {
-        font-size: 15px;
-        padding: 10px;
+      font-size: 15px;
+      padding: 10px;
     }
-
+  
     input,
     textarea,
     select {
-        font-size: 14px;
-        padding: 10px;
+      font-size: 14px;
+      padding: 10px;
     }
-
+  
     .file-drop-zone {
-        padding: 15px;
-        font-size: 14px;
+      padding: 15px;
+      font-size: 14px;
     }
-
+  
     .notification-popup {
-        font-size: 14px;
-        padding: 12px;
+      font-size: 14px;
+      padding: 12px;
     }
+  }
+  
+  
+  @media (max-width: 480px) {
+    .issue-submission-container {
+      padding: 10px;
+      width: 98%;
+    }
+  
+    h1 {
+      font-size: 18px;
+    }
+  
+    h2 {
+      font-size: 14px;
+    }
+  
+    input,
+    textarea,
+    select {
+      font-size: 13px;
+      padding: 8px;
+    }
+  
+    .submit-button {
+      font-size: 14px;
+      padding: 8px;
+    }
+  
+    .file-drop-zone {
+      padding: 12px;
+      font-size: 13px;
+    }
+  }
+  
+  
+  @media (max-width: 360px) {
+    .issue-submission-container {
+      padding: 8px;
+    }
+  
+    h1 {
+      font-size: 16px;
+    }
+  
+    h2 {
+      font-size: 13px;
+    }
+  
+    input,
+    textarea,
+    select {
+      font-size: 12px;
+      padding: 7px;
+    }
+  
+    .submit-button {
+      font-size: 13px;
+      padding: 7px;
+    }
+  
+    .file-drop-zone {
+      padding: 10px;
+      font-size: 12px;
+    }
+  }
+
+  @keyframes slideInOut {
+    0% {
+        top: -100px;
+        opacity: 0;
+    }
+    10% {
+        top: 20px; 
+        opacity: 1;
+    }
+    90% {
+        top: 20px; 
+        opacity: 1;
+    }
+    100% {
+        top: -100px; 
+        opacity: 0;
+    }
+}
+
+/* Responsive adjustments for the popup submission message*/
+@media (max-width: 600px) {
+  .notification-popup {
+      font-size: 14px;
+      padding: 12px;
+  }
 }
 
 @media (max-width: 480px) {
-    .issue-submission-container {
-        padding: 10px;
-        width: 98%;
-    }
-
-    h1 {
-        font-size: 18px;
-    }
-
-    h2 {
-        font-size: 14px;
-    }
-
-    input,
-    textarea,
-    select {
-        font-size: 13px;
-        padding: 8px;
-    }
-
-    .submit-button {
-        font-size: 14px;
-        padding: 8px;
-    }
-
-    .file-drop-zone {
-        padding: 12px;
-        font-size: 13px;
-    }
+  .notification-popup {
+      font-size: 13px;
+      padding: 10px;
+  }
 }
 
 @media (max-width: 360px) {
-    .issue-submission-container {
-        padding: 8px;
-    }
-
-    h1 {
-        font-size: 16px;
-    }
-
-    h2 {
-        font-size: 13px;
-    }
-
-    input,
-    textarea,
-    select {
-        font-size: 12px;
-        padding: 7px;
-    }
-
-    .submit-button {
-        font-size: 13px;
-        padding: 7px;
-    }
-
-    .file-drop-zone {
-        padding: 10px;
-        font-size: 12px;
-    }
+  .notification-popup {
+      font-size: 12px;
+      padding: 8px;
+  }
 }
