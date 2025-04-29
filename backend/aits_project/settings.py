@@ -34,7 +34,8 @@ DEBUG = env('DEBUG', default=False)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['aits-group-t.herokuapp.com', 'localhost', '127.0.0.1'])
+ALLOWED_HOSTS = ['aits-group-t.herokuapp.com']
+
 
 CORS_ALLOWED_ORIGINS = [ 
     "http://localhost:5173",
@@ -97,7 +98,7 @@ WSGI_APPLICATION = 'aits_project.wsgi.application'
 
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
-    'default': dj_database_url.config(default=env('DATABASE_URL'))
+    'default': dj_database_url.config(conn_max_age=600)
 }
 
 
@@ -135,7 +136,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Additional static files settings for Heroku
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -190,3 +191,5 @@ SIMPLE_JWT = {
 # Media files settings
 MEDIA_URL = '/media/' #this is the URL prefix for media files
 MEDIA_ROOT = BASE_DIR / 'media' #this is the file system path to the media files directory
+
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
