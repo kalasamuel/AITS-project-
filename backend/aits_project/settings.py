@@ -14,6 +14,7 @@ from pathlib import Path
 import environ # from the django-environ package installed
 from datetime import timedelta
 import dj_database_url # for database connection
+import os
 
 env = environ.Env(DEBUG=(bool,False))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -138,6 +139,12 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Additional static files settings for Heroku
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# tell Django to serve the React build
+STATICFILES_DIRS = [
+    BASE_DIR / "frontend/build/static",
+]
+TEMPLATES[0]['DIRS'] = [BASE_DIR / 'frontend' / 'build']
 
 
 # Default primary key field type
