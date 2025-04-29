@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import environ # from the django-environ package installed
 from datetime import timedelta
+import dj_database_url # for database connection
 
 env = environ.Env(DEBUG=(bool,False))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 environ.Env.read_env(BASE_DIR/".env")
 SECRET_KEY =env("SECRET_KEY")
-DEBUG=env("DEBUG")
+DEBUG = env('DEBUG', default=False)
 
 
 # Quick-start development settings - unsuitable for production
@@ -38,6 +39,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:5174",
+    "https://git.heroku.com/aits-group-t.git",
 ]
 
 
@@ -93,14 +95,7 @@ WSGI_APPLICATION = 'aits_project.wsgi.application'
 
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'aits',
-        'USER' : 'postgres',
-        'PASSWORD' : 'password',
-        'HOST' : 'localhost',
-        'PORT' : '5432',
-    }
+    'default': dj_database_url.config(default=env('DATABASE_URL'))
 }
 
 
@@ -137,6 +132,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Additional static files settings for Heroku
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
