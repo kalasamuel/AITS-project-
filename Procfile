@@ -1,2 +1,2 @@
-web: cd backend && gunicorn backend.wsgi --log-file -
-release: cd backend && python manage.py migrate
+web: gunicorn aits_project.wsgi --log-file -
+release: python manage.py migrate

@@ -28,18 +28,18 @@ DEBUG = env('DEBUG', default=False)
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7x3u^tnu7__g@i51q$t%kvi-11245!*w3&j+e-z_-_@i2q0n)s'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['aits-group-t.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['aits-group-t.herokuapp.com', 'localhost', '127.0.0.1'])
 
 CORS_ALLOWED_ORIGINS = [ 
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:5174",
-    "https://git.heroku.com/aits-group-t.git",
+    # "https://git.heroku.com/aits-group-t.git",
 ]
 
 
@@ -63,6 +63,7 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware', #adds CorsMiddleware to the middleware stack
     'django.middleware.common.CommonMiddleware',
@@ -148,14 +149,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',  #Force JSON responses
+        'rest_framework.renderers.JSONRenderer',  # Force JSON responses
     ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-        'django.contrib.auth.backends.ModelBackend',
     ),
     "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",  #default to authenticated access
+        "rest_framework.permissions.IsAuthenticated",  # Default to authenticated access
     ),
 }
 
@@ -163,8 +163,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com' #this is the google mail smtp host
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True #using TLS for secure connection
-EMAIL_HOST_USER = 'aits.mak.ac@gmail.com'
-EMAIL_HOST_PASSWORD = 'trkr wapc czpn nolw'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+# EMAIL_HOST_USER = 'aits.mak.ac@gmail.com'
+# EMAIL_HOST_PASSWORD = 'trkr wapc czpn nolw'
 
 #AUTHENTICATION_BACKENDS = [
    # 'django.contrib.auth.backends.ModelBackend',  # Ensures default authentication works
