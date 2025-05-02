@@ -79,7 +79,16 @@ class AssignmentSerializer(serializers.ModelSerializer):
         model = Assignment
         fields = '__all__'   
 
+# issues/serializers.py
+
+class IssueSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Issue
+        fields = ['issue_id', 'issue_type', 'status']
+
 class NotificationSerializer(serializers.ModelSerializer):
+    issue = IssueSimpleSerializer(read_only=True)
+
     class Meta:
         model = Notification
-        fields = '__all__'
+        fields = ['notification_id', 'message', 'created_at', 'issue', 'recipient']
