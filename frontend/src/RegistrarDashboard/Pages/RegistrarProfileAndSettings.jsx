@@ -6,6 +6,7 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
   const [bioData, setBioData] = useState({
     name: "",
     email: "",
+    registrationNumber: "",
   });
   const [passwords, setPasswords] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
   const [successMessage, setSuccessMessage] = useState("");
