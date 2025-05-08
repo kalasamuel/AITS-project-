@@ -66,8 +66,8 @@ class AssignIssueView(APIView):
             return Response({"error": "Issue ID and Lecturer ID are required."}, status=status.HTTP_400_BAD_REQUEST)
 
         # Fetch issue and lecturer
-        issue = get_object_or_404(Issue, id=issue_id)
-        lecturer = get_object_or_404(CustomUser, id=lecturer_id, role="lecturer")
+        issue = get_object_or_404(Issue, issue_id=issue_id)
+        lecturer = get_object_or_404(CustomUser, lecturer_id=lecturer_id, role="lecturer")
 
         # Assign issue
         issue.assigned_to = lecturer
@@ -90,7 +90,7 @@ class EnrollCourseView(APIView):
             return Response({"error": "Course ID is required."}, status=status.HTTP_400_BAD_REQUEST)
 
         # Fetch course
-        course = get_object_or_404(Course, id=course_id)
+        course = get_object_or_404(Course, code=course_id)
 
         # Check if already enrolled
         if Enrollment.objects.filter(student=request.user, course=course).exists():
