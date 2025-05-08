@@ -12,11 +12,11 @@ const Assigned = () => {
   useEffect(() => {
     const fetchAssignedIssues = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/issues/assigned/', {
+        const response = await axios.get("http://127.0.0.1:8000/api/issues/assigned/", {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
-        });
+      });
         setIssues(response.data);
       } catch (error) {
         console.error('Failed to fetch assigned issues:', error);

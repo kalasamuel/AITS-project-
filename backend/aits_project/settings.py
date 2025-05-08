@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import environ # from the django-environ package installed
 from datetime import timedelta
-import dj_database_url # for database connection
-import os
 
 env = environ.Env(DEBUG=(bool,False))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,26 +20,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 environ.Env.read_env(BASE_DIR/".env")
 SECRET_KEY =env("SECRET_KEY")
-DEBUG = env('DEBUG', default=False)
+DEBUG=env("DEBUG")
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-
+SECRET_KEY = 'django-insecure-7x3u^tnu7__g@i51q$t%kvi-11245!*w3&j+e-z_-_@i2q0n)s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['aits-group-t.herokuapp.com']
-
+ALLOWED_HOSTS = []
 
 CORS_ALLOWED_ORIGINS = [ 
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:5174",
-    # "https://git.heroku.com/aits-group-t.git",
 ]
 
 
@@ -65,7 +61,6 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware', #adds CorsMiddleware to the middleware stack
     'django.middleware.common.CommonMiddleware',
@@ -98,7 +93,14 @@ WSGI_APPLICATION = 'aits_project.wsgi.application'
 
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600)
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'aits',
+        'USER' : 'postgres',
+        'PASSWORD' : 'password',
+        'HOST' : 'localhost',
+        'PORT' : '5432',
+    }
 }
 
 
@@ -136,18 +138,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Additional static files settings for Heroku
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# tell Django to serve the React build
-STATICFILES_DIRS = [
-    BASE_DIR / "frontend/build/static",
-]
-TEMPLATES[0]['DIRS'] = [BASE_DIR / 'frontend' / 'build']
-
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -157,13 +147,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',  # Force JSON responses
+        'rest_framework.renderers.JSONRenderer',  #Force JSON responses
     ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
+        'django.contrib.auth.backends.ModelBackend',
     ),
     "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",  # Default to authenticated access
+        "rest_framework.permissions.IsAuthenticated",  #default to authenticated access
     ),
 }
 
@@ -171,10 +162,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com' #this is the google mail smtp host
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True #using TLS for secure connection
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-# EMAIL_HOST_USER = 'aits.mak.ac@gmail.com'
-# EMAIL_HOST_PASSWORD = 'trkr wapc czpn nolw'
+EMAIL_HOST_USER = 'aits.mak.ac@gmail.com'
+EMAIL_HOST_PASSWORD = 'trkr wapc czpn nolw'
 
 #AUTHENTICATION_BACKENDS = [
    # 'django.contrib.auth.backends.ModelBackend',  # Ensures default authentication works
@@ -191,5 +180,3 @@ SIMPLE_JWT = {
 # Media files settings
 MEDIA_URL = '/media/' #this is the URL prefix for media files
 MEDIA_ROOT = BASE_DIR / 'media' #this is the file system path to the media files directory
-
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
