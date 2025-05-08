@@ -188,3 +188,18 @@ class AssignedIssuesView(APIView):
             return Response(serializer.data, status=HTTP_200_OK)
         else:
             return Response({"error": "You do not have permission to view this resource."}, status=HTTP_403_FORBIDDEN)
+
+class RegistrarAssignedIssuesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        # Check if the user is a registrar
+        if user.role != 'registrar':
+            return Response({"error": "Forbidden: You do not have permission to view assigned issues."}, status=403)
+
+        # Fetch all assigned issues
+        assigned_issues = Issue.objects.filter(assigned_to__isnull=False)
+        serializer = IssueSerializer(assigned_issues, many=True)
+        return Response(serializer.data, status=200)
