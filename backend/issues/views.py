@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.status import HTTP_200_OK, HTTP_403_FORBIDDEN
 
 from accounts.permissions import IsStudent, IsLecturer, IsRegistrar
 from .serializers import *
@@ -175,3 +176,15 @@ class StudentResolvedIssuesView(APIView):
         resolved_issues = Issue.objects.filter(student=student, status="resolved")
         serializer = IssueSerializer(resolved_issues, many=True)
         return Response(serializer.data)
+
+class AssignedIssuesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        if request.user.role == 'lecturer':
+            # Fetch only the issues assigned to this specific lecturer
+            assigned_issues = Issue.objects.filter(assigned_to=request.user)
+            serializer = IssueSerializer(assigned_issues, many=True)
+            return Response(serializer.data, status=HTTP_200_OK)
+        else:
+            return Response({"error": "You do not have permission to view this resource."}, status=HTTP_403_FORBIDDEN)
