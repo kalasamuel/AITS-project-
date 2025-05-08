@@ -39,7 +39,7 @@ const AssignmentPage = () => {
         try {
             const token = localStorage.getItem("access_token");
             const response = await axios.post(
-                "http://127.0.1:8000/api/issues/assign-issue/",
+                "http://127.0.0.1:8000/api/issues/assign-issue/",
                 { issue_id: issueId, lecturer_id: lecturerId },
                 { headers: { Authorization: `Bearer ${token}`, },}
             );
