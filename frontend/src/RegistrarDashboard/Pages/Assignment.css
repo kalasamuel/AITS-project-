@@ -119,3 +119,54 @@ p {
         padding: 8px 16px;
     }
 }
+@media (max-width: 480px) {
+    .resolved-container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    table {
+        font-size: 11px;
+    }
+
+    th, td {
+        padding: 6px;
+    }
+
+    button {
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+
+    .modal {
+        width: 95%;
+        max-width: 250px;
+    }
+
+    .no-data-message, .error-message {
+        font-size: 12px;
+    }
+}
+
+/* For large screens (min-width: 1200px) */
+@media (min-width: 1200px) {
+    .resolved-container {
+        padding: 120px 30px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    table {
+        font-size: 16px;
+    }
+
+    button {
+        padding: 12px 24px;
+        font-size: 16px;
+    }
