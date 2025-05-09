@@ -222,3 +222,30 @@
     width: 200px;
   }
 }
+
+@media (max-width: 1024px) {
+  .dashboard-container {
+    padding: 80px 15px;
+  }
+
+  .header {
+    font-size: 22px;
+  }
+
+  .summary-container {
+    gap: 15px;
+  }
+
+  .card {
+    padding: 18px;
+    max-width: 250px;
+  }
+
+  .filters {
+    gap: 0.8rem;
+  }
+
+  .filter-dropdown {
+    width: 220px;
+  }
+}
