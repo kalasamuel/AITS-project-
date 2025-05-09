@@ -147,3 +147,26 @@ button:hover {
         padding: 8px 16px;
     }
 }
+@media (max-width: 480px) {
+    .resolved-container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    table {
+        font-size: 10px;
+    }
+
+    th, td {
+        padding: 6px;
+    }
+
+    button {
+        padding: 6px 12px;
+        font-size: 10px;
+    }
+}
