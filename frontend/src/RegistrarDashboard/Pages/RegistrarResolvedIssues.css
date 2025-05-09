@@ -169,4 +169,28 @@ button:hover {
         padding: 6px 12px;
         font-size: 10px;
     }
-}
+} 
+
+@media (max-width: 320px) {
+    .resolved-container {
+        padding: 5px;
+    }
+
+    h1 {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+
+    table {
+        font-size: 8px;
+    }
+
+    th, td {
+        padding: 4px;
+    }
+
+    button {
+        padding: 4px 8px;
+        font-size: 8px;
+    }
+}   
