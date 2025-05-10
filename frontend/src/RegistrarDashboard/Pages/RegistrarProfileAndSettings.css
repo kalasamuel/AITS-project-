@@ -200,3 +200,26 @@
     padding: 8px;
   }
 }
+@media (max-width: 900px) {
+  .profile-container {
+    margin-left: 60px;
+    width: calc(100% - 120px);
+  }
+
+  .profile-pic {
+    width: 110px;
+    height: 110px;
+  }
+
+  .bio-data input,
+  .change-password input {
+    font-size: 15px;
+    padding: 7px;
+  }
+
+  .save-btn,
+  .change-btn {
+    font-size: 15px;
+    padding: 9px;
+  }
+}

@@ -126,3 +126,21 @@ button:active {
         max-width: 300px;
     }
 }
+
+@media (max-width: 1024px) {
+    .resolved-container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    table {
+        font-size: 13px;
+    }
+
+    button {
+        padding: 8px 18px;
+        font-size: 13px;
+    }

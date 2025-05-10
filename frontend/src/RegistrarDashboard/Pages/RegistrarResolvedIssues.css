@@ -147,3 +147,50 @@ button:hover {
         padding: 8px 16px;
     }
 }
+@media (max-width: 480px) {
+    .resolved-container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    table {
+        font-size: 10px;
+    }
+
+    th, td {
+        padding: 6px;
+    }
+
+    button {
+        padding: 6px 12px;
+        font-size: 10px;
+    }
+} 
+
+@media (max-width: 320px) {
+    .resolved-container {
+        padding: 5px;
+    }
+
+    h1 {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+
+    table {
+        font-size: 8px;
+    }
+
+    th, td {
+        padding: 4px;
+    }
+
+    button {
+        padding: 4px 8px;
+        font-size: 8px;
+    }
+}   

@@ -180,3 +180,72 @@
     max-width: 100%;
   }
 }
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 50px 10px;
+  }
+
+  .header {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .summary-container {
+    gap: 10px;
+  }
+
+  .card {
+    padding: 15px;
+    min-width: 150px;
+    max-width: 100%;
+  }
+
+  .card-title {
+    font-size: 14px;
+  }
+
+  .card-value {
+    font-size: 20px;
+  }
+
+  .filters {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .search-bar {
+    padding: 0.4rem;
+    font-size: 0.9rem;
+  }
+
+  .filter-dropdown {
+    width: 200px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-container {
+    padding: 80px 15px;
+  }
+
+  .header {
+    font-size: 22px;
+  }
+
+  .summary-container {
+    gap: 15px;
+  }
+
+  .card {
+    padding: 18px;
+    max-width: 250px;
+  }
+
+  .filters {
+    gap: 0.8rem;
+  }
+
+  .filter-dropdown {
+    width: 220px;
+  }
+}
