@@ -206,7 +206,7 @@ class UserProfileView(APIView):
     def get(self, request):
         serializer = CustomUserSerializer(request.user)
         return Response(serializer.data)
-    
+
 class ProfilePictureUploadView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
@@ -226,7 +226,7 @@ class ProfilePictureUploadView(APIView):
 
         user.profile_picture = file
         user.save()
-        return Response({"message": "Profile picture uploaded successfully."})
+        return Response({"message": "Profile picture uploaded successfully.", "profile_picture": user.profile_picture.url})
     
 class UpdateProfileView(APIView):
     permission_classes = [IsAuthenticated]
