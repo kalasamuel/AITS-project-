@@ -11,7 +11,7 @@ function NavBar({ toggleSidebar }) {
 
   const fetchProfilePicture = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/accounts/profile-picture/', {
+      const response = await axios.get('http://127.0.0.1:8000/api/accounts/profile/', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
