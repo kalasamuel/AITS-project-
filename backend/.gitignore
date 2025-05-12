@@ -1,3 +1,4 @@
 "backend/postgresql.exe" 
 **/venv/
 myenv/
+staticfiles/
