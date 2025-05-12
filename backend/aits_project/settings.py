@@ -35,6 +35,7 @@ SECRET_KEY = 'django-insecure-7x3u^tnu7__g@i51q$t%kvi-11245!*w3&j+e-z_-_@i2q0n)s
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    "localhost",
     "aits-group-t-3712bf6213e8.herokuapp.com"
 ]
 
@@ -45,6 +46,9 @@ CORS_ALLOWED_ORIGINS = [
     "https://aits-group-t-3712bf6213e8.herokuapp.com"
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://aits-group-t-3712bf6213e8.herokuapp.com",
+]
 
 # Application definition
 
