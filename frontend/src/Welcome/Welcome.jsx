@@ -68,7 +68,7 @@ const Welcome = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://127.0.0.1:8000/auth/login/', {
+      const response = await fetch('https://aits-group-t-3712bf6213e8.herokuapp.com/auth/login/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -144,7 +144,7 @@ const Welcome = () => {
 
     // Submit Registration
     try {
-      const response = await fetch('http://127.0.0.1:8000/auth/register/', {
+      const response = await fetch('https://aits-group-t-3712bf6213e8.herokuapp.com/auth/register/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

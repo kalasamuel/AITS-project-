@@ -12,7 +12,7 @@ const ResolvedIssues = () => {
     const fetchResolvedIssues = async () => {
       try {
         const token = localStorage.getItem('access_token');
-        const response = await axios.get('http://127.0.0.1:8000/api/issues/registrar/all-issues/', {
+        const response = await axios.get('https://aits-group-t-3712bf6213e8.herokuapp.com/api/issues/registrar/all-issues/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

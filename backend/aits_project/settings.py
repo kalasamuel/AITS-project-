@@ -34,12 +34,15 @@ SECRET_KEY = 'django-insecure-7x3u^tnu7__g@i51q$t%kvi-11245!*w3&j+e-z_-_@i2q0n)s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "aits-group-t-3712bf6213e8.herokuapp.com"
+]
 
 CORS_ALLOWED_ORIGINS = [ 
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:5174",
+    "https://aits-group-t-3712bf6213e8.herokuapp.com"
 ]
 
 

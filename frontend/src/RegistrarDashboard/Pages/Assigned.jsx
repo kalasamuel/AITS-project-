@@ -12,7 +12,7 @@ const Assigned = () => {
   useEffect(() => {
     const fetchAssignedIssues = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/issues/assigned/", {
+        const response = await axios.get("https://aits-group-t-3712bf6213e8.herokuapp.com/api/issues/assigned/", {
           headers: {
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },

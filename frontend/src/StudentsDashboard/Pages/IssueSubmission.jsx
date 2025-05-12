@@ -103,7 +103,7 @@ const IssueSubmission = () => {
     }
 
     try {
-      await axios.post('http://127.0.0.1:8000/api/issues/submit-issue/', formData, {
+      await axios.post('https://aits-group-t-3712bf6213e8.herokuapp.com/api/issues/submit-issue/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,

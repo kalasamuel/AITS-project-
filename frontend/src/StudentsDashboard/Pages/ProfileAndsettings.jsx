@@ -25,7 +25,7 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("access_token");
-        const response = await axios.get("http://127.0.0.1:8000/api/accounts/profile/", {
+        const response = await axios.get("https://aits-group-t-3712bf6213e8.herokuapp.com/api/accounts/profile/", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -58,7 +58,7 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
         formData.append("profile_picture", file);
 
         const response = await axios.post(
-          "http://127.0.0.1:8000/api/accounts/profile/upload-picture/",
+          "https://aits-group-t-3712bf6213e8.herokuapp.com/api/accounts/profile/upload-picture/",
           formData,
           {
             headers: {
@@ -88,7 +88,7 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
     try {
       const token = localStorage.getItem("access_token");
       await axios.put(
-        "http://127.0.0.1:8000/api/accounts/profile/update/",
+        "https://aits-group-t-3712bf6213e8.herokuapp.com/api/accounts/profile/update/",
         {
           first_name: bioData.first_name,
           last_name: bioData.last_name,
@@ -123,7 +123,7 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
     try {
       const token = localStorage.getItem("access_token");
       await axios.post(
-        "http://127.0.0.1:8000/api/accounts/change-password/",
+        "https://aits-group-t-3712bf6213e8.herokuapp.com/api/accounts/change-password/",
         {
           current_password: passwords.currentPassword,
           new_password: passwords.newPassword,
