@@ -1,5 +1,5 @@
 import React, {useEffect ,useState } from 'react';
-import axios from 'axios';
+import { apiClient } from "../../api";
 import './Assignment.css';
 
 const AssignmentPage = () => {
@@ -15,8 +15,8 @@ const AssignmentPage = () => {
                 const headers = { Authorization: `Bearer ${token}` };
 
                 const [issuesResponse, lecturersResponse] = await Promise.all([
-                    axios.get("http://127.0.1:8000/api/issues/registrar/all-issues/", { headers }),
-                    axios.get("http://127.0.1:8000/api/accounts/lecturers/", { headers }),
+                    apiClient.get("/issues/registrar/all-issues/", { headers }),
+                    apiClient.get("/accounts/lecturers/", { headers }),
                 ]);
 
                 const unassignedIssues = issuesResponse.data.filter(issue => !issue.assigned_to);
@@ -38,8 +38,8 @@ const AssignmentPage = () => {
 
         try {
             const token = localStorage.getItem("access_token");
-            const response = await axios.post(
-                "https://aits-group-t-3712bf6213e8.herokuapp.com/api/issues/assign-issue/",
+            const response = await apiClient.post(
+                "/issues/assign-issue/",
                 { issue_id: issueId, lecturer_id: lecturerId },
                 { headers: { Authorization: `Bearer ${token}`, },}
             );

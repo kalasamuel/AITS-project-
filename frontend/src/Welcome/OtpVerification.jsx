@@ -26,7 +26,7 @@ const OtpVerification = () => {
     setMessage("");
 
     try {
-      const response = await fetch("https://aits-group-t-3712bf6213e8.herokuapp.com/api/accounts/verify/", {
+      const response = await fetch("/accounts/verify/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email, otp: otp }),

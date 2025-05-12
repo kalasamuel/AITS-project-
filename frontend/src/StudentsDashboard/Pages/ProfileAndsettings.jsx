@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { apiClient } from "../../api";
 import "./ProfileAndsettings.css";
 
 const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
@@ -25,7 +25,7 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("access_token");
-        const response = await axios.get("https://aits-group-t-3712bf6213e8.herokuapp.com/api/accounts/profile/", {
+        const response = await apiClient.get("/accounts/profile/", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -57,8 +57,8 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
         const formData = new FormData();
         formData.append("profile_picture", file);
 
-        const response = await axios.post(
-          "https://aits-group-t-3712bf6213e8.herokuapp.com/api/accounts/profile/upload-picture/",
+        const response = await apiClient.post(
+          "/accounts/profile/upload-picture/",
           formData,
           {
             headers: {
@@ -87,8 +87,8 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
   const handleSaveBioData = async () => {
     try {
       const token = localStorage.getItem("access_token");
-      await axios.put(
-        "https://aits-group-t-3712bf6213e8.herokuapp.com/api/accounts/profile/update/",
+      await apiClient.put(
+        "/accounts/profile/update/",
         {
           first_name: bioData.first_name,
           last_name: bioData.last_name,
@@ -122,8 +122,8 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
 
     try {
       const token = localStorage.getItem("access_token");
-      await axios.post(
-        "https://aits-group-t-3712bf6213e8.herokuapp.com/api/accounts/change-password/",
+      await apiClient.post(
+        "/accounts/change-password/",
         {
           current_password: passwords.currentPassword,
           new_password: passwords.newPassword,

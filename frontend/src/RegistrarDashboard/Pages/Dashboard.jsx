@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { apiClient } from "../../api";
 import './Dashboard.css';
 
 const RegistrarsDashboard = () => {
@@ -30,7 +30,7 @@ const RegistrarsDashboard = () => {
   useEffect(() => {
     const fetchIssues = async () => {
       try {
-        const response = await axios.get('https://aits-group-t-3712bf6213e8.herokuapp.com/api/issues/registrar/all-issues/', {
+        const response = await apiClient.get('/issues/registrar/all-issues/', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`
           }

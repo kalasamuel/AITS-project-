@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { apiClient } from "../../api";
 import './Assigned.css';
 
 const Assigned = () => {
@@ -12,7 +12,7 @@ const Assigned = () => {
   useEffect(() => {
     const fetchAssignedIssues = async () => {
       try {
-        const response = await axios.get("https://aits-group-t-3712bf6213e8.herokuapp.com/api/issues/assigned/", {
+        const response = await apiClient.get("/issues/assigned/", {
           headers: {
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },

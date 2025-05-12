@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import './NavBar.css';
 import { useNavigate } from 'react-router-dom';
 import { MdMenu } from 'react-icons/md';
-import axios from 'axios';
+import { apiClient } from "../../api";
 
 function NavBar({ toggleSidebar }) {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ function NavBar({ toggleSidebar }) {
 
   const fetchProfilePicture = async () => {
     try {
-      const response = await axios.get('https://aits-group-t-3712bf6213e8.herokuapp.com/api/accounts/profile/', {
+      const response = await apiClient.get('/accounts/profile/', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
@@ -31,7 +31,7 @@ function NavBar({ toggleSidebar }) {
     formData.append('profile_picture', file);
 
     try {
-      await axios.post('https://aits-group-t-3712bf6213e8.herokuapp.com/api/accounts/profile/upload-picture/', formData, {
+      await apiClient.post('/accounts/profile/upload-picture/', formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'multipart/form-data',

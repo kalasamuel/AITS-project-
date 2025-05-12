@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { apiClient } from "../../api";
 import "./RegistrarProfileAndSettings.css";
 
 const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
@@ -17,7 +17,7 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("access_token");
-        const response = await axios.get("http://127.0.1:8000/api/accounts/profile/", {
+        const response = await apiClient.get("/accounts/profile/", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const user = response.data;
@@ -42,7 +42,7 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
         const formData = new FormData();
         formData.append("profile_picture", file);
 
-        await axios.post("http://127.0.1:8000/api/accounts/profile/upload-picture/", formData, {
+        await apiClient.post("/accounts/profile/upload-picture/", formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
@@ -76,7 +76,7 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
     setLoading(true);
     try {
       const token = localStorage.getItem("access_token");
-      await axios.put("http://127.0.1:8000/api/accounts/profile/update/", {
+      await apiClient.put("/accounts/profile/update/", {
         first_name: bioData.name.split(" ")[0],
         last_name: bioData.name.split(" ")[1],
         institutional_email: bioData.email,
@@ -106,7 +106,7 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
     setLoading(true);
     try {
       const token = localStorage.getItem("access_token");
-      await axios.post("http://127.0.1:8000/api/accounts/change-password/", passwords, {
+      await apiClient.post("/accounts/change-password/", passwords, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSuccessMessage("Password changed successfully!");

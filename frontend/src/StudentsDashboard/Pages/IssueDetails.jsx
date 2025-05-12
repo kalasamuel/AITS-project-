@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from "react";
-import axios from "axios";
+import { apiClient } from "../../api";
 import IssuesList from "../Components/IssuesList";
 
 const IssueDetails = () => {
@@ -10,7 +10,7 @@ const IssueDetails = () => {
         const fetchResolvedIssues= async () => {
             try {
                 const token = localStorage.getItem("access_token");
-                const response = await axios.get("https://aits-group-t-3712bf6213e8.herokuapp.com/api/issues/student/resolved/", {
+                const response = await apiClient.get("/issues/student/resolved/", {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setIssues(response.data);
