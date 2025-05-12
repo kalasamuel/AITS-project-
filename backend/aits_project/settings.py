@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import environ # from the django-environ package installed
 from datetime import timedelta
+import os
+from urllib.parse import urlparse
 
 env = environ.Env(DEBUG=(bool,False))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -72,10 +74,21 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'aits_project.urls'
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.1/howto/static-files/
+
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR/'staticfiles'
+STATICFILES_DIRS = [
+    os.path.join(STATIC_ROOT, 'reactapp'),
+]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [], #os.path.join(BASE_DIR, "template") if importing a template
+        'DIRS': [
+            os.path.join(STATIC_ROOT, 'reactapp'),
+        ], #os.path.join(BASE_DIR, "template") if importing a template
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -92,14 +105,20 @@ WSGI_APPLICATION = 'aits_project.wsgi.application'
 
 
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+parsed_url =  urlparse(os.getenv("DATABASE_URL"))
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'aits',
-        'USER' : 'postgres',
-        'PASSWORD' : 'password',
-        'HOST' : 'localhost',
-        'PORT' : '5432',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': parsed_url.path[1:],  # removes leading slash
+        'USER': parsed_url.username,
+        'PASSWORD': parsed_url.password,
+        'HOST': parsed_url.hostname,
+        'PORT': 5432,
+        'OPTIONS': {
+            'sslmode': 'require',  # ensures SSL is used
+        },
     }
 }
 
