@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./ProfileAndSettings.css";
+import "./ProfileAndsettings.css";
 
 const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
   const [bioData, setBioData] = useState({
