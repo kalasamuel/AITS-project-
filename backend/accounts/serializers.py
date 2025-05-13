@@ -136,3 +136,22 @@ class LecturerSerializer(serializers.ModelSerializer):
         #return [course.code for course in obj.assigned_courses.all()]
         unassigned_courses = Course.objects.filter(assigned_lecturer__isnull=True)
         return [course.code for course in unassigned_courses]
+    
+class VerifyAccountSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+    otp = serializers.CharField(required=True)
+    
+    def validate(self, data):
+        """
+        Validate that both email and OTP are provided.
+        """
+        email = data.get('email')
+        otp = data.get('otp')
+        
+        if not email:
+            raise serializers.ValidationError("Email is required.")
+        
+        if not otp:
+            raise serializers.ValidationError("OTP verification code is required.")
+            
+        return data

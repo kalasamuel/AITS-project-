@@ -13,31 +13,84 @@ from datetime import timedelta
 from django.utils import timezone
 from .models import VerificationCode 
 import random
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from .serializers import *
+
 
 # Registrar Code (to be stored securely in settings)
 REGISTRAR_CODE = "REG123456"
 
-def validate_student_registration(data):
-    """
-    Validates Student registration fields.
-    """
-    student_number = data.get("student_number", "").strip()
-    if len(student_number) != 10 and not student_number.isdigit():
-        print("Invalid input! Check student number.")
-    year_of_study = data.get("year_of_study", "").strip()
-    if int(year_of_study) >= 6 and not year_of_study.isdigit():
-        print("Invalid year of study.")
+from datetime import datetime
+# @method_decorator(csrf_exempt, name='dispatch')
+# class VerifyAccountView(APIView):
+#     """
+#     Handles OTP verification for account activation with CSRF exemption.
+#     No CSRF token required for this endpoint.
+#     """
+#     permission_classes = [AllowAny]
     
-    try:
-        student_number_first_2 = int(student_number[:2])
-        current_year_last_2 = now().year % 100
-        if (current_year_last_2 - student_number_first_2) > 6:
-            return {"error": "Registration denied, please visit the Registrar."}
-    except ValueError:
-        return {"error": "Invalid student number format."}
+#     def dispatch(self, request, *args, **kwargs):
+#         """
+#         Override dispatch to ensure CORS headers are included
+#         in the response for both OPTIONS and POST requests.
+#         """
+#         response = super().dispatch(request, *args, **kwargs)
+#         response["Access-Control-Allow-Origin"] = "http://localhost:5173"  # Your React app's origin
+#         response["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+#         response["Access-Control-Allow-Headers"] = "Content-Type"
+#         return response
     
-    return None
-
+#     def options(self, request, *args, **kwargs):
+#         """
+#         Handle preflight OPTIONS requests explicitly.
+#         """
+#         response = Response()
+#         response["Access-Control-Allow-Origin"] = "http://localhost:5173"  # Your React app's origin
+#         response["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+#         response["Access-Control-Allow-Headers"] = "Content-Type"
+#         return response
+    
+#     def post(self, request):
+#         # Extract email and OTP from request
+#         email = request.data.get("email")
+#         otp = request.data.get("otp")
+        
+#         # Basic validation
+#         if not email or not otp:
+#             return Response(
+#                 {"error": "Email and verification code are required"}, 
+#                 status=status.HTTP_400_BAD_REQUEST
+#             )
+        
+#         try:
+#             # Find the user by email
+#             user = get_object_or_404(CustomUser, institutional_email=email)
+            
+#             # Check if OTP matches
+#             if user.verification_code == otp:
+#                 # Activate the account
+#                 user.is_verified = True
+#                 user.verification_code = None  # Clear code after verification
+#                 user.save()
+                
+#                 return Response(
+#                     {"message": "OTP verified successfully. Your account is now active."}, 
+#                     status=status.HTTP_200_OK
+#                 )
+            
+#             # OTP doesn't match
+#             return Response(
+#                 {"error": "Invalid verification code"}, 
+#                 status=status.HTTP_400_BAD_REQUEST
+#             )
+            
+#         except Exception as e:
+#             # Handle any other errors
+#             return Response(
+#                 {"error": "Verification failed. Please try again."}, 
+#                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
+#             )        
 
 def validate_lecturer_registration(data):
     """
@@ -80,6 +133,7 @@ class SelfRegisterView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
+        print("The data received from the Frontend is: ", request.data)
         """
         Handles self-registration for Students, Lecturers, and Registrars.
         """
@@ -119,7 +173,7 @@ class SelfRegisterView(APIView):
 
         # Create User (Inactive until verification)
         user = CustomUser.objects.create(
-            username=institutional_email,
+            #username=institutional_email,
             institutional_email=institutional_email,
             email=email,
             first_name=first_name,
@@ -146,8 +200,8 @@ class SelfRegisterView(APIView):
 
         return Response({"message": "Registration successful. Check your email for the verification code."}, status=status.HTTP_201_CREATED)
 
-### Verify Account View ###
 
+### Self-Registration View ###
 class VerifyAccountView(APIView):
     permission_classes = [AllowAny]
 
@@ -155,23 +209,52 @@ class VerifyAccountView(APIView):
         """
         Handles OTP verification for account activation.
         """
-        email = request.data.get("email")
+        serializer = VerifyAccountSerializer(data=request.data)
+        
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+        email = serializer.validated_data['email']
+        otp = serializer.validated_data['otp']
+        
+        # Log for debugging (remove in production)
         print(f"The Webmail received from the Frontend is: {email}")
-        otp = request.data.get("otp")
         print(f"The Code received from the Frontend is: {otp}")
+        
+        try:
+            # Look up the user by institutional email
+            user = get_object_or_404(CustomUser, institutional_email=email)
+            
+            # Check if verification code matches
+            if user.verification_code == otp:
+                user.is_verified = True
+                user.verification_code = None  # Clear code after successful verification
+                user.save()
+                
+                return Response({
+                    "message": "OTP verified successfully. Your account is now active.",
+                    "user_id": user.id,  # Optionally include user ID
+                    "is_verified": True
+                }, status=status.HTTP_200_OK)
+                
+            # Code doesn't match
+            return Response({
+                "error": "Invalid verification code. Please check and try again."
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
+        except Exception as e:
+            # Log the error (remove in production)
+            print(f"Verification error: {str(e)}")
+            return Response({
+                "error": "Account verification failed. Please contact support."
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
 
-        if not email or not otp:
-            return Response({"error": "Missing email or OTP"}, status=status.HTTP_400_BAD_REQUEST)
+class NV(APIView):
+    permission_classes = [AllowAny]
 
-        user = get_object_or_404(CustomUser, institutional_email=email)
-
-        if user.verification_code == otp:
-            user.is_verified = True
-            user.verification_code = None  # Clears code after verification
-            user.save()
-            return Response({"message": "OTP verified successfully. Your account is now active."}, status=status.HTTP_200_OK)
-
-        return Response({"error": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request):
+        print("The data received from the Frontend is: ", request.data)
+        return Response({"message": "Registration successful."}, status=status.HTTP_201_CREATED)
 
 class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all()
@@ -247,20 +330,20 @@ class UpdateProfileView(APIView):
 class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
 
-def post(self, request):
-    user = request.user
-    current = request.data.get("currentPassword")
-    new = request.data.get("newPassword")
+    def post(self, request):
+        user = request.user
+        current = request.data.get("currentPassword")
+        new = request.data.get("newPassword")
 
-    if not current or not new:
-        return Response({"error": "Both current and new passwords are required."}, status=400)
+        if not current or not new:
+            return Response({"error": "Both current and new passwords are required."}, status=400)
 
-    if not user.check_password(current):
-        return Response({"error": "Current password is incorrect."}, status=400)
+        if not user.check_password(current):
+            return Response({"error": "Current password is incorrect."}, status=400)
 
-    if len(new) < 8:
-        return Response({"error": "New password must be at least 8 characters long."}, status=400)
+        if len(new) < 8:
+            return Response({"error": "New password must be at least 8 characters long."}, status=400)
 
-    user.set_password(new)
-    user.save()
-    return Response({"message": "Password changed successfully."})
+        user.set_password(new)
+        user.save()
+        return Response({"message": "Password changed successfully."})
