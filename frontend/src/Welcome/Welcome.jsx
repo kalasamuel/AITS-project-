@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Welcome.css';
 import { BACKEND_URL } from '../config';
+import { apiClient } from '../api';
 
 const Welcome = () => {
   const navigate = useNavigate();
@@ -69,13 +70,8 @@ const Welcome = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${BACKEND_URL}/auth/login/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
+      const response = await apiClient.post(`${BACKEND_URL}/auth/login/`, formData)
+      const data = response.data;
       if (response.status === 200) {
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
@@ -100,7 +96,7 @@ const Welcome = () => {
     }
   };
 
-  // Handle Sign Up
+  // Handle Sign Up - Updated to use apiClient
   const handleSignUp = async (e) => {
     e.preventDefault();
     setMessage('');
@@ -118,14 +114,6 @@ const Welcome = () => {
       setError('All fields are required.');
       return;
     }
-    //if (formData.password.length < 8) {
-      //setError('Password must be at least 8 characters long.');
-    //  return;
-   // }
-   // if (!/[!@#$%^&*]/.test(formData.password)) {
-    //  setError('Password must contain at least one special character (!@#$%^&*).');
-     // return;
-   // }
     if (formData.password !== formData.confirm_password) {
       setError('Passwords do not match.');
       return;
@@ -143,9 +131,9 @@ const Welcome = () => {
       return;
     }
 
-    // Submit Registration
+    // Submit Registration using apiClient
     try {
-      const response = await fetch('/auth/register/', {
+      const response = await fetch(`${BACKEND_URL}/auth/register/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
