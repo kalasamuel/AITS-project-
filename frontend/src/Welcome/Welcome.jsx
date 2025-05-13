@@ -259,6 +259,7 @@ const Welcome = () => {
               <div className="form-group">
                 <label>Role</label>
                 <select name="role" value={formData.role} onChange={handleChange} required>
+                  <option value="" disabled>Select Role</option>
                   <option value="student">Student</option>
                   <option value="lecturer">Lecturer</option>
                   <option value="registrar">Registrar</option>
