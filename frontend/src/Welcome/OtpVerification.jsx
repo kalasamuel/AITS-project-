@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import "./OtpVerification.css";
+import { BACKEND_URL } from '../config';
 
 const OtpVerification = () => {
   const [otp, setOtp] = useState("");
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Get email from URL parameters on component mount
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const emailParam = searchParams.get('institutional_email');
@@ -20,28 +23,40 @@ const OtpVerification = () => {
     }
   }, [location]);
 
+  // Handle OTP verification form submission
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     setError("");
     setMessage("");
+    setIsSubmitting(true);
 
     try {
-      const response = await fetch("/accounts/verify/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email, otp: otp }),
+      const response = await fetch(`${BACKEND_URL}/api/accounts/verify/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({email, otp}),
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (e) {
+        data = { error: "Failed to parse server response" };
+      }
 
-      if (response.status === 200) {
+      if (response.ok) {
         setMessage(data.message || "OTP Verified Successfully! Redirecting...");
+        // Store verification status in localStorage or context if needed
+        localStorage.setItem('isVerified', 'true');
         setTimeout(() => navigate('/welcome?verified=true'), 3000);
       } else {
         setError(data.error || "Invalid Verification Code. Please try again.");
       }
     } catch (error) {
+      console.error("Verification error:", error);
       setError("An error occurred during verification. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -57,11 +72,17 @@ const OtpVerification = () => {
             type="text"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
+            maxLength="6"
+            placeholder="Enter 6-digit code"
             required
           />
         </div>
-        <button type="submit" className="verify-button">
-          Verify Code
+        <button
+          type="submit"
+          className="verify-button"
+          disabled={isSubmitting || !otp}
+        >
+          {isSubmitting ? "Verifying..." : "Verify Code"}
         </button>
       </form>
 
