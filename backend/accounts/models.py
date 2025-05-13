@@ -38,7 +38,7 @@ class CustomUser(AbstractUser):
         ('lecturer', 'Lecturer'),
         ('registrar', 'Registrar'),
     )
-    username = None  # Remove the username field
+    username = None #models.CharField(max_length=50)  # Remove the username field
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
