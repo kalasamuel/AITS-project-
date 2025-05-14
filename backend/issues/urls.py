@@ -28,5 +28,5 @@ urlpatterns = [
     #path("assigned/", AssignedIssuesView.as_view(), name="assigned-issues"),
     path("assigned/", RegistrarAssignedIssuesView.as_view(), name="registrar-assigned-issues"),
     path("lecturer/notifications/", LecturerNotificationsView.as_view(), name="lecturer-notifications"),
-
+    path("lecturer/student-updates/", LecturerStudentUpdatesView.as_view(), name="lecturer-student-updates"),
 ]
