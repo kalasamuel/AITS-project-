@@ -203,3 +203,16 @@ class RegistrarAssignedIssuesView(APIView):
         assigned_issues = Issue.objects.filter(assigned_to__isnull=False)
         serializer = IssueSerializer(assigned_issues, many=True)
         return Response(serializer.data, status=200)
+
+class LecturerNotificationsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        if user.role != "lecturer":
+            return Response({"error": "Unauthorized"}, status=403)
+
+        notifications = Notification.objects.filter(recipient=user).order_by("-created_at")
+        serializer = NotificationSerializer(notifications, many=True)
+        return Response(serializer.data)
+
