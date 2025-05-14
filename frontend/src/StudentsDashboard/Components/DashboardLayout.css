@@ -55,26 +55,3 @@
 .content.sidebar-open {
   margin-left: 250px;
 }
-
-@media (max-width: 1024px) {
-  .sidebar {
-    width: 200px;
-    left: -200px;
-  }
-  .sidebar.open {
-    left: 0;
-  }
-  .content.sidebar-open {
-    margin-left: 200px;
-  }
-}
-
-@media (max-width: 768px) {
-  .content {
-    margin-left: 0;
-  }
-
-  .content.sidebar-open {
-    margin-left: 250px;
-  }
-}
