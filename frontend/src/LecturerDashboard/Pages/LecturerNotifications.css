@@ -73,3 +73,75 @@
 .new-issue-button:hover {
     background-color: darkblue;
 }
+
+/* Add to: d:\computer_science\Sem-2\Main Project\gitwhat\AITS-project-\frontend\src\LecturerDashboard\Pages\LecturerNotifications.css */
+
+.main-content {
+  padding: 30px;
+  background: #f7f7f7;
+  min-height: 100vh;
+}
+
+.lecturer-section {
+  background: #fff;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.notifications-table h3 {
+  margin-bottom: 15px;
+}
+
+.notifications-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.notifications-table th,
+.notifications-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.notifications-table th {
+  background: #f0f0f0;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+}
+
+.student-updates {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.student-updates h2 {
+  margin-bottom: 15px;
+}
+
+.updates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.update-item {
+  background: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 12px;
+}
+
+.update-item strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
