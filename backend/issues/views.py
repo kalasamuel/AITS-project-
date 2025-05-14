@@ -216,3 +216,25 @@ class LecturerNotificationsView(APIView):
         serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data)
 
+class LecturerStudentUpdatesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        if user.role != "lecturer":
+            return Response({"error": "Unauthorized"}, status=403)
+
+        # Example: Fetch issues assigned to this lecturer that are not resolved
+        updates = Issue.objects.filter(assigned_to=user).exclude(status="resolved").order_by('-created_at')
+        # You can customize the serializer or fields as needed
+        data = [
+            {
+                "institutional_email": issue.student.institutional_email,
+                "issue_type": issue.issue_type,
+                "message": issue.description,
+                "status": issue.status,
+                "created_at": issue.created_at,
+            }
+            for issue in updates
+        ]
+        return Response({"updates": data}, status=200)
