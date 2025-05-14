@@ -1,8 +1,8 @@
 .notifications-container {
     width: 100%;
-    max-width: 1000px;
+    max-width: calc(100% - 400px);
     margin-top: 100px;
-    margin-left: 280px;
+    margin-left: 350px;
     padding: 24px;
     background-color: #f9f9f9;
     border: 1px solid #ccc;
