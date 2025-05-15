@@ -110,8 +110,8 @@ ROOT_URLCONF = 'aits_project.urls'
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR/'staticfiles'
-#STATICFILES_DIRS = [
-    #os.path.join(STATIC_ROOT, 'reactapp'),
+STATICFILES_DIRS = [
+    os.path.join(STATIC_ROOT, 'reactapp'),
 ]
 
 TEMPLATES = [
