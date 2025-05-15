@@ -77,7 +77,7 @@
 }
 
 /* Responsive Design */
-@media (max-width: 900px) {
+/*@media (max-width: 900px) {
   .sidebar {
     width: 200px;
   }
@@ -88,7 +88,7 @@
     font-size: 1rem;
     padding: 10px 10px;
   }
-}
+} */
 
 @media (max-width: 600px) {
   .sidebar {
