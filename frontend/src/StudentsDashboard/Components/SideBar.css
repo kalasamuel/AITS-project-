@@ -1,4 +1,128 @@
+/* Sidebar Container */
 .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 250px;
+  background: #232946;
+  color: #fff;
+  box-shadow: 2px 0 12px rgba(44, 62, 80, 0.08);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  transition: transform 0.3s cubic-bezier(.4,2,.6,1), width 0.2s;
+  transform: translateX(0);
+}
+
+.sidebar:not(.open) {
+  transform: translateX(-100%);
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  align-self: flex-end;
+  margin: 16px 18px 0 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-button:hover {
+  color: #eebbc3;
+}
+
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  margin-top: 32px;
+  gap: 8px;
+  padding: 0 18px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  color: #eebbc3;
+  font-size: 1.08rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.18s, color 0.18s;
+  margin-bottom: 2px;
+}
+
+.nav-link .nav-icon {
+  font-size: 1.4rem;
+  color: #b8c1ec;
+  transition: color 0.18s;
+}
+
+.nav-link:hover, .nav-link.active {
+  background: #eebbc3;
+  color: #232946;
+}
+
+.nav-link.active .nav-icon,
+.nav-link:hover .nav-icon {
+  color: #232946;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .sidebar {
+    width: 200px;
+  }
+  .sidebar-links {
+    padding: 0 10px;
+  }
+  .nav-link {
+    font-size: 1rem;
+    padding: 10px 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    width: 80vw;
+    min-width: 160px;
+    max-width: 320px;
+    box-shadow: 4px 0 16px rgba(44, 62, 80, 0.13);
+  }
+  .sidebar-links {
+    margin-top: 18px;
+    gap: 4px;
+  }
+  .close-button {
+    font-size: 2.2rem;
+    margin: 10px 12px 0 0;
+  }
+}
+
+@media (max-width: 400px) {
+  .sidebar {
+    width: 100vw;
+    min-width: 0;
+    border-radius: 0;
+  }
+  .sidebar-links {
+    padding: 0 4px;
+  }
+  .nav-link {
+    font-size: 0.98rem;
+    padding: 8px 6px;
+  }
+}
+
+/*.sidebar {
   width: 250px;
   height: calc(100vh - 70px);
   background-color: #2D3748;
@@ -89,5 +213,5 @@
     padding: 0.7rem 1rem;
   }
 }
-
+*/
 
