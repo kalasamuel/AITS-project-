@@ -105,7 +105,7 @@ const IssueSubmission = () => {
     try {
       await apiClient.post('/issues/submit-issue/', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          //'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
       });
