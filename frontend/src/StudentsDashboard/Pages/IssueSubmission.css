@@ -48,7 +48,7 @@ select {
 input[type="text"]:focus,
 textarea:focus,
 select:focus {
-  border-color: #38bdf8;
+  border-color: #0000ff;
   outline: none;
   background: #fff;
 }
@@ -99,12 +99,12 @@ select[size] {
 
 /* File Drop Zone */
 .file-drop-zone {
-  border: 2px dashed #38bdf8;
+  border: 2px dashed #0000ff;
   border-radius: 8px;
   background: #f0f9ff;
   padding: 18px 10px;
   text-align: center;
-  color: #0ea5e9;
+  color: #0000ff;
   cursor: pointer;
   transition: border 0.2s, background 0.2s;
   margin-bottom: 2px;
@@ -112,21 +112,21 @@ select[size] {
 
 .file-drop-zone:hover,
 .file-drop-zone:focus {
-  border-color: #0ea5e9;
+  border-color: #0000ff;
   background: #e0f2fe;
 }
 
 .file-drop-zone p {
   margin: 0;
   font-size: 1rem;
-  color: #0ea5e9;
+  color: #0000ff;
 }
 
 /* Submit Button */
 .submit-button {
   width: 100%;
   padding: 12px 0;
-  background: linear-gradient(90deg, #38bdf8 0%, #06b6d4 100%);
+  background: linear-gradient(90deg, #0000ff 0%, #0000ff 100%);
   color: #fff;
   font-size: 1.13rem;
   font-weight: 600;
