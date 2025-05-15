@@ -146,7 +146,7 @@ const IssueSubmission = () => {
   };
 
   return (
-    <div className="issue-submission-container">
+    <form className="issue-submission-container" onSubmit={handleSubmit}>
       <h1>Issue Submission Form</h1>
       {showPopup && <div className="notification-popup">{message}</div>}
       {backendError && <p className="error-message">{backendError}</p>}
@@ -173,6 +173,7 @@ const IssueSubmission = () => {
           }}
           required
         >
+          <option value="" disabled>Select</option>
           {filteredIssueTypes.map((type) => (
             <option key={type.value} value={type.value}>
               {type.label}
@@ -203,6 +204,7 @@ const IssueSubmission = () => {
           }}
           required
         >
+          <option value="" disabled>Select</option>
           {filteredCourseCodes.map((code) => (
             <option key={code} value={code}>
               {code}
@@ -282,7 +284,7 @@ const IssueSubmission = () => {
           <button type="submit" className="submit-button" disabled={loading} onClick={handleSubmit}>
             {loading ? 'Submitting...' : 'Submit'}
           </button>
-        </div>
+        </form>
       );
     };
     
