@@ -1,10 +1,24 @@
 from rest_framework import serializers
 from .models import Issue, Enrollment, Course, Assignment, Notification
 from rest_framework.response import Response
+from accounts.models import CustomUser
 
+class UserSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'registration_number']
+
+class CourseSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = "__all__"
+        
 class IssueSerializer(serializers.ModelSerializer):
+    student = UserSimpleSerializer(read_only=True)
+    assigned_to = UserSimpleSerializer(read_only=True)
+    course = CourseSimpleSerializer(read_only=True)
     course_code = serializers.CharField(write_only=True)
-    student_name = serializers.CharField(source='student.institutional_email', read_only=True)
+    student_name = serializers.CharField(read_only=True)
     registration_number = serializers.SerializerMethodField()
     resolution_time = serializers.SerializerMethodField()
     class Meta:
