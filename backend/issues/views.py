@@ -181,7 +181,7 @@ class AssignedIssuesView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        if request.user.role == 'lecturer':
+        if request.user.role == 'lecturer' or request.user.role == 'registrar':
             # Fetch only the issues assigned to this specific lecturer
             assigned_issues = Issue.objects.filter(assigned_to=request.user)
             serializer = IssueSerializer(assigned_issues, many=True)
