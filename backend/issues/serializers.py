@@ -6,7 +6,7 @@ from accounts.models import CustomUser
 class UserSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'registration_number']
+        fields = ['first_name', 'last_name', 'student_number']
 
 class CourseSimpleSerializer(serializers.ModelSerializer):
     class Meta:
