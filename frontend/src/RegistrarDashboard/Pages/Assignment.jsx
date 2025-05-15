@@ -96,7 +96,7 @@ const AssignmentPage = () => {
                                     >
                                         <option value="">Select Lecturer</option>
                                         {lecturers.map(lect => (
-                                            <option key={lect.id} value={lect.id}>
+                                            <option key={lect.lecturer_id} value={lect.lecturer_id}>
                                                 {lect.first_name} {lect.last_name}
                                             </option>
                                         ))}
