@@ -163,19 +163,22 @@ const IssueSubmission = () => {
         />
         {fieldErrors.issueType && <p className="field-error">{fieldErrors.issueType}</p>}
         {showIssueTypeDropdown && (
-          <select
-            id="issueType"
-            size="4"
-            value={issueType}
-            onChange={(e) => setIssueType(e.target.value)}
-            required
-          >
-            {filteredIssueTypes.map((type) => (
-              <option key={type.value} value={type.value} onClick={() => handleIssueTypeOptionClick(type)}>
-                {type.label}
-              </option>
-            ))}
-          </select>
+        <select
+          id="issueType"
+          size="4"
+          value={issueType}
+          onChange={e => {
+            const selected = issueTypes.find(type => type.value === e.target.value);
+            if (selected) handleIssueTypeOptionClick(selected);
+          }}
+          required
+        >
+          {filteredIssueTypes.map((type) => (
+            <option key={type.value} value={type.value}>
+              {type.label}
+            </option>
+          ))}
+        </select>
         )}
       </div>
 
@@ -191,19 +194,21 @@ const IssueSubmission = () => {
         />
         {fieldErrors.courseCode && <p className="field-error">{fieldErrors.courseCode}</p>}
         {showCourseCodeDropdown && (
-          <select
-            id="courseCode"
-            size="4"
-            value={courseCode}
-            onChange={(e) => setCourseCode(e.target.value)}
-            required
-          >
-            {filteredCourseCodes.map((code) => (
-              <option key={code} value={code} onClick={() => handleCourseCodeOptionClick(code)}>
-                {code}
-              </option>
-            ))}
-          </select>
+        <select
+          id="courseCode"
+          size="4"
+          value={courseCode}
+          onChange={e => {
+            handleCourseCodeOptionClick(e.target.value);
+          }}
+          required
+        >
+          {filteredCourseCodes.map((code) => (
+            <option key={code} value={code}>
+              {code}
+            </option>
+          ))}
+        </select>
         )}
       </div>
 
