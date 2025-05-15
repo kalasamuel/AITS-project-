@@ -29,14 +29,14 @@ const AssignedIssues = () => {
     fetchAssignedIssues();
   }, []);
 
-  const filteredIssues = issues.filter((issue) => {
-    const searchValue = searchTerm.toLowerCase();
-    return (
-      issue.student_name.toLowerCase().includes(searchValue) ||
-      (issue.registration_number && issue.registration_number.toLowerCase().includes(searchValue)) ||
-      issue.issue_type.toLowerCase().includes(searchValue)
-    );
-  });
+const filteredIssues = issues.filter((issue) => {
+  const searchValue = searchTerm.toLowerCase();
+  return (
+    (issue.student_name && issue.student_name.toLowerCase().includes(searchValue)) ||
+    (issue.registration_number && issue.registration_number.toLowerCase().includes(searchValue)) ||
+    (issue.issue_type && issue.issue_type.toLowerCase().includes(searchValue))
+  );
+});
 
   const sortedIssues = [...filteredIssues].sort((a, b) => {
     if (sortBy === "date") {
