@@ -12,11 +12,11 @@ const LecturerNotifications = () => {
     const fetchNotifications = async () => {
       try {
         const token = localStorage.getItem('access_token');
-        const notifRes = await apiClient.get('/lecturer/notifications/', {
+        const notifRes = await apiClient.get('/issues/lecturer/notifications/', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setNotifications(notifRes.data.notifications || []);
-        const updatesRes = await apiClient.get('/lecturer/student-updates/', {
+        const updatesRes = await apiClient.get('/issues/lecturer/student-updates/', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setStudentsUpdates(updatesRes.data.updates || []);
