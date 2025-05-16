@@ -29,6 +29,24 @@ const AssignedIssues = () => {
     fetchAssignedIssues();
   }, []);
 
+  const handleIssueStatusUpdate = async (issueId, status) => {
+    try {
+      const response = await apiClient.patch(`/issues/lecturer/issues/${issueId}/resolve/`, 
+        {status},
+        {headers: {Authorization: `Bearer ${localStorage.getItem("access_token")}`,},}
+      );
+
+      // Update the local issues state
+      setIssues((prevIssues) =>
+      prevIssues.map((issue)=>
+        issue.issue_id === issueId ? { ...issue, status: response.data.status } : issue 
+      )
+    );
+  } catch (error) {
+    console.error("Failed to update issue status:", error);
+    setError("Failed to update isssue status. Please try again later. ");}
+  };
+
 const filteredIssues = issues.filter((issue) => {
   const searchValue = searchTerm.toLowerCase();
   return (
@@ -77,7 +95,7 @@ const filteredIssues = issues.filter((issue) => {
       ) : issues.length === 0 ? (
         <p>No assigned issues found.</p>
       ) : (
-        <table>
+        <table className="issues-table">
           <thead>
             <tr>
               <th>Issue Type</th>
@@ -85,6 +103,7 @@ const filteredIssues = issues.filter((issue) => {
               <th>Student Name</th>
               <th>Status</th>
               <th>Date Submitted</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -95,6 +114,29 @@ const filteredIssues = issues.filter((issue) => {
                 <td>{issue.student_name}</td>
                 <td>{issue.status.replace("_", " ")}</td>
                 <td>{new Date(issue.created_at).toLocaleString()}</td>
+                <td>
+                  <button
+                    className="resolve-btn"
+                    onClick={() => handleIssueStatusUpdate(issue.issue_id, "resolved")}
+                    disabled={issue.status === "resolved"}
+                  >
+                    Resolve
+                  </button>
+                  <button 
+                    className="pending-btn"
+                    onClick={()=> handleIssueStatusUpdate(issue.issue_id, "in_progress")}
+                    disabled={issue.status === "in_progress"}
+                  >
+                    Mark Pending
+                  </button>
+                  <button
+                    className="reject-btn"
+                    onClick={() => handleIssueStatusUpdate(issue.issue_id, "rejected")}
+                    disabled={issue.status === "rejected"}                    
+                  >
+                    Reject
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
