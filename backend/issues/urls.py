@@ -29,4 +29,5 @@ urlpatterns = [
     path("assigned/", RegistrarAssignedIssuesView.as_view(), name="registrar-assigned-issues"),
     path("lecturer/notifications/", LecturerNotificationsView.as_view(), name="lecturer-notifications"),
     path("lecturer/student-updates/", LecturerStudentUpdatesView.as_view(), name="lecturer-student-updates"),
+    path("lecturer/issues/<int:issue_id>/resolve/", LecturerIssueResolutionView.as_view(), name="resolve-issue"),
 ]
