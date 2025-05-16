@@ -107,6 +107,7 @@ class Issue(models.Model):
     ('open', 'Open'),
     ('in_progress', 'In Progress'),
     ('resolved', 'Resolved'),
+    ('rejected', 'Rejected'),
     ]
     
     issue_id = models.AutoField(primary_key=True)
