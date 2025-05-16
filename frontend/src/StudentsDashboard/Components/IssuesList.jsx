@@ -15,6 +15,7 @@ const IssuesList = ({ issues }) => {
   const filteredIssues = issues.filter(
     (issue) =>
       (filter === "All" || issue.status === filter) &&
+      issue.title &&
       issue.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 

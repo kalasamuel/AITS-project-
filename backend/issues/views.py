@@ -164,7 +164,8 @@ class StudentIssuesView(APIView):
         student = request.user
         print("Authenticated user:", request.user)
         print("User role:", request.user.role)
-        issues = Issue.objects.filter(student=student).order_by('-created_at')
+        issues = Issue.objects.filter(student=student,
+                                      status__in =["resolved", "rejected", "in_progress"] ).order_by('-created_at')
         serializer = IssueSerializer(issues, many=True)
         return Response(serializer.data, status=200)
 
