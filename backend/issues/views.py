@@ -238,3 +238,27 @@ class LecturerStudentUpdatesView(APIView):
             for issue in updates
         ]
         return Response({"updates": data}, status=200)
+    
+class LecturerIssueResolutionView(APIView):
+    permissions_classes = [IsAuthenticated]
+    def patch(self,request, issue_id):
+        try:
+            user = request.user
+            issue = Issue.objects.get(issue_id=issue_id, assigned_to=user)
+            
+            new_status = request.data.get("status")
+            if new_status not in ["resolved", "in_progress", "rejected"]:
+                return Response({"error": "Invalid status value."}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Update the issue status
+            issue.status = new_status
+            issue.save()
+            
+            # Return the updated issue data
+            serializer= IssueSerializer(issue)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except Issue.DoesNotExist:
+            return Response({"error": "Issue not found or not assigned to this lecturer."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
