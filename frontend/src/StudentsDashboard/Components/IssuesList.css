@@ -1,4 +1,196 @@
 .i-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 16px;
+  padding-top: 64px;   /* ALways add this property
+  to all your CSS pages to prevent the position: fixed;
+  of the navbar from hiding staff */
+}
+
+.search-sort {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Search Bar */
+.search-bar-advanced {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 600px;
+  min-width: 300px;
+  margin-right: 16px;
+}
+
+.long-search,
+.search-input {
+  width: 100%;
+  min-width: 300px;
+  max-width: 600px;
+  padding: 8px 36px 8px 32px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  background: #f9f9f9;
+  transition: border 0.2s;
+}
+
+.search-input:focus {
+  box-shadow: 0 0 0 2px #3182ce33;
+  border: 1.5px solid #3182ce;
+  outline: none;
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 1.3em;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+/* Filter Dropdown */
+.filter-dropdown {
+  position: relative;
+  min-width: 140px;
+  width: 180px;
+    background: #ffeeba !important;
+  border: 1px solid red !important;
+}
+
+.filter-select {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 8px 32px 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  background: #fff;
+  cursor: pointer;
+}
+
+.dropdown-arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 1.1em;
+  color: #888;
+  z-index: 2;
+}
+
+/* Issues List */
+.modern-issues-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 24px;
+  justify-content: flex-start;
+}
+
+.issue-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 20px;
+  min-width: 260px;
+  max-width: 340px;
+  flex: 1 1 260px;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+  outline: none;
+  margin-bottom: 12px;
+}
+.issue-card:focus, .issue-card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.13);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.issue-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.issue-type {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 1.1em;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.95em;
+  font-weight: 500;
+  color: #fff;
+  text-transform: capitalize;
+}
+.status-open { background: #f6ad55; }
+.status-in_progress { background: #4299e1; }
+.status-resolved { background: #48bb78; }
+.status-rejected { background: #e53e3e; }
+
+.issue-card-body {
+  margin-top: 8px;
+}
+.issue-description {
+  color: #4a5568;
+  margin-bottom: 12px;
+}
+.issue-meta {
+  font-size: 0.95em;
+  color: #718096;
+}
+.department {
+  background: #edf2f7;
+  padding: 2px 8px;
+  border-radius: 8px;
+  margin-right: 6px;
+}
+
+.issue-details {
+  margin-top: 16px;
+  background: #f7fafc;
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.error-message {
+  color: #e53e3e;
+  margin-bottom: 12px;
+}
+.no-issues {
+  color: #718096;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .search-sort {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .search-bar-advanced,
+  .long-search {
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+
+/*.i-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -313,5 +505,4 @@
     }
 }
   
-
-  
+*/
