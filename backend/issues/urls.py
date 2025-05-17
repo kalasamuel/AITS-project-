@@ -30,4 +30,5 @@ urlpatterns = [
     path("lecturer/notifications/", LecturerNotificationsView.as_view(), name="lecturer-notifications"),
     path("lecturer/student-updates/", LecturerStudentUpdatesView.as_view(), name="lecturer-student-updates"),
     path("lecturer/issues/<int:issue_id>/resolve/", LecturerIssueResolutionView.as_view(), name="resolve-issue"),
-]
+    path("student/all/", StudentAllIssuesView.as_view(), name="student-all-issues"),
+    ]

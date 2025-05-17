@@ -263,3 +263,12 @@ class LecturerIssueResolutionView(APIView):
             return Response({"error": "Issue not found or not assigned to this lecturer."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+        
+class StudentAllIssuesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        student = request.user
+        issues = Issue.objects.filter(student=student).order_by('-created_at')
+        serializer = IssueSerializer(issues, many=True)
+        return Response(serializer.data, status=200)
