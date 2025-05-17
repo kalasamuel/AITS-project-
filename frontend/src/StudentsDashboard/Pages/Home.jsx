@@ -4,11 +4,29 @@ import { useNavigate } from "react-router-dom";
 import IssuesList from "../Components/IssuesList";
 import './Home.css';
 
+function formatStatus(status) {
+  if (!status) return "";
+  return status
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+function formatIssueType(issueType) {
+  if (!issueType) return "";
+  const formatted = issueType
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+  return formatted.length > 14 ? formatted.slice(0, 14) + "..." : formatted;
+}
+
 const Home = () => {
   const [issues, setIssues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchIssues = async () => {
@@ -27,6 +45,7 @@ const Home = () => {
     };
     fetchIssues();
   }, []);
+
   return (
     <div className="student-home-container">
       <div className="header-row">
@@ -55,9 +74,9 @@ const Home = () => {
                 aria-pressed="false"
               >
                 <div className="issue-card-header">
-                  <span className="issue-type">{issue.issue_type}</span>
+                  <span className="issue-type">{formatIssueType(issue.issue_type)}</span>
                   <span className={`status-badge status-${issue.status.toLowerCase().replace(/\s+/g, '-')}`}>
-                    {issue.status}
+                    {formatStatus(issue.status)}
                   </span>
                 </div>
                 <div className="issue-card-body">
