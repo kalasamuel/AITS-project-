@@ -3,6 +3,7 @@ import './NavBar.css';
 import { useNavigate } from 'react-router-dom';
 import { MdMenu } from 'react-icons/md';
 import { apiClient } from "../../api";
+import { FiLogOut, FiCamera } from 'react-icons/fi';
 
 function NavBar({ toggleSidebar }) {
   const navigate = useNavigate();
@@ -55,35 +56,42 @@ function NavBar({ toggleSidebar }) {
   };
 
   return (
-    <nav className="navbar">
-      <button className="hamburger-button" onClick={toggleSidebar} aria-label="Toggle Sidebar">
-        <MdMenu size={24} />
-      </button>
-
-      <div className="navbar-content">
-        <h1 className="aits">ACADEMIC ISSUE TRACKING SYSTEM</h1>
+    <nav className="navbar modern-navbar">
+      <div className="navbar-section navbar-left">
+        <button className="hamburger-button" onClick={toggleSidebar} aria-label="Toggle Sidebar">
+          <MdMenu size={28} />
+        </button>
+        <span className="navbar-brand">AITS</span>
       </div>
 
-      <div className="navbar-profile">
-        <label htmlFor="profile-upload" className="navbar-img-wrapper" title="Click to change profile picture">
-          <img
-            src={profilePic || "/path/to/default-placeholder.png"}
-            alt="Profile"
-            className="navbar-img"
-            onClick={() => fileInputRef.current.click()}
-          />
-        </label>
-        <input
-          id="profile-upload"
-          ref={fileInputRef}
-          type="file"
-          style={{ display: 'none' }}
-          accept="image/*"
-          onChange={handleProfilePicUpload}
-        />
+      <div className="navbar-section navbar-center">
+        <h1 className="navbar-title">Academic Issue Tracking System</h1>
+      </div>
 
+      <div className="navbar-section navbar-right">
+        <div className="navbar-profile-group">
+          <div className="navbar-img-wrapper" title="Change profile picture">
+            <img
+              src={profilePic || "/path/to/default-placeholder.png"}
+              alt="Profile"
+              className="navbar-img"
+              onClick={() => fileInputRef.current.click()}
+            />
+            <span className="profile-camera-icon" onClick={() => fileInputRef.current.click()}>
+              <FiCamera size={18} />
+            </span>
+          </div>
+          <input
+            id="profile-upload"
+            ref={fileInputRef}
+            type="file"
+            style={{ display: 'none' }}
+            accept="image/*"
+            onChange={handleProfilePicUpload}
+          />
+        </div>
         <button className="logout-button" onClick={handleLogout} aria-label="Log Out">
-          Log Out
+          <span className="logout-text">Log Out</span>
         </button>
       </div>
     </nav>
