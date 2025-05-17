@@ -29,7 +29,9 @@ function StudentRoutes({ isAuthenticated, profilePic, setProfilePic }) {
                 path="profileandsettings"
                 element={isAuthenticated ? <ProfileAndSettings profilePic={profilePic} setProfilePic={setProfilePic} /> : <Navigate to="/welcome" />}
             />
+            <Route path="issuedetails/:issue_id" element={<IssueDetails />} />
         </Routes>
+        
     );
 }
 
