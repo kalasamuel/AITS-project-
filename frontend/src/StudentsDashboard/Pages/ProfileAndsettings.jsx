@@ -57,7 +57,7 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
         const formData = new FormData();
         formData.append("profile_picture", file);
 
-        const response = await apiClient.post(
+        await apiClient.post(
           "/accounts/profile/upload-picture/",
           formData,
           {
@@ -79,44 +79,16 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
     }
   };
 
-  const handleBioDataChange = (e) => {
-    const { name, value } = e.target;
-    setBioData({ ...bioData, [name]: value });
-  };
-
-  const handleSaveBioData = async () => {
-    try {
-      const token = localStorage.getItem("access_token");
-      await apiClient.put(
-        "/accounts/profile/update/",
-        {
-          first_name: bioData.first_name,
-          last_name: bioData.last_name,
-          institutional_email: bioData.email,
-          student_number: bioData.student_number,
-          program: bioData.program,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setSuccessMessage("Bio data saved successfully!");
-      setErrorMessage("");
-    } catch (error) {
-      console.error("Failed to save bio data:", error);
-      setErrorMessage("Failed to save bio data. Please try again.");
-      setSuccessMessage("");
-    }
-  };
-
   const handlePasswordsChange = (e) => {
     const { name, value } = e.target;
     setPasswords({ ...passwords, [name]: value });
   };
 
-  const handleChangePassword = async () => {
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
     if (passwords.newPassword !== passwords.confirmPassword) {
       setErrorMessage("Passwords do not match!");
+      setSuccessMessage("");
       return;
     }
 
@@ -143,53 +115,81 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
   };
 
   return (
-    <div className="profile-container">
-      <h1>Profile and Settings</h1>
-      <div className="profile-pic-section">
-        <label htmlFor="profile-pic-input" className="profile-pic">
-          {profilePic ? (
-            <img src={profilePic} alt="Profile" className="profile-img" />
-          ) : (
-            <span className="placeholder">Click to upload</span>
-          )}
-        </label>
-        <input
-          id="profile-pic-input"
-          name="profilePic"
-          type="file"
-          accept="image/*"
-          onChange={handleProfilePicChange}
-          style={{ display: "none" }}
-        />
-      </div>
-      <div className="bio-data">
-        <h2>Bio Data</h2>
-        <label>First Name</label>
-        <input type="text" name="first_name" value={bioData.first_name} onChange={handleBioDataChange} />
-        <label>Last Name</label>
-        <input type="text" name="last_name" value={bioData.last_name} onChange={handleBioDataChange} />
-        <label>Email</label>
-        <input type="email" name="email" value={bioData.email} onChange={handleBioDataChange} />
-        <label>Student Number</label>
-        <input type="text" name="student_number" value={bioData.student_number} onChange={handleBioDataChange} />
-        <label>Program</label>
-        <input type="text" name="program" value={bioData.program} onChange={handleBioDataChange} />
-        <button className="save-btn" onClick={handleSaveBioData}>Save</button>
-      </div>
+    <div className="profile-outer-wrapper">
+      <div className="profile-container">
+        <h1 className="profile-title">Profile & Settings</h1>
+        {loading ? (
+          <div className="profile-loading">Loading...</div>
+        ) : (
+          <>
+            <section className="profile-pic-section">
+              <label htmlFor="profile-pic-input" className="profile-pic-label" tabIndex={0}>
+                {profilePic ? (
+                  <img src={profilePic} alt="Profile" className="profile-img" />
+                ) : (
+                  <span className="profile-placeholder">Click to upload</span>
+                )}
+              </label>
+              <input
+                id="profile-pic-input"
+                name="profilePic"
+                type="file"
+                accept="image/*"
+                onChange={handleProfilePicChange}
+                style={{ display: "none" }}
+              />
+            </section>
 
-      <div className="change-password">
-        <h2>Change Password</h2>
-        <label>Current Password</label>
-        <input type="password" name="currentPassword" value={passwords.currentPassword} onChange={handlePasswordsChange} />
-        <label>New Password</label>
-        <input type="password" name="newPassword" value={passwords.newPassword} onChange={handlePasswordsChange} />
-        <label>Confirm New Password</label>
-        <input type="password" name="confirmPassword" value={passwords.confirmPassword} onChange={handlePasswordsChange} />
-        <button className="change-btn" onClick={handleChangePassword}>Change Password</button>
-      </div>
+            <form className="bio-data-form" autoComplete="off">
+              <h2>Bio Data</h2>
+              <div className="form-row">
+                <label htmlFor="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name" value={bioData.first_name} readOnly tabIndex={-1} />
+              </div>
+              <div className="form-row">
+                <label htmlFor="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name" value={bioData.last_name} readOnly tabIndex={-1} />
+              </div>
+              <div className="form-row">
+                <label htmlFor="email">Email</label>
+                <input type="email" id="email" name="email" value={bioData.email} readOnly tabIndex={-1} />
+              </div>
+              <div className="form-row">
+                <label htmlFor="student_number">Student Number</label>
+                <input type="text" id="student_number" name="student_number" value={bioData.student_number} readOnly tabIndex={-1} />
+              </div>
+              <div className="form-row">
+                <label htmlFor="program">Program</label>
+                <input type="text" id="program" name="program" value={bioData.program} readOnly tabIndex={-1} />
+              </div>
+            </form>
 
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+            <form className="change-password-form" onSubmit={handleChangePassword} autoComplete="off">
+              <h2>Change Password</h2>
+              <div className="form-row">
+                <label htmlFor="currentPassword">Current Password</label>
+                <input type="password" id="currentPassword" name="currentPassword" value={passwords.currentPassword} onChange={handlePasswordsChange} />
+              </div>
+              <div className="form-row">
+                <label htmlFor="newPassword">New Password</label>
+                <input type="password" id="newPassword" name="newPassword" value={passwords.newPassword} onChange={handlePasswordsChange} />
+              </div>
+              <div className="form-row">
+                <label htmlFor="confirmPassword">Confirm New Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" value={passwords.confirmPassword} onChange={handlePasswordsChange} />
+              </div>
+              <button className="change-btn" type="submit">Change Password</button>
+            </form>
+
+            {(successMessage || errorMessage) && (
+              <div className="profile-messages">
+                {successMessage && <p className="success-message">{successMessage}</p>}
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
