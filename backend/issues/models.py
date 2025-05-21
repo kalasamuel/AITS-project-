@@ -137,14 +137,33 @@ class Issue(models.Model):
         ordering = ['-created_at']  # Show latest issues first
 
 class Notification(models.Model):
-    '''Represents a notification in the system.'''
+    NOTIFICATION_TYPES = [
+        ('issue', 'Issue'),
+        ('announcement', 'Announcement'),
+        ('reminder', 'Reminder'),
+        ('comment', 'Comment'),
+        ('event', 'Event'),
+        ('finance', 'Finance'),
+        ('rejected', 'Rejected'),
+        ('general', 'General'),
+    ]
+
     notification_id = models.AutoField(primary_key=True)
+    type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES, default='general')
+    title = models.CharField(max_length=255, blank=True, null=True)
     message = models.TextField()
-    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, related_name='issue_notifications') 
+    issue = models.ForeignKey(
+        'Issue', on_delete=models.CASCADE, related_name='issue_notifications', blank=True, null=True
+    )
+    link = models.URLField(blank=True, null=True)
+    due_date = models.DateTimeField(blank=True, null=True)
+    event_date = models.DateTimeField(blank=True, null=True)
+    amount = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     recipient = models.ForeignKey(
         CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='user_notifications'
     )
+
     def __str__(self):
         return f"Notification {self.notification_id}: {self.message[:50]}..."
 
