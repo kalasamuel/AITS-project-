@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { apiClient } from "../../api";
 import "./IssuesList.css";
 
@@ -22,6 +22,7 @@ function formatIssueType(issueType) {
 
 const IssuesList = () => {
   const navigate = useNavigate();
+  const { issue_id } = useParams();
   const [issues, setIssues] = useState([]);
   const [expandedIssue, setExpandedIssue] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -58,6 +59,17 @@ const IssuesList = () => {
     }, 250);
     return () => clearTimeout(handler);
   }, [searchTerm]);
+
+  useEffect(() => {
+    if (issue_id) {
+      setExpandedIssue(Number(issue_id));
+      // Optionally, scroll into view
+      setTimeout(() => {
+        const el = document.getElementById(`issue-card-${issue_id}`);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 300);
+    }
+  }, [issue_id, issues]);
 
   const handleIssueClick = (issueId) => {
     setExpandedIssue((prev) => (prev === issueId ? null : issueId));
@@ -117,12 +129,13 @@ const IssuesList = () => {
             <option value="All">All</option>
             <option value="Resolved">Resolved</option>
             <option value="In Progress">In Progress</option>
+            <option value="Pending">Pending</option>
             <option value="Rejected">Rejected</option>
             <option value="Open">Open</option>
           </select>
           <span className="dropdown-arrow">&#9662;</span>
         </div>
-      </div>      
+      </div>    
       {error && <p className="error-message">{error}</p>}
       {loading ? (
         <div className="loading-container"><p>Loading issues...</p></div>
@@ -132,6 +145,7 @@ const IssuesList = () => {
             filteredIssues.map((issue) => (
               <div
                 key={issue.issue_id}
+                id={`issue-card-${issue.issue_id}`}
                 className={`issue-card status-${issue.status}`}
                 onClick={() => handleIssueClick(issue.issue_id)}
                 tabIndex={0}
@@ -147,7 +161,13 @@ const IssuesList = () => {
                   </span>
                 </div>
                 <div className="issue-card-body">
-                  <p className="issue-description">{issue.description}</p>
+                  <p className="issue-description">
+                    {expandedIssue === issue.issue_id
+                      ? issue.description
+                      : (issue.description && issue.description.length > 45
+                          ? issue.description.slice(0, 45) + "..."
+                          : issue.description)}
+                  </p>
                   <div className="issue-meta">
                     <span className="department">{issue.department}</span>
                   </div>
