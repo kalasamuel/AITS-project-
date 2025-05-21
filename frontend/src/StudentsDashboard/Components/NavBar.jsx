@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './NavBar.css';
 import { useNavigate } from 'react-router-dom';
 import { MdMenu } from 'react-icons/md';
 import { apiClient } from "../../api";
 import { FiLogOut, FiCamera } from 'react-icons/fi';
+import logo from '../../assets/logo.png';
 
-function NavBar({ toggleSidebar }) {
+function NavBar({ toggleSidebar, profilePic, setProfilePic }) {
   const navigate = useNavigate();
-  const [profilePic, setProfilePic] = useState(null);
   const fileInputRef = useRef(null);
 
   const fetchProfilePicture = async () => {
@@ -24,6 +24,7 @@ function NavBar({ toggleSidebar }) {
     }
   };
 
+  // Upload new profile picture and refresh everywhere
   const handleProfilePicUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -55,13 +56,22 @@ function NavBar({ toggleSidebar }) {
     }
   };
 
+  const handleImgError = (e) => {
+    e.target.src = "/path/to/default-placeholder.png";
+  };
+
   return (
     <nav className="navbar modern-navbar">
       <div className="navbar-section navbar-left">
         <button className="hamburger-button" onClick={toggleSidebar} aria-label="Toggle Sidebar">
           <MdMenu size={28} />
         </button>
-        <span className="navbar-brand">AITS</span>
+        <img
+          src={logo}
+          alt="AITS Logo"
+          className="navbar-logo"
+          style={{ height: "38px", width: "auto", marginLeft: "8px" }}
+        />
       </div>
 
       <div className="navbar-section navbar-center">
@@ -76,6 +86,7 @@ function NavBar({ toggleSidebar }) {
               alt="Profile"
               className="navbar-img"
               onClick={() => fileInputRef.current.click()}
+              onError={handleImgError}
             />
             <span className="profile-camera-icon" onClick={() => fileInputRef.current.click()}>
               <FiCamera size={18} />

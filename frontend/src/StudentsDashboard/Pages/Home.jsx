@@ -27,7 +27,6 @@ const Home = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const fetchIssues = async () => {
       try {
@@ -80,7 +79,11 @@ const Home = () => {
                   </span>
                 </div>
                 <div className="issue-card-body">
-                  <p className="issue-description">{issue.description}</p>
+                  <p className="issue-description">
+                    {issue.description && issue.description.length > 20
+                      ? issue.description.slice(0, 20) + "..."
+                      : issue.description}
+                  </p>
                   <div className="issue-meta">
                     <span className="department">{issue.department}</span>
                   </div>
