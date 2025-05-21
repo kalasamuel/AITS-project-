@@ -71,36 +71,38 @@ const IssueSubmission = () => {
 
     const errors = {};
 
-    if (!issueType) {
-      errors.issueType = 'Please select an issue type.';
-    }
-    if (!courseCode) {
-      errors.courseCode = 'Please enter a valid course code.';
-    }
-    if (!description) {
-      errors.description = 'Please provide a description of the issue.';
-    }
-    if (!department) {
-      errors.department = 'Please select a department.';
-    }
-    if (department && !DEPARTMENT_COURSECODE[department].includes(courseCode)) {
-      errors.department = `Invalid! Course code ${courseCode} does not belong to ${department.toUpperCase()}`;
-    }
+  if (!issueType) {
+    errors.issueType = 'Please select an issue type.';
+  }
+  if (!courseCode) {
+    errors.courseCode = 'Please enter a valid course code.';
+  }
+  if (!description) {
+    errors.description = 'Please provide a description of the issue.';
+  } else if (description.length > 250) {
+    errors.description = 'Description must be no more than 250 characters.';
+  }
+  if (!department) {
+    errors.department = 'Please select a department.';
+  }
+  if (department && !DEPARTMENT_COURSECODE[department].includes(courseCode)) {
+    errors.department = `Invalid! Course code ${courseCode} does not belong to ${department.toUpperCase()}`;
+  }
 
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
-      setLoading(false);
-      return;
-    }
+  if (Object.keys(errors).length > 0) {
+    setFieldErrors(errors);
+    setLoading(false);
+    return;
+  }
 
-    const formData = new FormData();
-    formData.append('issue_type', issueType);
-    formData.append('course_code', courseCode);
-    formData.append('description', description);
-    formData.append('department', department);
-    if (file) {
-      formData.append('support_file', file);
-    }
+  const formData = new FormData();
+  formData.append('issue_type', issueType);
+  formData.append('course_code', courseCode);
+  formData.append('description', description);
+  formData.append('department', department);
+  if (file) {
+    formData.append('support_file', file);
+  }
 
     try {
       await apiClient.post('/issues/submit-issue/', formData, {
@@ -110,28 +112,54 @@ const IssueSubmission = () => {
         },
       });
 
-      setMessage('Issue submitted successfully!');
-      setIssueType('');
-      setCourseCode('');
-      setCourseCodeFilter('');
-      setIssueTypeFilter('');
-      setDescription('');
-      setDepartment('');
-      setFile(null);
+    setMessage('Issue submitted successfully!');
+    setIssueType('');
+    setCourseCode('');
+    setCourseCodeFilter('');
+    setIssueTypeFilter('');
+    setDescription('');
+    setDepartment('');
+    setFile(null);
 
-      setShowPopup(true);
-      setTimeout(() => setShowPopup(false), 3000);
-    } catch (error) {
-      console.error('Error submitting issue:', error);
-      if (error.response && error.response.data) {
-        setBackendError(error.response.data.error || 'Error submitting issue. Please try again.');
-      } else {
+    setShowPopup(true);
+    setTimeout(() => setShowPopup(false), 3000);
+  } catch (error) {
+    console.error('Error submitting issue:', error);
+    // Handle backend validation errors
+    if (error.response && error.response.data) {
+      const data = error.response.data;
+      // Handle field errors from backend (e.g., description length)
+      const newFieldErrors = {};
+      if (data.description && Array.isArray(data.description)) {
+        newFieldErrors.description = data.description.join(' ');
+      }
+      if (data.issue_type && Array.isArray(data.issue_type)) {
+        newFieldErrors.issueType = data.issue_type.join(' ');
+      }
+      if (data.course_code && Array.isArray(data.course_code)) {
+        newFieldErrors.courseCode = data.course_code.join(' ');
+      }
+      if (data.department && Array.isArray(data.department)) {
+        newFieldErrors.department = data.department.join(' ');
+      }
+      if (data.support_file && Array.isArray(data.support_file)) {
+        newFieldErrors.file = data.support_file.join(' ');
+      }
+      setFieldErrors(newFieldErrors);
+
+      // Show general backend error if present
+      if (data.error && typeof data.error === "string") {
+        setBackendError(data.error);
+      } else if (!Object.keys(newFieldErrors).length) {
         setBackendError('Error submitting issue. Please try again.');
       }
+    } else {
+      setBackendError('Error submitting issue. Please try again.');
     }
+  }
 
-    setLoading(false);
-  };
+  setLoading(false);
+};
 
   const handleIssueTypeOptionClick = (type) => {
     setIssueType(type.value);
