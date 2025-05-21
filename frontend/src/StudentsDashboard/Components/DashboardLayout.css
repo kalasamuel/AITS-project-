@@ -55,3 +55,13 @@
 .content.sidebar-open {
   margin-left: 250px;
 }
+
+@media (max-width: 768px) {
+  .content {
+    margin-left: 0;
+  }
+
+  .content.sidebar-open {
+    margin-left: 250px;
+  }
+}

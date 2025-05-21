@@ -3,7 +3,7 @@ import NavBar from './NavBar';
 import SideBar from './SideBar';
 import './DashboardLayout.css';
 
-function DashboardLayout({ children, profilePic }) {
+function DashboardLayout({ children, profilePic, setProfilePic }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -12,7 +12,7 @@ function DashboardLayout({ children, profilePic }) {
 
   return (
     <div className="dashboard-layout">
-      <NavBar profilePic={profilePic} toggleSidebar={toggleSidebar} />
+      <NavBar profilePic={profilePic} setProfilePic={setProfilePic} toggleSidebar={toggleSidebar} />
       <SideBar isOpen={isOpen} toggleSidebar={toggleSidebar} />
       <div className={`content ${isOpen ? 'sidebar-open' : ''}`}>
         {children}

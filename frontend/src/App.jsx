@@ -33,7 +33,7 @@ function App() {
     return (
         <div>
             {isAuthenticated && location.pathname !== '/welcome' ? (
-                <DashboardLayout profilePic={profilePic} toggleSidebar={toggleSidebar}>
+                <DashboardLayout profilePic={profilePic} setProfilePic={setProfilePic} toggleSidebar={toggleSidebar}>
                     <Routes>
                         <Route path="/test" element={<h1>Hello from test route</h1>} />
                         <Route path="/welcome" element={<Welcome />} />
