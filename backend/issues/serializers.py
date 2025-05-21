@@ -96,13 +96,51 @@ class AssignmentSerializer(serializers.ModelSerializer):
 # issues/serializers.py
 
 class IssueSimpleSerializer(serializers.ModelSerializer):
+    course_code = serializers.SerializerMethodField()
+    department_display = serializers.SerializerMethodField()
+    issue_type_display = serializers.SerializerMethodField()
     class Meta:
         model = Issue
-        fields = ['issue_id', 'issue_type', 'status']
+        fields = [
+            'issue_id',
+            'issue_type',
+            'issue_type_display',
+            'status',
+            'course_code',
+            'department',
+            'department_display',
+        ]
+
+    def get_course_code(self, obj):
+        return obj.course.code if obj.course else None
+
+    def get_department_display(self, obj):
+        return obj.get_department_display()
+
+    def get_issue_type_display(self, obj):
+        return obj.get_issue_type_display()
 
 class NotificationSerializer(serializers.ModelSerializer):
     issue = IssueSimpleSerializer(read_only=True)
+    recipient_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Notification
-        fields = ['notification_id', 'message', 'created_at', 'issue', 'recipient']
+        fields = [
+            'notification_id',
+            'type',
+            'title',
+            'message',
+            'created_at',
+            'issue',
+            'recipient_name',
+            'link',
+            'due_date',
+            'event_date',
+            'amount',
+        ]
+
+    def get_recipient_name(self, obj):
+        if obj.recipient:
+            return f"{obj.recipient.first_name} {obj.recipient.last_name}"
+        return None
