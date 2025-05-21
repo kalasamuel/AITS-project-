@@ -272,3 +272,15 @@ class StudentAllIssuesView(APIView):
         issues = Issue.objects.filter(student=student).order_by('-created_at')
         serializer = IssueSerializer(issues, many=True)
         return Response(serializer.data, status=200)
+
+class DismissNotificationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, id):
+        user = request.user
+        try:
+            notification = Notification.objects.get(notification_id=id, recipient=user)
+            notification.delete()  # Or set a 'dismissed' flag if you want to keep it
+            return Response({'detail': 'Notification dismissed.'}, status=status.HTTP_204_NO_CONTENT)
+        except Notification.DoesNotExist:
+            return Response({'detail': 'Notification not found.'}, status=status.HTTP_404_NOT_FOUND)
