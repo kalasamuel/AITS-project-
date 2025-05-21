@@ -31,4 +31,5 @@ urlpatterns = [
     path("lecturer/student-updates/", LecturerStudentUpdatesView.as_view(), name="lecturer-student-updates"),
     path("lecturer/issues/<int:issue_id>/resolve/", LecturerIssueResolutionView.as_view(), name="resolve-issue"),
     path("student/all/", StudentAllIssuesView.as_view(), name="student-all-issues"),
+    path('notifications/<int:id>/dismiss/', DismissNotificationView.as_view(), name='dismiss-notification'),
     ]
