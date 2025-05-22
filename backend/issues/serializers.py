@@ -18,7 +18,7 @@ class IssueSerializer(serializers.ModelSerializer):
     assigned_to = UserSimpleSerializer(read_only=True)
     course = CourseSimpleSerializer(read_only=True)
     course_code = serializers.CharField(write_only=True)
-    student_name = serializers.CharField(read_only=True)
+    student_name = serializers.SerializerMethodField()
     registration_number = serializers.SerializerMethodField()
     resolution_time = serializers.SerializerMethodField()
     class Meta:
