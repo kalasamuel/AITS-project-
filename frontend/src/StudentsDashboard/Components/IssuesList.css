@@ -245,16 +245,20 @@
     padding: 12px 8px;
   }
   .search-sort {
-  flex-wrap: nowrap;
-  gap: 8px;
-  margin-bottom: 18px;
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin-bottom: 18px;
+    justify-content: center;
   }
   .search-bar-advanced {
     min-width: 0;
     max-width: 100%;
+    flex: 0 1 80%;
   }
   .filter-dropdown {
-    min-width: 90px;
+    min-width: 0;
+    flex: 0 1 20%;
+    max-width: 100%;
   }
 }
 
@@ -274,16 +278,20 @@
     padding: 10px 16px;
     font-size: 1em;
   }
-    .search-sort {
+  .search-sort {
     flex-wrap: nowrap;
     gap: 6px;
     margin-bottom: 12px;
+    justify-content: center;
   }
   .search-bar-advanced {
     min-width: 0;
     max-width: 100%;
+    flex: 0 1 80%;
   }
   .filter-dropdown {
-    min-width: 70px;
+    min-width: 0;
+    flex: 0 1 20%;
+    max-width: 100%;
   }
 }

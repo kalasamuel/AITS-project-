@@ -15,6 +15,30 @@
   padding-top: 24px;
 }
 
+.sidebar-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 0 10px 0;
+}
+
+.sidebar-logo {
+  height: 90px;
+  width: auto;
+  object-fit: contain;
+  user-select: none;
+}
+
+/*.sidebar-title {
+  font-size: 1.1em;
+  color: #acacac;
+  margin-top: 10px;
+  text-align: center;
+  position: fixed;
+  top: 125px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}*/
+
 .modern-sidebar.open {
   transform: translateX(0);
 }

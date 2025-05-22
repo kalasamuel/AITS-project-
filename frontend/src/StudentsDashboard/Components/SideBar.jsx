@@ -12,6 +12,7 @@ import {
   MdCheckCircleOutline,
   MdClose,
 } from "react-icons/md";
+import logo from "../../assets/logo.png";
 
 function SideBar({ isOpen, toggleSidebar }) {
   const userRole = localStorage.getItem("user_role");
@@ -21,6 +22,10 @@ function SideBar({ isOpen, toggleSidebar }) {
       <button className="close-button" onClick={toggleSidebar} aria-label="Close Sidebar">
         <MdClose size={28} />
       </button>
+      {/* Logo at the top */}
+      <div className="sidebar-logo-container">
+        <img src={logo} alt="AITS Logo" className="sidebar-logo" />
+      </div>
       <div className="sidebar-links">
         {userRole === "student" && (
           <>
