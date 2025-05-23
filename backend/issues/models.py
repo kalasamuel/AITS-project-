@@ -112,7 +112,7 @@ class Issue(models.Model):
     
     issue_id = models.AutoField(primary_key=True)
     issue_type = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
-    description = models.TextField(max_length=250)
+    description = models.TextField(max_length=500)
     support_file = models.FileField(upload_to='issue_support_files/', blank=True, null=True)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='open')
     created_at = models.DateTimeField(auto_now_add=True)
