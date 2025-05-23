@@ -1,146 +1,227 @@
-.resolved-container {
-    padding: 100px 20px;
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    min-height: 100vh;
-    overflow-x: auto;
+.assigned-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 90px 24px 32px 24px;
+  background: #f7f9fb;
+  min-height: 100vh;
+  border-radius: 18px;
+  box-shadow: 0 4px 32px rgba(44, 62, 80, 0.10);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
-h1 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #333;
+.assigned-container h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #232946;
+  margin-bottom: 18px;
+  letter-spacing: 1px;
+  text-align: center;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    font-size: 14px;
+/* Search & Filter Bar */
+.search-filter-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
+.search-bar {
+  flex: 0 1 40%;
+  min-width: 180px;
+  max-width: 420px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1.5px solid #e0e7ef;
+  font-size: 1em;
+  background: #fff;
+  color: #232946;
+  box-shadow: 0 1px 4px rgba(44, 62, 80, 0.04);
+  transition: border 0.18s;
+  outline: none;
+}
+.search-bar:focus {
+  border: 1.5px solid #4f8cff;
 }
 
-th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    color: #333;
+.select-field {
+  flex: 0 1 20%;
+  min-width: 120px;
+  max-width: 200px;
+  padding: 8px 12px;
+  border-radius: 7px;
+  border: 1.5px solid #e0e7ef;
+  font-size: 1em;
+  background: #fff;
+  color: #232946;
+  outline: none;
+  transition: border 0.18s;
+}
+.select-field:focus {
+  border: 1.5px solid #4f8cff;
 }
 
-tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+/* Table */
+.table-container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(44, 62, 80, 0.07);
+  padding: 24px 18px 18px 18px;
+  margin-top: 18px;
 }
 
-tbody tr:hover {
-    background-color: #f1f1f1;
-    cursor: pointer;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
-    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+.issues-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1em;
+  background: #fff;
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 14px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+.issues-table th,
+.issues-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #e0e7ef;
+  color: #232946;
+  font-size: 1em;
+  vertical-align: middle;
 }
 
-button:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
+.issues-table th {
+  background: #e0e7ef;
+  color: #232946;
+  font-weight: 700;
+  border-bottom: 2px solid #d1d5db;
+  text-align: left;
 }
 
-button:active {
-    transform: translateY(1px);
+.issues-table tr:nth-child(even) {
+  background: #f7f9fb;
 }
 
+.issues-table tr:hover {
+  background: #e0e7ef;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+
+/* Status badge */
+.issues-table td:nth-child(6) {
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Messages */
+.loading-message,
+.no-data-message,
+.error-message {
+  text-align: center;
+  font-size: 1.08em;
+  color: #2563eb;
+  margin: 24px 0;
+}
+.error-message {
+  color: #d32f2f;
+}
+
+/* Modal */
 .modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    z-index: 1000;
-    max-width: 90%;
-    width: 400px;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-.modal.hidden {
-    display: none; 
+.modal-content {
+  background: #fff;
+  border-radius: 14px;
+  padding: 32px 28px 24px 28px;
+  box-shadow: 0 8px 40px rgba(44, 62, 80, 0.18);
+  min-width: 320px;
+  max-width: 95vw;
+  position: relative;
+  z-index: 1001;
+  animation: modalIn 0.2s;
 }
-
+@keyframes modalIn {
+  from { transform: translateY(40px) scale(0.98); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+.modal-content h2 {
+  margin-top: 0;
+  color: #232946;
+  font-size: 1.3em;
+  font-weight: 700;
+}
+.modal-content p {
+  margin: 8px 0;
+  color: #232946;
+  font-size: 1.05em;
+}
+.modal-content button {
+  margin-top: 18px;
+  background: #4f8cff;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 8px 22px;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  box-shadow: 0 1px 4px rgba(44, 62, 80, 0.04);
+}
+.modal-content button:hover,
+.modal-content button:focus {
+  background: #2563eb;
+  color: #fff;
+  outline: none;
+}
 .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-}
-.no-data-message {
-    text-align: center;
-    color: #555;
-    font-style: italic;
-    padding: 10px;
-  }
-  .error-message {
-    color: red;
-    font-weight: bold;
-    margin: 10px 0;
-    text-align: center;
-  }
-
-@media (max-width: 768px) {
-    .resolved-container {
-        padding: 15px;
-    }
-
-    table {
-        font-size: 12px;
-    }
-
-    th, td {
-        padding: 8px;
-    }
-
-    button {
-        padding: 8px 16px;
-        font-size: 12px;
-    }
-
-    .modal {
-        width: 90%;
-        max-width: 300px;
-    }
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(44, 62, 80, 0.18);
+  z-index: 1000;
 }
 
-@media (max-width: 1024px) {
-    .resolved-container {
-        padding: 20px;
-    }
+/* Responsive */
+@media (max-width: 900px) {
+  .assigned-container {
+    padding: 70px 6vw 18px 6vw;
+  }
+  .table-container {
+    padding: 12px 2px 8px 2px;
+  }
+}
 
-    h1 {
-        font-size: 20px;
-    }
-
-    table {
-        font-size: 13px;
-    }
-
-    button {
-        padding: 8px 18px;
-        font-size: 13px;
-    }
+@media (max-width: 600px) {
+  .assigned-container {
+    padding: 60px 2vw 8px 2vw;
+    border-radius: 0;
+    box-shadow: none;
+    gap: 18px;
+  }
+  .search-filter-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .search-bar, .select-field {
+    flex-basis: 100%;
+    min-width: 0;
+    max-width: 100vw;
+    font-size: 0.98em;
+  }
+  .issues-table th, .issues-table td {
+    padding: 7px 4px;
+    font-size: 0.97em;
+  }
+  .modal-content {
+    padding: 18px 8px 12px 8px;
+    min-width: 0;
+  }
+}

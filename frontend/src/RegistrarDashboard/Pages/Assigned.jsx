@@ -8,6 +8,9 @@ const Assigned = () => {
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [lecturerFilter, setLecturerFilter] = useState('');
+  const [courseFilter, setCourseFilter] = useState('');
 
   useEffect(() => {
     const fetchAssignedIssues = async () => {
@@ -29,9 +32,54 @@ const Assigned = () => {
     fetchAssignedIssues();
   }, []);
 
-  const filteredIssues = selectedStatus === 'All' 
-    ? issues 
-    : issues.filter(issue => issue.status === selectedStatus);
+  // Unique options for filters
+  const lecturerOptions = Array.from(
+    new Set(
+      issues
+        .map(issue =>
+          issue.assigned_to
+            ? `${issue.assigned_to.last_name} ${issue.assigned_to.first_name}`
+            : ''
+        )
+        .filter(Boolean)
+    )
+  );
+  const courseOptions = Array.from(
+    new Set(issues.map(issue => issue.course?.code).filter(Boolean))
+  );
+
+  // Modern search and filter logic
+  const filteredIssues = issues.filter(issue => {
+    const searchTermLower = searchTerm.toLowerCase();
+
+    // Search by student name, registration, lecturer, course, issue type
+    const studentName = `${issue.student?.last_name || ''} ${issue.student?.first_name || ''}`.toLowerCase();
+    const registrationNo = issue.student?.student_number?.toLowerCase() || '';
+    const lecturerName = issue.assigned_to
+      ? `${issue.assigned_to.last_name} ${issue.assigned_to.first_name}`.toLowerCase()
+      : '';
+    const courseCode = issue.course?.code?.toLowerCase() || '';
+    const issueType = issue.issue_type?.replace(/_/g, ' ').toLowerCase() || '';
+
+    const globalSearchMatch =
+      !searchTerm ||
+      studentName.includes(searchTermLower) ||
+      registrationNo.includes(searchTermLower) ||
+      lecturerName.includes(searchTermLower) ||
+      courseCode.includes(searchTermLower) ||
+      issueType.includes(searchTermLower);
+
+    const statusMatch =
+      selectedStatus === 'All' || issue.status === selectedStatus;
+
+    const lecturerFilterMatch =
+      !lecturerFilter || lecturerName === lecturerFilter.toLowerCase();
+
+    const courseFilterMatch =
+      !courseFilter || courseCode === courseFilter.toLowerCase();
+
+    return globalSearchMatch && statusMatch && lecturerFilterMatch && courseFilterMatch;
+  });
 
   return (
     <div className="assigned-container">
@@ -39,17 +87,46 @@ const Assigned = () => {
 
       {error && <p className="error-message">{error}</p>}
 
-      <label htmlFor="status-filter">Filter by Status: </label>
-      <select
-        id="status-filter"
-        onChange={(e) => setSelectedStatus(e.target.value)}
-        value={selectedStatus}
-      >
-        <option value="All">All</option>
-        <option value="open">Pending</option>
-        <option value="in_progress">In Progress</option>
-        <option value="resolved">Resolved</option>
-      </select>
+      <div className="search-filter-wrapper" style={{ marginBottom: 24 }}>
+        <input
+          type="text"
+          className="search-bar"
+          placeholder="Search by Student, Reg. No, Lecturer, Course, or Issue Type..."
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+        />
+        <select
+          className="select-field"
+          onChange={e => setSelectedStatus(e.target.value)}
+          value={selectedStatus}
+        >
+          <option value="All">All Statuses</option>
+          <option value="open">Pending</option>
+          <option value="in_progress">In Progress</option>
+          <option value="resolved">Resolved</option>
+          <option value="rejected">Rejected</option>
+        </select>
+        <select
+          className="select-field"
+          value={lecturerFilter}
+          onChange={e => setLecturerFilter(e.target.value)}
+        >
+          <option value="">All Lecturers</option>
+          {lecturerOptions.map(name => (
+            <option key={name} value={name}>{name}</option>
+          ))}
+        </select>
+        <select
+          className="select-field"
+          value={courseFilter}
+          onChange={e => setCourseFilter(e.target.value)}
+        >
+          <option value="">All Courses</option>
+          {courseOptions.map(code => (
+            <option key={code} value={code}>{code}</option>
+          ))}
+        </select>
+      </div>
 
       <div className="table-container">
         {loading ? (
@@ -75,7 +152,7 @@ const Assigned = () => {
                   style={{ cursor: 'pointer' }}
                 >
                   <td>{issue.issue_type.replace(/_/g, ' ')}</td>
-                  <td>{issue.student?.registration_number}</td>
+                  <td>{issue.student?.student_number}</td>
                   <td>{`${issue.student?.last_name} ${issue.student?.first_name}`}</td>
                   <td>{`${issue.assigned_to?.last_name} ${issue.assigned_to?.first_name}`}</td>
                   <td>{issue.course?.code}</td>
