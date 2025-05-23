@@ -101,6 +101,7 @@ const ResolvedIssues = () => {
   return (
     <div className="resolved-container">
       <h1>Resolved Issues</h1>
+
       <div className="search-filter-wrapper" style={{ marginBottom: 24 }}>
         <input
           type="text"
