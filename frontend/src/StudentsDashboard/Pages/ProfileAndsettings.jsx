@@ -102,6 +102,7 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
         },
         {
           headers: { Authorization: `Bearer ${token}` },
+          "Content-Type": "multipart/form-data",
         }
       );
       setSuccessMessage("Password changed successfully!");
@@ -115,80 +116,110 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
   };
 
   return (
-    <div className="profile-outer-wrapper">
-      <div className="profile-container">
-        <h1 className="profile-title">Profile & Settings</h1>
-        {loading ? (
-          <div className="profile-loading">Loading...</div>
-        ) : (
-          <>
-            <section className="profile-pic-section">
-              <label htmlFor="profile-pic-input" className="profile-pic-label" tabIndex={0}>
-                {profilePic ? (
-                  <img src={profilePic} alt="Profile" className="profile-img" />
-                ) : (
-                  <span className="profile-placeholder">Click to upload</span>
-                )}
-              </label>
-              <input
-                id="profile-pic-input"
-                name="profilePic"
-                type="file"
-                accept="image/*"
-                onChange={handleProfilePicChange}
-                style={{ display: "none" }}
-              />
-            </section>
-
-            <form className="bio-data-form" autoComplete="off">
-              <h2>Bio Data</h2>
-              <div className="form-row">
-                <label htmlFor="first_name">First Name</label>
-                <input type="text" id="first_name" name="first_name" value={bioData.first_name} readOnly tabIndex={-1} />
-              </div>
-              <div className="form-row">
-                <label htmlFor="last_name">Last Name</label>
-                <input type="text" id="last_name" name="last_name" value={bioData.last_name} readOnly tabIndex={-1} />
-              </div>
-              <div className="form-row">
-                <label htmlFor="email">Email</label>
-                <input type="email" id="email" name="email" value={bioData.email} readOnly tabIndex={-1} />
-              </div>
-              <div className="form-row">
-                <label htmlFor="student_number">Student Number</label>
-                <input type="text" id="student_number" name="student_number" value={bioData.student_number} readOnly tabIndex={-1} />
-              </div>
-              <div className="form-row">
-                <label htmlFor="program">Program</label>
-                <input type="text" id="program" name="program" value={bioData.program} readOnly tabIndex={-1} />
-              </div>
-            </form>
-
-            <form className="change-password-form" onSubmit={handleChangePassword} autoComplete="off">
-              <h2>Change Password</h2>
-              <div className="form-row">
-                <label htmlFor="currentPassword">Current Password</label>
-                <input type="password" id="currentPassword" name="currentPassword" value={passwords.currentPassword} onChange={handlePasswordsChange} />
-              </div>
-              <div className="form-row">
-                <label htmlFor="newPassword">New Password</label>
-                <input type="password" id="newPassword" name="newPassword" value={passwords.newPassword} onChange={handlePasswordsChange} />
-              </div>
-              <div className="form-row">
-                <label htmlFor="confirmPassword">Confirm New Password</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" value={passwords.confirmPassword} onChange={handlePasswordsChange} />
-              </div>
-              <button className="change-btn" type="submit">Change Password</button>
-            </form>
-
-            {(successMessage || errorMessage) && (
-              <div className="profile-messages">
-                {successMessage && <p className="success-message">{successMessage}</p>}
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
-              </div>
+    <div className="profile-container-modern">
+      <h1 className="profile-title">Profile & Settings</h1>
+      <div className="profile-card">
+        <div className="profile-pic-section-modern">
+          <label htmlFor="profile-pic-input" className="profile-pic-modern" title="Click to upload">
+            {profilePic ? (
+              <img src={profilePic} alt="Profile" className="profile-img-modern" />
+            ) : (
+              <span className="placeholder-modern">Upload Photo</span>
             )}
-          </>
-        )}
+            <div className="profile-pic-overlay">Change</div>
+          </label>
+          <input
+            id="profile-pic-input"
+            name="profilePic"
+            type="file"
+            accept="image/*"
+            onChange={handleProfilePicChange}
+            style={{ display: "none" }}
+          />
+          <div className="profile-meta">
+            <div className="profile-meta-label">Student Number</div>
+            <div className="profile-meta-value">{bioData.student_number || "N/A"}</div>
+          </div>
+          <div className="profile-meta">
+            <div className="profile-meta-label">Program</div>
+            <div className="profile-meta-value">{bioData.program || "N/A"}</div>
+          </div>
+        </div>
+        <div className="profile-forms">
+          <div className="bio-data-modern">
+            <h2>Bio Data</h2>
+            <div className="input-group">
+              <label>First Name</label>
+              <input
+                type="text"
+                name="first_name"
+                value={bioData.first_name}
+                readOnly
+                style={{ background: "#f0f2f5", color: "#888", cursor: "not-allowed" }}
+              />
+            </div>
+            <div className="input-group">
+              <label>Last Name</label>
+              <input
+                type="text"
+                name="last_name"
+                value={bioData.last_name}
+                readOnly
+                style={{ background: "#f0f2f5", color: "#888", cursor: "not-allowed" }}
+              />
+            </div>
+            <div className="input-group">
+              <label>Email</label>
+              <input
+                type="email"
+                name="email"
+                value={bioData.email}
+                readOnly
+                style={{ background: "#f0f2f5", color: "#888", cursor: "not-allowed" }}
+              />
+            </div>
+          </div>
+          <div className="change-password-modern">
+            <h2>Change Password</h2>
+            <form onSubmit={handleChangePassword} autoComplete="off">
+              <div className="input-group">
+                <label>Current Password</label>
+                <input
+                  type="password"
+                  name="currentPassword"
+                  value={passwords.currentPassword}
+                  onChange={handlePasswordsChange}
+                  required
+                />
+              </div>
+              <div className="input-group">
+                <label>New Password</label>
+                <input
+                  type="password"
+                  name="newPassword"
+                  value={passwords.newPassword}
+                  onChange={handlePasswordsChange}
+                  required
+                />
+              </div>
+              <div className="input-group">
+                <label>Confirm New Password</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={passwords.confirmPassword}
+                  onChange={handlePasswordsChange}
+                  required
+                />
+              </div>
+              <button className="change-btn-modern" type="submit">
+                Change Password
+              </button>
+            </form>
+            {successMessage && <p className="success-message">{successMessage}</p>}
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+          </div>
+        </div>
       </div>
     </div>
   );
