@@ -12,6 +12,11 @@ const Assigned = () => {
   const [lecturerFilter, setLecturerFilter] = useState('');
   const [courseFilter, setCourseFilter] = useState('');
 
+  function formatWords(str) {
+  if (!str) return '';
+  return str.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
   useEffect(() => {
     const fetchAssignedIssues = async () => {
       try {
@@ -49,37 +54,39 @@ const Assigned = () => {
   );
 
   // Modern search and filter logic
-  const filteredIssues = issues.filter(issue => {
-    const searchTermLower = searchTerm.toLowerCase();
+  const filteredIssues = issues
+    .filter(issue => issue.status === "open" || issue.status === "in_progress")
+    .filter(issue => {
+      const searchTermLower = searchTerm.toLowerCase();
 
-    // Search by student name, registration, lecturer, course, issue type
-    const studentName = `${issue.student?.last_name || ''} ${issue.student?.first_name || ''}`.toLowerCase();
-    const registrationNo = issue.student?.student_number?.toLowerCase() || '';
-    const lecturerName = issue.assigned_to
-      ? `${issue.assigned_to.last_name} ${issue.assigned_to.first_name}`.toLowerCase()
-      : '';
-    const courseCode = issue.course?.code?.toLowerCase() || '';
-    const issueType = issue.issue_type?.replace(/_/g, ' ').toLowerCase() || '';
+      // Search by student name, registration, lecturer, course, issue type
+      const studentName = `${issue.student?.last_name || ''} ${issue.student?.first_name || ''}`.toLowerCase();
+      const registrationNo = issue.student?.student_number?.toLowerCase() || '';
+      const lecturerName = issue.assigned_to
+        ? `${issue.assigned_to.last_name} ${issue.assigned_to.first_name}`.toLowerCase()
+        : '';
+      const courseCode = issue.course?.code?.toLowerCase() || '';
+      const issueType = issue.issue_type?.replace(/_/g, ' ').toLowerCase() || '';
 
-    const globalSearchMatch =
-      !searchTerm ||
-      studentName.includes(searchTermLower) ||
-      registrationNo.includes(searchTermLower) ||
-      lecturerName.includes(searchTermLower) ||
-      courseCode.includes(searchTermLower) ||
-      issueType.includes(searchTermLower);
+      const globalSearchMatch =
+        !searchTerm ||
+        studentName.includes(searchTermLower) ||
+        registrationNo.includes(searchTermLower) ||
+        lecturerName.includes(searchTermLower) ||
+        courseCode.includes(searchTermLower) ||
+        issueType.includes(searchTermLower);
 
-    const statusMatch =
-      selectedStatus === 'All' || issue.status === selectedStatus;
+      const statusMatch =
+        selectedStatus === 'All' || issue.status === selectedStatus;
 
-    const lecturerFilterMatch =
-      !lecturerFilter || lecturerName === lecturerFilter.toLowerCase();
+      const lecturerFilterMatch =
+        !lecturerFilter || lecturerName === lecturerFilter.toLowerCase();
 
-    const courseFilterMatch =
-      !courseFilter || courseCode === courseFilter.toLowerCase();
+      const courseFilterMatch =
+        !courseFilter || courseCode === courseFilter.toLowerCase();
 
-    return globalSearchMatch && statusMatch && lecturerFilterMatch && courseFilterMatch;
-  });
+      return globalSearchMatch && statusMatch && lecturerFilterMatch && courseFilterMatch;
+    });
 
   return (
     <div className="assigned-container">
@@ -101,10 +108,8 @@ const Assigned = () => {
           value={selectedStatus}
         >
           <option value="All">All Statuses</option>
-          <option value="open">Pending</option>
+          <option value="open">Open</option>
           <option value="in_progress">In Progress</option>
-          <option value="resolved">Resolved</option>
-          <option value="rejected">Rejected</option>
         </select>
         <select
           className="select-field"
@@ -151,12 +156,12 @@ const Assigned = () => {
                   onClick={() => setSelectedIssue(issue)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <td>{issue.issue_type.replace(/_/g, ' ')}</td>
+                  <td>{formatWords(issue.issue_type)}</td>
                   <td>{issue.student?.student_number}</td>
                   <td>{`${issue.student?.last_name} ${issue.student?.first_name}`}</td>
                   <td>{`${issue.assigned_to?.last_name} ${issue.assigned_to?.first_name}`}</td>
                   <td>{issue.course?.code}</td>
-                  <td>{issue.status}</td>
+                  <td>{formatWords(issue.status)}</td>
                   <td>{new Date(issue.created_at).toLocaleString()}</td>
                 </tr>
               ))}
@@ -176,12 +181,12 @@ const Assigned = () => {
         >
           <div className="modal-content">
             <h2 id="modal-title">Issue Details</h2>
-            <p id="modal-description"><strong>Type:</strong> {selectedIssue.issue_type}</p>
+            <p id="modal-description"><strong>Type:</strong> {formatWords(selectedIssue.issue_type)}</p>
             <p><strong>Registration No:</strong> {selectedIssue.student?.registration_number}</p>
             <p><strong>Student Name:</strong> {`${selectedIssue.student?.last_name} ${selectedIssue.student?.first_name}`}</p>
             <p><strong>Lecturer:</strong> {`${selectedIssue.assigned_to?.last_name} ${selectedIssue.assigned_to?.first_name}`}</p>
             <p><strong>Course Code:</strong> {selectedIssue.course?.code}</p>
-            <p><strong>Status:</strong> {selectedIssue.status}</p>
+            <p><strong>Status:</strong> {formatWords(selectedIssue.status)}</p>
             <p><strong>Date Assigned:</strong> {new Date(selectedIssue.created_at).toLocaleString()}</p>
             <button onClick={() => setSelectedIssue(null)}>Close</button>
           </div>
