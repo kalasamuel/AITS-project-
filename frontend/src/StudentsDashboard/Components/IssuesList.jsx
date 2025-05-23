@@ -129,7 +129,6 @@ const IssuesList = () => {
             <option value="All">All</option>
             <option value="Resolved">Resolved</option>
             <option value="In Progress">In Progress</option>
-            <option value="Pending">Pending</option>
             <option value="Rejected">Rejected</option>
             <option value="Open">Open</option>
           </select>
