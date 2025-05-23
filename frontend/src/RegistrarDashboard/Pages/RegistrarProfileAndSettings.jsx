@@ -122,50 +122,80 @@ const ProfileAndSettings = ({ profilePic, setProfilePic }) => {
   };
 
   return (
-    <div className="profile-container">
-      <h1>Profile and Settings</h1>
-      <div className="profile-pic-section">
-        <label htmlFor="profile-pic-input" className="profile-pic">
-          {profilePic ? (
-            <img src={profilePic} alt="Profile" className="profile-img" />
-          ) : (
-            <span className="placeholder">Click to upload</span>
-          )}
-        </label>
-        <input
-          id="profile-pic-input"
-          name="profilePic"
-          type="file"
-          accept="image/*"
-          onChange={handleProfilePicChange}
-          style={{ display: "none" }}
-        />
-      </div>
-      <div className="bio-data">
-        <h2>Bio Data</h2>
-        <label>Name</label>
-        <input type="text" name="name" value={bioData.name} onChange={handleBioDataChange} />
-        <label>Email</label>
-        <input type="email" name="email" value={bioData.email} onChange={handleBioDataChange} />
-        <button className="save-btn" onClick={handleSaveBioData} disabled={loading}>
-          {loading ? "Saving..." : "Save"}
-        </button>
-        {successMessage && <p className="success-message">{successMessage}</p>}
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
-      </div>
-      <div className="change-password">
-        <h2>Change Password</h2>
-        <label>Current Password</label>
-        <input type="password" name="currentPassword" value={passwords.currentPassword} onChange={handlePasswordsChange} />
-        <label>New Password</label>
-        <input type="password" name="newPassword" value={passwords.newPassword} onChange={handlePasswordsChange} />
-        <label>Confirm New Password</label>
-        <input type="password" name="confirmPassword" value={passwords.confirmPassword} onChange={handlePasswordsChange} />
-        <button className="change-btn" onClick={handleChangePassword} disabled={loading}>
-          {loading ? "Changing..." : "Change Password"}
-        </button>
-        {successMessage && <p className="success-message">{successMessage}</p>}
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
+    <div className="profile-container-modern">
+      <h1 className="profile-title">Profile & Settings</h1>
+      <div className="profile-card">
+        <div className="profile-pic-section-modern">
+          <label htmlFor="profile-pic-input" className="profile-pic-modern" title="Click to upload">
+            {profilePic ? (
+              <img src={profilePic} alt="Profile" className="profile-img-modern" />
+            ) : (
+              <span className="placeholder-modern">Upload Photo</span>
+            )}
+            <div className="profile-pic-overlay">Change</div>
+          </label>
+          <input
+            id="profile-pic-input"
+            name="profilePic"
+            type="file"
+            accept="image/*"
+            onChange={handleProfilePicChange}
+            style={{ display: "none" }}
+          />
+          <div className="profile-meta">
+            <div className="profile-meta-label">Registration No.</div>
+            <div className="profile-meta-value">{bioData.registrationNumber || "N/A"}</div>
+          </div>
+        </div>
+        <div className="profile-forms">
+          <div className="bio-data-modern">
+            <h2>Bio Data</h2>
+            <div className="input-group">
+              <label>Name</label>
+              <input
+                type="text"
+                name="name"
+                value={bioData.name}
+                readOnly
+                style={{ background: "#f0f2f5", color: "#888", cursor: "not-allowed" }}
+              />
+            </div>
+            <div className="input-group">
+              <label>Email</label>
+              <input
+                type="email"
+                name="email"
+                value={bioData.email}
+                onChange={handleBioDataChange}
+              />
+            </div>
+            <button className="save-btn-modern" onClick={handleSaveBioData} disabled={loading}>
+              {loading ? "Saving..." : "Save"}
+            </button>
+            {successMessage && <p className="success-message">{successMessage}</p>}
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+          </div>
+          <div className="change-password-modern">
+            <h2>Change Password</h2>
+            <div className="input-group">
+              <label>Current Password</label>
+              <input type="password" name="currentPassword" value={passwords.currentPassword} onChange={handlePasswordsChange} />
+            </div>
+            <div className="input-group">
+              <label>New Password</label>
+              <input type="password" name="newPassword" value={passwords.newPassword} onChange={handlePasswordsChange} />
+            </div>
+            <div className="input-group">
+              <label>Confirm New Password</label>
+              <input type="password" name="confirmPassword" value={passwords.confirmPassword} onChange={handlePasswordsChange} />
+            </div>
+            <button className="change-btn-modern" onClick={handleChangePassword} disabled={loading}>
+              {loading ? "Changing..." : "Change Password"}
+            </button>
+            {successMessage && <p className="success-message">{successMessage}</p>}
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+          </div>
+        </div>
       </div>
     </div>
   );
