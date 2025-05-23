@@ -21,10 +21,11 @@
 
 .filter-controls {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 10px;
   justify-content: center;
   margin-bottom: 28px;
+  overflow-x: auto;
 }
 
 .filter-button {
@@ -43,6 +44,12 @@
 .filter-button:hover {
   background: #4f8cff;
   color: #fff;
+}
+
+.filter-button:focus, .notification-item:focus {
+  outline: 2px solid #4f8cff;
+  outline-offset: 2px;
+  z-index: 1;
 }
 
 .notifications-list {
@@ -65,11 +72,22 @@
   display: flex;
   flex-direction: column;
 }
+
+.notification-item:not(.expanded) .notification-details {
+  max-height: 0;
+  padding: 0 10px;
+}
+
 .notification-item:hover, .notification-item.expanded {
   box-shadow: 0 6px 24px rgba(44, 62, 80, 0.16);
   transform: translateY(-2px) scale(1.01);
   background: #f7f9fb;
 }
+.notification-item.expanded .notification-details {
+  max-height: 500px; /* or a value that fits your content */
+  padding: 12px 10px 6px 10px;
+}
+
 .notification-item.notification-type-issue { border-color: #4f8cff; }
 .notification-item.notification-type-announcement { border-color: #2563eb; }
 .notification-item.notification-type-reminder { border-color: #ffb347; }
@@ -142,6 +160,9 @@
   font-size: 0.98em;
   color: #232946;
   box-shadow: 0 1px 4px rgba(44, 62, 80, 0.04);
+  word-break: break-word;
+  transition: max-height 0.25s cubic-bezier(.4,0,.2,1), padding 0.2s;
+  overflow: hidden;
 }
 
 .notification-details p {
@@ -193,7 +214,7 @@
 
 @media (max-width: 700px) {
   .notifications-container {
-    padding: 90px 2vw 16px 2vw;
+    padding: 32px 2vw 16px 2vw;
     border-radius: 0;
     box-shadow: none;
     max-width: 100vw;
@@ -213,5 +234,13 @@
   .new-notification-button {
     padding: 10px 16px;
     font-size: 1em;
+  }
+    .filter-controls {
+    gap: 6px;
+    padding-bottom: 4px;
+  }
+  .filter-button {
+    padding: 6px 10px;
+    font-size: 0.98em;
   }
 }

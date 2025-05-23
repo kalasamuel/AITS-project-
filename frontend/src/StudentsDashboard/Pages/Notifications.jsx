@@ -68,13 +68,12 @@ const Notifications = () => {
 
         setNotifications(response.data);
       } catch (err) {
-        console.error('Error fetching notifications:', err);
+        console.error("Failed to fetch notifications:", err);
         setError("Failed to load notifications. Please try again.");
       } finally {
         setLoading(false);
       }
     };
-
     fetchNotifications();
   }, []);
 
@@ -97,7 +96,6 @@ const dismissNotification = async (id, e) => {
     }
   };
 
-  // Filter by type or status
   const filteredNotifications = notifications.filter(notif => {
     if (filter === 'all') return true;
     if (filter === 'rejected') return notif.type === 'issue' && notif.issue?.status === 'rejected';
