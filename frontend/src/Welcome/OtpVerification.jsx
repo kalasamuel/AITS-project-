@@ -41,6 +41,7 @@ const OtpVerification = () => {
       try {
         data = await response.json();
       } catch (e) {
+        console.error("Failed to parse response:", e);
         data = { error: "Failed to parse server response" };
       }
 
