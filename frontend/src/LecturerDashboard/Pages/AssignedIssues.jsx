@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { apiClient } from "../../api";
 import "./AssignedIssues.css";
+import { FiCheckCircle, FiClock, FiXCircle } from "react-icons/fi";
 
 const AssignedIssues = () => {
   const [issues, setIssues] = useState([]);
@@ -9,6 +10,10 @@ const AssignedIssues = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  function formatWords(str) {
+  if (!str) return "";
+  return str.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+}
   useEffect(() => {
     const fetchAssignedIssues = async () => {
       try {
@@ -36,7 +41,6 @@ const AssignedIssues = () => {
         {headers: {Authorization: `Bearer ${localStorage.getItem("access_token")}`,},}
       );
 
-      // Update the local issues state
       setIssues((prevIssues) =>
       prevIssues.map((issue)=>
         issue.issue_id === issueId ? { ...issue, status: response.data.status } : issue 
@@ -69,19 +73,22 @@ const filteredIssues = issues.filter((issue) => {
   return (
     <div className="lecturer-dashboard">
       <h2>Lecturer's Dashboard</h2>
-
       <div className="search-sort-bar">
-        <input
-          type="text"
-          placeholder="Search by Student Name, Registration Number, or Issue Type..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
+        <div className="search-input-wrapper">
+          <input
+            type="text"
+            placeholder="Search by Student Name, Registration Number, or Issue Type..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+            aria-label="Search issues"
+          />
+        </div>
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
           className="sort-select"
+          aria-label="Sort issues"
         >
           <option value="date">Sort by Date</option>
           <option value="status">Sort by Status</option>
@@ -95,52 +102,62 @@ const filteredIssues = issues.filter((issue) => {
       ) : issues.length === 0 ? (
         <p>No assigned issues found.</p>
       ) : (
-        <table className="issues-table">
-          <thead>
-            <tr>
-              <th>Issue Type</th>
-              <th>Registration Number</th>
-              <th>Student Name</th>
-              <th>Status</th>
-              <th>Date Submitted</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedIssues.map((issue) => (
-              <tr key={issue.issue_id}>
-                <td>{issue.issue_type.replace("_", " ")}</td>
-                <td>{issue.registration_number || "N/A"}</td>
-                <td>{issue.student_name}</td>
-                <td>{issue.status.replace("_", " ")}</td>
-                <td>{new Date(issue.created_at).toLocaleString()}</td>
-                <td>
-                  <button
-                    className="resolve-btn"
-                    onClick={() => handleIssueStatusUpdate(issue.issue_id, "resolved")}
-                    disabled={issue.status === "resolved"}
-                  >
-                    Resolve
-                  </button>
-                  <button 
-                    className="pending-btn"
-                    onClick={()=> handleIssueStatusUpdate(issue.issue_id, "in_progress")}
-                    disabled={issue.status === "in_progress"}
-                  >
-                    Mark Pending
-                  </button>
-                  <button
-                    className="reject-btn"
-                    onClick={() => handleIssueStatusUpdate(issue.issue_id, "rejected")}
-                    disabled={issue.status === "rejected"}                    
-                  >
-                    Reject
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+  <table className="issues-table">
+    <thead>
+      <tr>
+        <th>Issue Type</th>
+        <th>Registration Number</th>
+        <th>Student Name</th>
+        <th>Status</th>
+        <th>Date Submitted</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {sortedIssues.map((issue) => (
+        <tr key={issue.issue_id}>
+          <td>{formatWords(issue.issue_type)}</td>
+          <td>{issue.registration_number || "N/A"}</td>
+          <td>{issue.student_name}</td>
+          <td>
+            <span className={`status-badge status-${issue.status}`}>
+              {formatWords(issue.status)}
+            </span>
+          </td>
+          <td>{new Date(issue.created_at).toLocaleString()}</td>
+          <td>
+            <button
+              className="resolve-btn"
+              onClick={() => handleIssueStatusUpdate(issue.issue_id, "resolved")}
+              disabled={issue.status === "resolved"}
+              aria-label="Mark as Resolved"
+              title="Mark as Resolved"
+            >
+              <FiCheckCircle /> Resolve
+            </button>
+            <button
+              className="pending-btn"
+              onClick={() => handleIssueStatusUpdate(issue.issue_id, "in_progress")}
+              disabled={issue.status === "in_progress"}
+              aria-label="Mark as In Progress"
+              title="Mark as In Progress"
+            >
+              <FiClock /> In Progress
+            </button>
+            <button
+              className="reject-btn"
+              onClick={() => handleIssueStatusUpdate(issue.issue_id, "rejected")}
+              disabled={issue.status === "rejected"}
+              aria-label="Reject Issue"
+              title="Reject Issue"
+            >
+              <FiXCircle /> Reject
+            </button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
       )}
     </div>
   );
