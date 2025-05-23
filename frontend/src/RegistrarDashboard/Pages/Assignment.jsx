@@ -38,7 +38,6 @@ const AssignmentPage = () => {
                     apiClient.get("/issues/registrar/all-issues/", { headers }),
                     apiClient.get("/accounts/lecturers/", { headers }),
                 ]);
-
                 // Only show unassigned issues
                 let unassignedIssues = issuesResponse.data.filter(issue => !issue.assigned_to);
 
