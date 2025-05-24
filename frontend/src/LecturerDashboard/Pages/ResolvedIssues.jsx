@@ -5,9 +5,20 @@ import "./ResolvedIssues.css";
 const ResolvedIssues = () => {
   const [issues, setIssues] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("asc");
+  const [filterIssueType, setFilterIssueType] = useState("");
+  const [filterStatus, setFilterStatus] = useState(""); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const formatWords = (str) => {
+    if (!str) return "";
+    return str
+      .replace(/_/g, " ") 
+      .toLowerCase() 
+      .split(" ") 
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
 
   useEffect(() => {
     const fetchResolvedIssues = async () => {
@@ -23,7 +34,7 @@ const ResolvedIssues = () => {
         );
 
         const resolvedOnly = response.data.filter(
-          (issue) => issue.status === "resolved"
+          (issue) => issue.status === "resolved" || issue.status === "rejected"
         );
 
         setIssues(resolvedOnly);
@@ -38,19 +49,29 @@ const ResolvedIssues = () => {
     fetchResolvedIssues();
   }, []);
 
-  const filteredIssues = issues.filter((issue) =>
-    [issue.issue_type, issue.student_name, issue.status, issue.registration_number]
-      .join(" ")
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
-  );
+  const filteredIssues = issues.filter((issue) => {
+    const matchesSearchTerm =
+      [issue.issue_type, issue.student_name, issue.status, issue.registration_number]
+        .join(" ")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
 
-  const sortedIssues = [...filteredIssues].sort((a, b) => {
-    return sortOrder === "asc"
-      ? a.student_name.localeCompare(b.student_name)
-      : b.student_name.localeCompare(a.student_name);
+    const matchesIssueType =
+      filterIssueType === "" || issue.issue_type === filterIssueType;
+
+    const matchesStatus = filterStatus === "" || issue.status === filterStatus;
+
+    return matchesSearchTerm && matchesIssueType && matchesStatus;
   });
 
+  const uniqueIssueTypes = [
+    "",
+    ...new Set(issues.map((issue) => issue.issue_type)),
+  ];
+  const uniqueStatuses = [
+    "",
+    ...new Set(issues.map((issue) => issue.status)),
+  ];
   return (
     <div className="resolved-issues">
       <h2>Resolved Issues</h2>
@@ -61,14 +82,41 @@ const ResolvedIssues = () => {
           placeholder="Search by name, type, or status..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
         />
 
         <select
-          onChange={(e) => setSortOrder(e.target.value)}
-          value={sortOrder}
+          value={filterIssueType}
+          onChange={(e) => setFilterIssueType(e.target.value)}
+          className="filter-select"
+          aria-label="Filter by Issue Type"
         >
-          <option value="asc">Sort by A-Z</option>
-          <option value="desc">Sort by Z-A</option>
+          <option value="">All Issue Types</option>
+          {uniqueIssueTypes.map(
+            (type) =>
+              type && (
+                <option key={type} value={type}>
+                  {formatWords(type)}
+                </option>
+              )
+          )}
+        </select>
+
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          className="filter-select"
+          aria-label="Filter by Status"
+        >
+          <option value="">All Statuses</option>
+          {uniqueStatuses.map(
+            (status) =>
+              status && ( 
+                <option key={status} value={status}>
+                  {formatWords(status)}
+                </option>
+              )
+          )}
         </select>
       </div>
 
@@ -76,8 +124,8 @@ const ResolvedIssues = () => {
         <p>Loading resolved issues...</p>
       ) : error ? (
         <p className="error">{error}</p>
-      ) : sortedIssues.length === 0 ? (
-        <p>No resolved issues found.</p>
+      ) : filteredIssues.length === 0 ? (
+        <p>No resolved issues found matching your criteria.</p>
       ) : (
         <table>
           <thead>
@@ -91,12 +139,12 @@ const ResolvedIssues = () => {
             </tr>
           </thead>
           <tbody>
-            {sortedIssues.map((issue) => (
+            {filteredIssues.map((issue) => (
               <tr key={issue.issue_id}>
-                <td>{issue.issue_type.replace(/_/g, " ")}</td>
+                <td>{formatWords(issue.issue_type)}</td>
                 <td>{issue.registration_number}</td>
                 <td>{issue.student_name}</td>
-                <td>{issue.status.replace(/_/g, " ")}</td>
+                <td>{formatWords(issue.status)}</td>
                 <td>{new Date(issue.created_at).toLocaleString()}</td>
                 <td>{issue.resolution_time}</td>
               </tr>

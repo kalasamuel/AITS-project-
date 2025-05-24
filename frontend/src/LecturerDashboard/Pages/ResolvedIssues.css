@@ -1,105 +1,143 @@
 .resolved-issues {
-    padding: 90px 20px;
-    background-color: #f0f0f0;
-    border-radius: 10px;
-    max-width: 1200px;
-    margin: 20px auto;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    min-height: 100vh;
+  padding: 90px 20px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  max-width: 1200px;
+  margin: 20px auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  min-height: 100vh;
 }
 
 .resolved-issues h2 {
-    text-align: center;
-    color: #333;
-    font-size: 28px;
-    margin-bottom: 20px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #232946;
+  margin-bottom: 18px;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.filter-select {
+  flex: 0 1 20%;
+  min-width: 120px;
+  max-width: 200px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 7px;
+  border: 1.5px solid #e0e7ef;
+  font-size: 1em;
+  background: #fff;
+  color: #232946;
+  outline: none;
+  transition: border 0.18s;
+  margin-left: 12px;
+}
+
+/* No .sort-select:focus needed as that element is removed */
+
+.search-input {
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 8px;
+  border: 1.5px solid #e0e7ef;
+  font-size: 1em;
+  background: #fff;
+  color: #232946;
+  box-shadow: 0 1px 4px rgba(44, 62, 80, 0.04);
+  transition: border 0.18s;
+  outline: none;
+}
+
+.search-input:focus {
+  border: 1.5px solid #4f8cff;
 }
 
 .controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    gap: 10px;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .controls input,
 .controls select {
-    padding: 10px;
-    font-size: 14px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    flex: 1;
-    min-width: 200px;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  flex: 1;
+  min-width: 200px;
 }
 
 .controls input {
-    flex-grow: 2;
+  flex-grow: 2;
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 thead {
-    background-color: #4caf50;
-    color: white;
+  background-color: #d1d5db;
+  color: #232946;
 }
 
 thead th {
-    padding: 12px;
-    font-size: 15px;
-    text-align: left;
+  padding: 12px;
+  font-size: 15px;
+  text-align: left;
 }
 
 tbody td {
-    padding: 12px;
-    font-size: 14px;
-    color: #555;
-    border-bottom: 1px solid #ddd;
+  padding: 12px;
+  font-size: 14px;
+  color: #555;
+  border-bottom: 1px solid #ddd;
 }
 
 tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
 
 tbody tr:hover {
-    background-color: #eef6ee;
+  background-color: #eef6ee;
 }
 
 .error {
-    color: red;
-    text-align: center;
-    margin-top: 20px;
-    font-weight: bold;
+  color: red;
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
 }
 
 @media (max-width: 768px) {
-    .controls {
-        flex-direction: column;
-    }
+  .controls {
+    flex-direction: column;
+  }
 
-    .controls input,
-    .controls select {
-        width: 100%;
-        margin-bottom: 10px;
-    }
+  .controls input,
+  .controls select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 
-    .resolved-issues {
-        margin-left: 10px;
-        margin-right: 10px;
-    }
+  .resolved-issues {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 
-    thead th, tbody td {
-        font-size: 13px;
-        padding: 10px;
-    }
+  thead th,
+  tbody td {
+    font-size: 13px;
+    padding: 10px;
+  }
 }
