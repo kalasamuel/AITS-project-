@@ -1,5 +1,5 @@
 .i-container {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 64px 16px 48px 16px;
   background: #f7f9fb;
@@ -132,15 +132,19 @@
   padding: 18px 22px;
   cursor: pointer;
   transition: box-shadow 0.18s, transform 0.18s;
-  border-left: 5px solid #4f8cff;
+  border-left: 5px solid #58637c;
   position: relative;
   outline: none;
   min-width: 0;
 }
+.issue-card.status-open:hover {border-left: 5px solid #f7b731;}
+.issue-card.status-in_progress:hover {border-left: 5px solid #3867d6;}
+.issue-card.status-rejected:hover {border-left: 5px solid #eb3b5a;}
+.issue-card.status-resolved:hover {border-left: 5px solid #20bf6b;}
+
 .issue-card:hover, .issue-card:focus {
   box-shadow: 0 6px 24px rgba(44, 62, 80, 0.16);
   transform: translateY(-2px) scale(1.01);
-  border-left: 5px solid #2563eb;
 }
 
 .issue-card-header {
@@ -178,7 +182,6 @@
 .status-badge.status-in_progress { background: #3867d6; color: #fff; }
 .status-badge.status-resolved { background: #20bf6b; color: #fff; }
 .status-badge.status-rejected { background: #eb3b5a; color: #fff; }
-.status-badge.status-pending { background: #ffb347; color: #232946; }
 
 .issue-card-body {
   display: flex;
