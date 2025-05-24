@@ -10,6 +10,8 @@ import OtpVerification from "./Welcome/OtpVerification.jsx";
 import './styles.css';
 import useIsAuthenticated from '../hooks/useIsAuthenticated.js';
 import DashboardLayout from './StudentsDashboard/Components/DashboardLayout.jsx';
+import ForgotPassword from './Welcome/ForgotPassword';
+import ResetPassword from './Welcome/ResetPassword'
 import axios from 'axios';
 
 const token = localStorage.getItem('access_token');
@@ -35,7 +37,6 @@ function App() {
             {isAuthenticated && location.pathname !== '/welcome' ? (
                 <DashboardLayout profilePic={profilePic} setProfilePic={setProfilePic} toggleSidebar={toggleSidebar}>
                     <Routes>
-                        <Route path="/test" element={<h1>Hello from test route</h1>} />
                         <Route path="/welcome" element={<Welcome />} />
                         <Route path="/otp-verification" element={<OtpVerification />} />
                         <Route
@@ -93,6 +94,8 @@ function App() {
                     <Route path="/welcome" element={<Welcome />} />
                     <Route path="/otp-verification" element={<OtpVerification />} />
                     <Route path="*" element={<Navigate to="/welcome" />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password/:uidb64/:token/" element={<ResetPassword />} />                    
                 </Routes>
             )}
         </div>
