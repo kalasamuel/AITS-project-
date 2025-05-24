@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import './Welcome.css';
 import { BACKEND_URL } from '../config';
 import { apiClient } from '../api';
@@ -8,7 +8,6 @@ const Welcome = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // State Management
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     first_name: '',
@@ -92,6 +91,7 @@ const Welcome = () => {
         setError(data.error || 'Login failed.');
       }
     } catch (error) {
+      console.error('Error during login:', error);
       setError('An error occurred. Login failed.');
     }
   };
