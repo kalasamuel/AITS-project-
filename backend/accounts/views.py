@@ -2,95 +2,111 @@ from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
-from django.contrib.auth.hashers import check_password
 from rest_framework.response import Response
 from rest_framework import status, generics, viewsets
-from django.utils.timezone import now
 from .models import CustomUser, Department, VerificationCode
 from .utils import send_verification_email
-from .serializers import RegistrationSerializer, DepartmentSerializer, CustomTokenObtainPairSerializer, LecturerSerializer, CustomUserSerializer
+from .serializers import EmailSerializer, PasswordResetConfirmSerializer, RegistrationSerializer, DepartmentSerializer, CustomTokenObtainPairSerializer, LecturerSerializer, CustomUserSerializer
 from datetime import timedelta
 from django.utils import timezone
 from .models import VerificationCode 
 import random
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
 from .serializers import *
+from aits_project.settings import REGISTRAR_CODE, EMAIL_HOST_USER
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
+from django.db import transaction
+
+class PasswordResetRequestView(generics.GenericAPIView):
+    serializer_class = EmailSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email']
+
+        try:
+            user = CustomUser.objects.get(institutional_email=email)
+        except CustomUser.DoesNotExist:
+            return Response({'message': 'If an account with that email exists, a password reset link has been sent.'}, status=status.HTTP_200_OK)
+
+        with transaction.atomic():
+            # token and UID generation
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+
+            # the reset link (Frontend URL)
+            reset_link = f"https://aits-group-t-3712bf6213e8.herokuapp.com/reset-password/{uid}/{token}/"
+
+            # email content
+            email_subject = "Password Reset Request for AITS"
+            email_html_message = render_to_string('emails/password_reset_email.html', {
+                'user': user,
+                'reset_link': reset_link,
+                'domain': 'aits-group-t-3712bf6213e8.herokuapp.com/'
+            })
+            email_plain_message = f"""
+            Hi {user.last_name} {user.first_name},
+
+            You requested a password reset for your AITS account.
+
+            Please go to the following page and choose a new password:
+            {reset_link}
+
+            If you didn't request a password reset, you can ignore this email.
+
+            Thank you,
+            AITS Team
+            """
+
+            # Send email
+            try:
+                send_mail(
+                    subject=email_subject,
+                    message=email_plain_message,
+                    html_message=email_html_message,
+                    from_email=EMAIL_HOST_USER,
+                    recipient_list=[user.institutional_email],
+                    fail_silently=False,
+                )
+            except Exception as e:
+                print(f"Error sending password reset email: {e}")
+                return Response({'error': 'Failed to send reset email. Please try again later.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# Registrar Code (to be stored securely in settings)
-REGISTRAR_CODE = "REG123456"
+        return Response({'message': 'If an account with that email exists, a password reset link has been sent.'}, status=status.HTTP_200_OK)
 
-from datetime import datetime
-# @method_decorator(csrf_exempt, name='dispatch')
-# class VerifyAccountView(APIView):
-#     """
-#     Handles OTP verification for account activation with CSRF exemption.
-#     No CSRF token required for this endpoint.
-#     """
-#     permission_classes = [AllowAny]
-    
-#     def dispatch(self, request, *args, **kwargs):
-#         """
-#         Override dispatch to ensure CORS headers are included
-#         in the response for both OPTIONS and POST requests.
-#         """
-#         response = super().dispatch(request, *args, **kwargs)
-#         response["Access-Control-Allow-Origin"] = "http://localhost:5173"  # Your React app's origin
-#         response["Access-Control-Allow-Methods"] = "POST, OPTIONS"
-#         response["Access-Control-Allow-Headers"] = "Content-Type"
-#         return response
-    
-#     def options(self, request, *args, **kwargs):
-#         """
-#         Handle preflight OPTIONS requests explicitly.
-#         """
-#         response = Response()
-#         response["Access-Control-Allow-Origin"] = "http://localhost:5173"  # Your React app's origin
-#         response["Access-Control-Allow-Methods"] = "POST, OPTIONS"
-#         response["Access-Control-Allow-Headers"] = "Content-Type"
-#         return response
-    
-#     def post(self, request):
-#         # Extract email and OTP from request
-#         email = request.data.get("email")
-#         otp = request.data.get("otp")
-        
-#         # Basic validation
-#         if not email or not otp:
-#             return Response(
-#                 {"error": "Email and verification code are required"}, 
-#                 status=status.HTTP_400_BAD_REQUEST
-#             )
-        
-#         try:
-#             # Find the user by email
-#             user = get_object_or_404(CustomUser, institutional_email=email)
-            
-#             # Check if OTP matches
-#             if user.verification_code == otp:
-#                 # Activate the account
-#                 user.is_verified = True
-#                 user.verification_code = None  # Clear code after verification
-#                 user.save()
-                
-#                 return Response(
-#                     {"message": "OTP verified successfully. Your account is now active."}, 
-#                     status=status.HTTP_200_OK
-#                 )
-            
-#             # OTP doesn't match
-#             return Response(
-#                 {"error": "Invalid verification code"}, 
-#                 status=status.HTTP_400_BAD_REQUEST
-#             )
-            
-#         except Exception as e:
-#             # Handle any other errors
-#             return Response(
-#                 {"error": "Verification failed. Please try again."}, 
-#                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
-#             )        
+
+class PasswordResetConfirmView(generics.GenericAPIView):
+    serializer_class = PasswordResetConfirmSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        uidb64 = serializer.validated_data['uid']
+        token = serializer.validated_data['token']
+        new_password = serializer.validated_data['new_password']
+
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = CustomUser._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            with transaction.atomic():
+                user.set_password(new_password)
+                user.save()
+
+            return Response({'message': 'Password has been reset successfully.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'The reset link is invalid or has expired.'}, status=status.HTTP_400_BAD_REQUEST)
 
 def validate_lecturer_registration(data):
     """
@@ -112,7 +128,7 @@ def validate_registrar_registration(data):
     return None
 
 def create_verification_code_db(user, code):
-    # Get the current time
+    # current time
     current_time = timezone.now()
 
     # Calculate the expiration time (30 minutes from now)
@@ -233,7 +249,6 @@ class VerifyAccountView(APIView):
                 
                 return Response({
                     "message": "OTP verified successfully. Your account is now active.",
-                    "user_id": user.id,  # Optionally include user ID
                     "is_verified": True
                 }, status=status.HTTP_200_OK)
                 
