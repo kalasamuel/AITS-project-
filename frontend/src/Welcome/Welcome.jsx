@@ -147,6 +147,7 @@ const Welcome = () => {
         setError(data.error || 'Registration failed.');
       }
     } catch (error) {
+      console.error('Error during registration:', error);
       setError('An error occurred. Please try again.');
     }
   };
@@ -199,7 +200,9 @@ const Welcome = () => {
                 />
               </div>
               <button type="submit" className="login-button">Log In</button>
-              <p className="forgot-password">Forgot Password?</p>
+              <p className="forgot-password">
+                <Link to="/forgot-password">Forgot Password?</Link>
+                </p>
             </form>
           ) : (
             <form onSubmit={handleSignUp}>
