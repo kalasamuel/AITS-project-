@@ -24,6 +24,7 @@ environ.Env.read_env(BASE_DIR/".env")
 SECRET_KEY =env("SECRET_KEY")
 DEBUG=env("DEBUG")
 
+REGISTRAR_CODE = "REG123456"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -119,6 +120,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(STATIC_ROOT, 'reactapp'),
+            BASE_DIR / 'templates'
         ], #os.path.join(BASE_DIR, "template") if importing a template
         'APP_DIRS': True,
         'OPTIONS': {
