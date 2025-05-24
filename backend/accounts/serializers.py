@@ -155,3 +155,17 @@ class VerifyAccountSerializer(serializers.Serializer):
             raise serializers.ValidationError("OTP verification code is required.")
             
         return data
+    
+class EmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    uid = serializers.CharField(max_length=255)
+    token = serializers.CharField(max_length=255)
+    new_password = serializers.CharField(min_length=8, write_only=True)
+    confirm_password = serializers.CharField(min_length=8, write_only=True)
+
+    def validate(self, data):
+        if data['new_password'] != data['confirm_password']:
+            raise serializers.ValidationError({"confirm_password": "New passwords must match."})
+        return data
