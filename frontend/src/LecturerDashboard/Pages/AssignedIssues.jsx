@@ -90,8 +90,8 @@ const filteredIssues = issues.filter((issue) => {
           className="sort-select"
           aria-label="Sort issues"
         >
-          <option value="date">Sort by Date</option>
           <option value="status">Sort by Status</option>
+          <option value="date">Sort by Date</option>
         </select>
       </div>
 
