@@ -11,6 +11,7 @@ WORKDIR /app/frontend
 
 # RUN npm install --global corepack@latest && corepack enable && \
 #     corepack prepare pnpm@latest-10 --activate && pnpm config set store-dir ~/.pnpm-store \
+RUN npm install react-toastify
 RUN npm install && npm run build
 
 # Change to a specific folder, within /app
