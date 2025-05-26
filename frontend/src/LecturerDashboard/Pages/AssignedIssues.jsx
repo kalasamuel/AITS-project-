@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { apiClient } from "../../api";
 import "./AssignedIssues.css";
 import { FiCheckCircle, FiClock, FiXCircle } from "react-icons/fi";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AssignedIssues = () => {
   const [issues, setIssues] = useState([]);
@@ -27,6 +29,7 @@ const AssignedIssues = () => {
       } catch (error) {
         console.error("Error fetching assigned issues:", error);
         setError("Failed to fetch assigned issues.");
+        toast.error("Failed to load issues. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -35,20 +38,27 @@ const AssignedIssues = () => {
   }, []);
 
   const handleIssueStatusUpdate = async (issueId, status) => {
+    const originalIssues = issues;
+    setIssues((prevIssues) =>
+      prevIssues.map((issue) =>
+        issue.issue_id === issueId ? { ...issue, status: status } : issue
+      )
+    );
+    toast.info(`Updating issue status to ${formatWords(status)}...`);
     try {
       const response = await apiClient.patch(`/issues/lecturer/issues/${issueId}/resolve/`, 
         {status},
         {headers: {Authorization: `Bearer ${localStorage.getItem("access_token")}`,},}
       );
 
-      setIssues((prevIssues) =>
-      prevIssues.map((issue)=>
-        issue.issue_id === issueId ? { ...issue, status: response.data.status } : issue 
-      )
-    );
-  } catch (error) {
-    console.error("Failed to update issue status:", error);
-    setError("Failed to update isssue status. Please try again later. ");}
+      console.log("Issue status update response:", response.data);
+      toast.success(`Issue status updated to ${formatWords(response.data.status)}!`)
+    } catch (error) {
+      console.error("Failed to update issue status:", error);
+      setError("Failed to update issue status. Please try again later.");
+      setIssues(originalIssues);
+      toast.error(`Failed to update issue status: ${error.response?.data?.detail || error.message}`); 
+    }
   };
 
 const filteredIssues = issues.filter((issue) => {
