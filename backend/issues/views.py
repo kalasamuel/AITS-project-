@@ -4,12 +4,17 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.conf import settings
 from rest_framework.status import HTTP_200_OK, HTTP_403_FORBIDDEN
+from django.db import transaction
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 from accounts.permissions import IsStudent, IsLecturer, IsRegistrar
 from .serializers import *
 from accounts.models import CustomUser
 from .models import *
+from aits_project.settings import EMAIL_HOST_USER
 # Create your views here.
 #CRUD for issues
 class IssueViewSet(viewsets.ModelViewSet):
@@ -241,28 +246,96 @@ class LecturerStudentUpdatesView(APIView):
         return Response({"updates": data}, status=200)
     
 class LecturerIssueResolutionView(APIView):
-    permissions_classes = [IsAuthenticated]
-    def patch(self,request, issue_id):
+    serializer_class = IssueStatusUpdateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, issue_id, *args, **kwargs):
+        user = request.user
         try:
-            user = request.user
             issue = Issue.objects.get(issue_id=issue_id, assigned_to=user)
-            
             new_status = request.data.get("status")
-            if new_status not in ["resolved", "in_progress", "rejected"]:
+
+            if not new_status or new_status not in ["resolved", "in_progress", "rejected"]:
                 return Response({"error": "Invalid status value."}, status=status.HTTP_400_BAD_REQUEST)
-            
-            # Update the issue status
-            issue.status = new_status
-            issue.save()
-            
-            # Return the updated issue data
-            serializer= IssueSerializer(issue)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        
+
+            old_status = issue.status
+
+            if old_status == new_status:
+                return Response({"detail": "Issue already in this status."}, status=status.HTTP_200_OK)
+
+            try:
+                with transaction.atomic():
+                    issue.status = new_status
+                    issue.save()
+
+                    # --- Email Sending Logic ---
+                    student = issue.student
+                    if student and student.email:
+                        email_subject = f"Your Issue '{issue.issue_type}' Status Update"
+
+                        formatted_old_status = old_status.replace('_', ' ').title()
+                        formatted_new_status = new_status.replace('_', ' ').title()
+                        
+                        old_status_class = old_status.lower().replace(' ', '_')
+                        new_status_class = new_status.lower().replace(' ', '_')
+
+                        email_html_message = render_to_string('emails/issue_status_update_email.html', {
+                            'student_name': student.first_name,
+                            'issue_type': issue.issue_type,
+                            'old_status': formatted_old_status,
+                            'new_status': formatted_new_status, 
+                            'old_status_class': old_status_class, 
+                            'new_status_class': new_status_class, 
+                            'lecturer_name': user.first_name + " " + user.last_name,
+                            'issue_description': issue.description,
+                            'timestamp': issue.updated_at,
+                            'contact_email': settings.EMAIL_HOST_USER 
+                        })
+                        
+                        email_plain_message = (
+                            f"Dear {student.first_name},\n\n"
+                            f"The status of your issue '{issue.issue_type}' (ID: {issue.issue_id}) "
+                            f"has been updated from '{formatted_old_status}' to '{formatted_new_status}' "
+                            f"by Lecturer {user.first_name} {user.last_name}.\n\n"
+                            f"Issue Description: {issue.description}\n"
+                            f"Updated On: {issue.updated_at.strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+                            "Please log in to the AITS system for more details.\n\n"
+                            "Sincerely,\n"
+                            "The AITS Team"
+                        )
+
+                        try:
+                            send_mail(
+                                subject=email_subject,
+                                message=email_plain_message,
+                                html_message=email_html_message,
+                                from_email=settings.EMAIL_HOST_USER,
+                                recipient_list=[student.email],
+                                fail_silently=False,
+                            )
+                            print(f"Email sent to {student.email} for issue {issue.issue_id} status update.")
+                        except Exception as email_err:
+                            print(f"Error sending issue status update email to {student.email}: {email_err}")
+                            pass
+                    else:
+                        print(f"Skipping email for issue {issue.issue_id}: Student or student's 'email' field is empty/None.")
+
+                serializer = IssueSerializer(issue)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+
+            except Exception as transaction_err:
+                print(f"Error during atomic transaction for issue update: {transaction_err}")
+                return Response(
+                    {"detail": "An internal server error occurred during the update transaction."},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+
         except Issue.DoesNotExist:
             return Response({"error": "Issue not found or not assigned to this lecturer."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+            print(f"An unexpected error occurred: {e}")
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         
 class StudentAllIssuesView(APIView):
     permission_classes = [IsAuthenticated]
@@ -284,3 +357,4 @@ class DismissNotificationView(APIView):
             return Response({'detail': 'Notification dismissed.'}, status=status.HTTP_204_NO_CONTENT)
         except Notification.DoesNotExist:
             return Response({'detail': 'Notification not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
