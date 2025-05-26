@@ -144,3 +144,9 @@ class NotificationSerializer(serializers.ModelSerializer):
         if obj.recipient:
             return f"{obj.recipient.first_name} {obj.recipient.last_name}"
         return None
+    
+class IssueStatusUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Issue
+        fields = ['status']
+        read_only_fields = ['issue_id', 'assigned_to', 'issue_type', 'description', 'created_at', 'updated_at']
