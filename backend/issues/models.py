@@ -59,13 +59,13 @@ COURSE_CODES = (
 
 DEPARTMENT_COURSECODE={
     "cocis": ["BSCS", "BIT", "BSE", "BIS"],
-    "cedat": ["BME", "BEE", "BCE", "BARCH", "BPLAN", "BAGRIC"],
-    "chuss": ["BAS", "BAE", "BMC", "BLS"],
+    "cedat": ["BME", "BEE", "BCE", "BARCH", "BPLAN", "BAGRIC", "BFA"],
+    "chuss": ["BAS", "BAE", "BMC", "BLS","BPSY"],
     "conas": ["BSc", "BSTAT", "BENV"],
     "law": ["LLB"],
-    "cobams": ["BBA", "BPS", "BHRM", "BPA", "BDEV"],
+    "cobams": ["BBA", "BPS", "BHRM", "BPA", "BDEV", "BSTAT"],
     "cees": ["BEd"],
-    "cahs": ["BAG", "BFOOD", "BFORE", "BTOUR"],
+    "cahs": ["BAG", "BFOOD", "BFORE", "BTOUR", "BHM"],
     "chs": ["BPH", "BNS", "BPHARM", "BDS"],
     "vet": ["BVM"]
 }
@@ -218,7 +218,7 @@ def notify_on_issue_creation(sender, instance, created, **kwargs):
         # Send email to Academic Registrar
         if registrar_email:
             send_mail(
-                subject, message, 'admin@aits.com', [registrar_email], fail_silently=True
+                subject, message, settings.EMAIL_HOST_USER, [registrar_email], fail_silently=True
             )
 
         # Send email to Student (confirmation)
@@ -241,7 +241,7 @@ def notify_on_issue_creation(sender, instance, created, **kwargs):
 # Signal to notify student when issue is resolved
 @receiver(post_save, sender=Issue)
 def notify_student_on_resolution(sender, instance, **kwargs):
-    if instance.status == "resolved":
+    if instance.status == "resolved" or instance.status == "rejected":
         student_email = instance.student.email if instance.student else None
 
         if student_email:
