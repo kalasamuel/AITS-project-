@@ -13,6 +13,8 @@ import DashboardLayout from './StudentsDashboard/Components/DashboardLayout.jsx'
 import ForgotPassword from './Welcome/ForgotPassword';
 import ResetPassword from './Welcome/ResetPassword'
 import axios from 'axios';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const token = localStorage.getItem('access_token');
 if (token) {
@@ -98,6 +100,8 @@ function App() {
                     <Route path="/reset-password/:uidb64/:token/" element={<ResetPassword />} />                    
                 </Routes>
             )}
+
+            <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
         </div>
     );
 }
